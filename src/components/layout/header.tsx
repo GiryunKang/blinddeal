@@ -90,28 +90,26 @@ export function Header() {
           {user ? (
             <>
               {/* Notifications */}
-              <Button
-                variant="ghost"
-                size="icon"
-                render={<Link href="/notifications" />}
-              >
-                <Bell className="size-4" />
-              </Button>
+              <Link href="/notifications">
+                <Button variant="ghost" size="icon">
+                  <Bell className="size-4" />
+                </Button>
+              </Link>
 
               {/* New Deal */}
-              <Button size="sm" render={<Link href="/deals/new" />}>
-                딜 등록
-              </Button>
+              <Link href="/deals/new">
+                <Button size="sm">딜 등록</Button>
+              </Link>
 
               {/* User Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger className="cursor-pointer outline-none">
-                  <Avatar size="sm">
+                  <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={user.user_metadata?.avatar_url}
                       alt={displayName}
                     />
-                    <AvatarFallback>{initials}</AvatarFallback>
+                    <AvatarFallback className="text-xs">{initials}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" sideOffset={8}>
@@ -129,31 +127,29 @@ export function Header() {
                   <DropdownMenuItem
                     onClick={() => router.push("/profile")}
                   >
-                    <UserIcon />
+                    <UserIcon className="mr-2 h-4 w-4" />
                     프로필
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => router.push("/settings")}
                   >
-                    <Settings />
+                    <Settings className="mr-2 h-4 w-4" />
                     설정
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut />
+                    <LogOut className="mr-2 h-4 w-4" />
                     로그아웃
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
           ) : (
-            <Button
-              size="sm"
-              variant="outline"
-              render={<Link href="/auth/login" />}
-            >
-              로그인
-            </Button>
+            <Link href="/auth/login">
+              <Button size="sm" variant="outline">
+                로그인
+              </Button>
+            </Link>
           )}
         </div>
       </div>
