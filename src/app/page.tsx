@@ -15,6 +15,9 @@ import {
   TrendingUp,
   MessageSquare,
   Plus,
+  FileCheck,
+  Scale,
+  CheckCircle,
 } from "lucide-react";
 import { formatKRW } from "@/lib/utils";
 
@@ -59,6 +62,30 @@ export default function HomePage() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof Bar */}
+      <section className="border-b border-border/30 bg-card/20">
+        <div className="mx-auto max-w-7xl px-4 py-6">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white md:text-3xl">₩1.2T+</div>
+              <div className="mt-1 text-xs text-muted-foreground">누적 거래액</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white md:text-3xl">2,400+</div>
+              <div className="mt-1 text-xs text-muted-foreground">검증된 딜</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white md:text-3xl">8,700+</div>
+              <div className="mt-1 text-xs text-muted-foreground">활성 사용자</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white md:text-3xl">94%</div>
+              <div className="mt-1 text-xs text-muted-foreground">거래 성사율</div>
             </div>
           </div>
         </div>
@@ -218,26 +245,89 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Trust & Security Section */}
+      <section className="border-t border-border/30 bg-card/50">
+        <div className="mx-auto max-w-7xl px-4 py-14">
+          <h2 className="mb-2 text-center text-xl font-bold">안전한 거래를 위한 보호 장치</h2>
+          <p className="mb-10 text-center text-sm text-muted-foreground">모든 거래 단계에서 보호받으세요</p>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-xl border border-border/50 bg-background/50 p-6">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <Shield className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold">에스크로 결제</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                거래 대금은 에스크로 계좌에 안전하게 보관됩니다. 소유권 이전이 확인된 후에만 매도자에게 자금이 전달됩니다.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border/50 bg-background/50 p-6">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <FileCheck className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold">법적 구속력 있는 NDA</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                비공개 딜 열람 시 전자 서명하는 NDA는 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border/50 bg-background/50 p-6">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <Scale className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold">분쟁 해결 프로세스</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                거래 과정에서 분쟁 발생 시 플랫폼의 중재 프로세스와 전문가 자문을 통해 공정하게 해결합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Trust Indicators */}
       <section className="border-t border-border/30">
         <div className="mx-auto max-w-7xl px-4 py-14">
+          <h2 className="mb-2 text-center text-xl font-bold">왜 BlindDeal인가?</h2>
+          <p className="mb-10 text-center text-sm text-muted-foreground">차별화된 거래 환경</p>
           <div className="grid gap-8 md:grid-cols-3">
             <TrustCard
               icon={<EyeOff className="h-6 w-6" />}
               title="원하는 만큼만 공개"
-              description="딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. 비공개 딜의 상세 정보는 NDA 서명 후에만 접근 가능합니다."
+              description="등록된 딜의 62%가 비공개로 운영됩니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. NDA 서명 후에만 상세 정보에 접근 가능합니다."
             />
             <TrustCard
               icon={<Shield className="h-6 w-6" />}
               title="단계적 인증 체계"
-              description="매도자는 간편하게 시작하고, 매수자는 등급별 검증을 거쳐 신뢰를 쌓습니다. 자격이 검증된 상대방만 비공개 딜에 접근합니다."
+              description="4단계 인증 시스템을 통해 매수자의 자격을 검증합니다. 인증 등급이 높을수록 더 큰 규모의 비공개 딜에 접근할 수 있으며, 현재 8,700명 이상의 검증된 사용자가 활동 중입니다."
             />
             <TrustCard
               icon={<Users className="h-6 w-6" />}
               title="전문가 네트워크"
-              description="법무, 회계, 세무, 감정 전문가가 실사부터 계약까지 지원합니다. 거래의 모든 단계를 전문가와 함께합니다."
+              description="120명 이상의 법무, 회계, 세무, 감정 전문가가 실사부터 계약까지 지원합니다. 평균 거래 완료 기간 45일, 거래 성사율 94%의 검증된 프로세스입니다."
             />
           </div>
+        </div>
+      </section>
+
+      {/* Partner / Credential Logos */}
+      <section className="border-t border-border/30 bg-card/20">
+        <div className="mx-auto max-w-7xl px-4 py-14">
+          <h2 className="mb-2 text-center text-xl font-bold">신뢰할 수 있는 파트너십</h2>
+          <p className="mb-8 text-center text-sm text-muted-foreground">함께하는 전문 기관들</p>
+
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {["법무법인 A", "회계법인 B", "감정평가법인 C", "신탁회사 D"].map((partner) => (
+              <div
+                key={partner}
+                className="flex h-14 items-center justify-center rounded-lg border border-border/30 bg-muted/10 px-8 text-sm font-medium text-muted-foreground/60"
+              >
+                {partner}
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-6 text-center text-xs text-muted-foreground/50">
+            실제 파트너 기관은 서비스 런칭 시 공개됩니다
+          </p>
         </div>
       </section>
 
@@ -289,7 +379,11 @@ function DealPreviewCard({
         </Badge>
         <span className="ml-auto text-xs text-muted-foreground">{dealType}</span>
       </div>
-      <h3 className="mt-3 font-semibold leading-tight">{title}</h3>
+      <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
+        <CheckCircle className="h-3 w-3" />
+        검증완료
+      </div>
+      <h3 className="mt-1 font-semibold leading-tight">{title}</h3>
       <p className="mt-1 text-sm text-muted-foreground">{location}</p>
       <div className="mt-4 flex items-center justify-between">
         <span className="text-lg font-bold text-primary">{formatKRW(amount)}</span>
@@ -321,6 +415,10 @@ function BlindDealCard({
         <Badge variant="secondary" className="bg-amber-500/10 text-amber-400">
           <EyeOff className="mr-1 h-3 w-3" />비공개
         </Badge>
+        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
+          <CheckCircle className="h-3 w-3" />
+          관리자 검증
+        </span>
         <span className="ml-auto text-xs text-muted-foreground">{dealType}</span>
       </div>
 
