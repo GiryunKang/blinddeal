@@ -70,6 +70,7 @@ CREATE TABLE profiles (
   preferred_deal_size_min BIGINT,
   preferred_deal_size_max BIGINT,
   preferred_regions TEXT[],
+  is_admin BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -108,7 +109,7 @@ CREATE TABLE deals (
   -- 공개/비공개
   visibility TEXT NOT NULL DEFAULT 'public' CHECK (visibility IN ('public', 'private')),
   required_verification_level INT NOT NULL DEFAULT 0, -- 비공개 딜 접근에 필요한 인증 등급
-  -- 금액
+  -- 금액 (모든 금액은 해당 통화의 최소 단위. KRW=원, USD=센트)
   asking_price BIGINT, -- NULL이면 "협의 후 공개"
   price_currency TEXT NOT NULL DEFAULT 'KRW',
   price_negotiable BOOLEAN NOT NULL DEFAULT true,
@@ -227,41 +228,9 @@ CREATE TABLE loi_documents (
 );
 ```
 
-### 3.4 실사 (Due Diligence)
+### 3.4 전문가 네트워크
 
-```sql
--- 실사 프로세스
-CREATE TABLE due_diligence (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  room_id UUID NOT NULL REFERENCES deal_rooms(id) ON DELETE CASCADE,
-  deal_id UUID NOT NULL REFERENCES deals(id) ON DELETE CASCADE,
-  status TEXT NOT NULL DEFAULT 'initiated' CHECK (status IN (
-    'initiated', 'document_collection', 'review_in_progress',
-    'expert_review', 'completed', 'failed'
-  )),
-  started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  target_completion TIMESTAMPTZ,
-  completed_at TIMESTAMPTZ,
-  summary TEXT,
-  result TEXT CHECK (result IN ('pass', 'conditional_pass', 'fail'))
-);
-
--- 실사 체크리스트
-CREATE TABLE dd_checklist_items (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  dd_id UUID NOT NULL REFERENCES due_diligence(id) ON DELETE CASCADE,
-  category TEXT NOT NULL, -- 'legal', 'financial', 'tax', 'operational', 'environmental'
-  item_name TEXT NOT NULL,
-  description TEXT,
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'completed', 'issue_found')),
-  assigned_expert_id UUID REFERENCES experts(id),
-  documents TEXT[],
-  notes TEXT,
-  completed_at TIMESTAMPTZ
-);
-```
-
-### 3.5 전문가 네트워크
+> **주의**: experts 테이블은 dd_checklist_items에서 참조하므로 반드시 먼저 생성해야 합니다.
 
 ```sql
 -- 전문가 (법무, 회계, 세무 등)
@@ -294,6 +263,51 @@ CREATE TABLE expert_assignments (
   report_url TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   completed_at TIMESTAMPTZ
+);
+```
+
+### 3.5 실사 (Due Diligence)
+
+```sql
+-- 실사 프로세스
+CREATE TABLE due_diligence (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  room_id UUID NOT NULL REFERENCES deal_rooms(id) ON DELETE CASCADE,
+  deal_id UUID NOT NULL REFERENCES deals(id) ON DELETE CASCADE,
+  status TEXT NOT NULL DEFAULT 'initiated' CHECK (status IN (
+    'initiated', 'document_collection', 'review_in_progress',
+    'expert_review', 'completed', 'failed'
+  )),
+  started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  target_completion TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ,
+  summary TEXT,
+  result TEXT CHECK (result IN ('pass', 'conditional_pass', 'fail'))
+);
+
+-- 실사 체크리스트
+CREATE TABLE dd_checklist_items (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  dd_id UUID NOT NULL REFERENCES due_diligence(id) ON DELETE CASCADE,
+  category TEXT NOT NULL, -- 'legal', 'financial', 'tax', 'operational', 'environmental'
+  item_name TEXT NOT NULL,
+  description TEXT,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'completed', 'issue_found')),
+  assigned_expert_id UUID REFERENCES experts(id),
+  documents TEXT[],
+  notes TEXT,
+  completed_at TIMESTAMPTZ
+);
+
+-- 딜 상태 변경 이력 (감사 추적용)
+CREATE TABLE deal_status_history (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  deal_id UUID NOT NULL REFERENCES deals(id) ON DELETE CASCADE,
+  old_status TEXT NOT NULL,
+  new_status TEXT NOT NULL,
+  changed_by UUID NOT NULL REFERENCES profiles(id),
+  reason TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ```
 
@@ -640,37 +654,29 @@ CREATE TABLE admin_logs (
 
 ## 6. Row Level Security (RLS) 정책
 
-```sql
--- 공개 딜: 누구나 열람
--- 비공개 딜: verification_level 충족 + (NDA 서명 or 딜 소유자)
-CREATE POLICY "deals_select" ON deals FOR SELECT USING (
-  visibility = 'public'
-  OR owner_id = auth.uid()
-  OR (
-    visibility = 'private'
-    AND EXISTS (
-      SELECT 1 FROM profiles
-      WHERE id = auth.uid()
-      AND verification_level >= deals.required_verification_level
-    )
-  )
-);
+> **접근제어 전략 (2계층):**
+> - **RLS (DB 레벨)**: 비공개 딜 목록 노출 자체를 인증 등급으로 제어
+> - **앱 레이어**: document_urls 등 민감 상세 정보는 NDA 서명 여부를 앱에서 체크 후 반환
+>
+> **삭제 전략**: 모든 민감 테이블은 소프트 삭제(status 기반) 또는 삭제 불가. 하드 삭제 정책 없음.
+>
+> **금액 컨벤션**: 모든 BIGINT 금액 필드는 해당 통화의 최소 단위 (KRW=원, USD=센트).
 
--- 딜 수정: 소유자만
-CREATE POLICY "deals_update" ON deals FOR UPDATE USING (owner_id = auth.uid());
+모든 테이블에 RLS 활성화. 주요 정책은 구현 계획(migration)에 포함.
 
--- 메시지: 해당 룸 참가자만
-CREATE POLICY "messages_select" ON messages FOR SELECT USING (
-  EXISTS (
-    SELECT 1 FROM deal_rooms
-    WHERE deal_rooms.id = messages.room_id
-    AND (deal_rooms.buyer_id = auth.uid() OR deal_rooms.seller_id = auth.uid())
-  )
-);
-
--- 알림: 본인 것만
-CREATE POLICY "notifications_select" ON notifications FOR SELECT USING (user_id = auth.uid());
-```
+- **profiles**: 모든 사용자 열람 가능, 수정은 본인만
+- **deals**: 공개 딜은 누구나, 비공개 딜은 verification_level 충족자 + 소유자 + 관리자
+- **deals INSERT**: 인증 등급 1 이상만 등록 가능
+- **deal_rooms, messages, loi_documents**: 해당 룸 참가자(buyer/seller)만
+- **verification_records**: 본인 + 관리자만
+- **escrow_accounts, transactions**: 해당 거래 참가자 + 관리자만
+- **nda_agreements**: 서명자 본인 + 딜 소유자만
+- **due_diligence, dd_checklist_items**: 해당 룸 참가자 + 배정된 전문가만
+- **notifications, match_preferences**: 본인만
+- **articles**: 게시된 것은 모두, 초안은 저자만
+- **posts, comments**: 모두 열람, 수정은 저자만
+- **admin_logs**: 관리자만
+- **관리자 식별**: `profiles.is_admin = true`
 
 ---
 
@@ -685,11 +691,14 @@ CREATE POLICY "notifications_select" ON notifications FOR SELECT USING (user_id 
 | `/api/escrow/create` | POST | 에스크로 계좌 생성 |
 | `/api/escrow/[id]/fund` | POST | Toss Payments 결제 → 에스크로 입금 |
 | `/api/escrow/[id]/release` | POST | 에스크로 자금 방출 |
+| `/api/escrow/[id]/dispute` | POST | 에스크로 분쟁 제기 |
 | `/api/payments/webhook` | POST | Toss Payments 웹훅 수신 |
 | `/api/notifications/send` | POST | 알림 발송 (이메일/푸시) |
 | `/api/admin/approve-deal` | POST | 관리자 딜 승인 |
 | `/api/admin/verify-user` | POST | 관리자 사용자 인증 승인 |
 | `/api/market-data/sync` | CRON | 시장 데이터 정기 수집 |
+
+> **결제 참고**: Toss Payments는 멤버십/수수료/전문가 비용 결제에 사용. 대형 부동산/M&A 거래의 에스크로는 향후 신탁회사/은행 에스크로 연동으로 확장 예정.
 
 ---
 
