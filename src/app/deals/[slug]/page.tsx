@@ -10,14 +10,18 @@ import {
   Heart,
   MessageSquare,
   Lock,
+  BarChart3,
 } from "lucide-react"
 import { getDealBySlug } from "@/lib/actions/deals"
+import { getUser } from "@/lib/supabase/auth"
+import { getMatchedBuyersForDeal } from "@/lib/actions/deal-visibility"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { formatKRW, formatDate } from "@/lib/utils"
 import { InterestButton } from "@/components/deals/interest-button"
+import { VisibilityControl } from "@/components/deals/visibility-control"
 
 interface DealDetailPageProps {
   params: Promise<{ slug: string }>
@@ -54,6 +58,19 @@ export default async function DealDetailPage({
 
   if (!deal) {
     notFound()
+  }
+
+  const currentUser = await getUser()
+  const isOwner = currentUser?.id === deal.owner_id
+
+  let matchedBuyerCount = 0
+  if (isOwner) {
+    try {
+      const result = await getMatchedBuyersForDeal(deal.id)
+      matchedBuyerCount = result.count
+    } catch {
+      // ignore if not owner or error
+    }
   }
 
   const categoryLabel =
@@ -373,6 +390,25 @@ export default async function DealDetailPage({
                   )}
                 </CardContent>
               </Card>
+            )}
+
+            {/* Owner-only: Visibility Control & Analytics */}
+            {isOwner && (
+              <>
+                <VisibilityControl
+                  dealId={deal.id}
+                  currentVisibility={deal.visibility}
+                  currentRequiredLevel={deal.required_verification_level ?? 0}
+                  matchedBuyerCount={matchedBuyerCount}
+                  dealSlug={slug}
+                />
+                <a href={`/deals/${slug}/analytics`}>
+                  <Button variant="outline" className="w-full" size="sm">
+                    <BarChart3 className="mr-2 size-4" />
+                    관심도 분석 대시보드
+                  </Button>
+                </a>
+              </>
             )}
           </div>
         </div>
