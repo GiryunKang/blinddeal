@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -16,6 +16,23 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+function getPasswordStrength(pw: string): {
+  score: number;
+  label: string;
+  color: string;
+} {
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+  if (score <= 1) return { score, label: "약함", color: "bg-red-500" };
+  if (score <= 2) return { score, label: "보통", color: "bg-amber-500" };
+  return { score, label: "강함", color: "bg-emerald-500" };
+}
 
 export function RegisterForm() {
   const router = useRouter();
@@ -29,13 +46,25 @@ export function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+
+  function validatePassword(pw: string): string | null {
+    if (pw.length < 8) return "비밀번호는 최소 8자 이상이어야 합니다.";
+    if (!/[A-Z]/.test(pw)) return "대문자를 최소 1개 포함해야 합니다.";
+    if (!/[0-9]/.test(pw)) return "숫자를 최소 1개 포함해야 합니다.";
+    if (!/[^A-Za-z0-9]/.test(pw))
+      return "특수문자를 최소 1개 포함해야 합니다.";
+    return null;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    if (password.length < 6) {
-      setError("비밀번호는 최소 6자 이상이어야 합니다.");
+    const pwError = validatePassword(password);
+    if (pwError) {
+      setError(pwError);
       setLoading(false);
       return;
     }
@@ -59,7 +88,7 @@ export function RegisterForm() {
       return;
     }
 
-    router.push("/");
+    router.push("/auth/onboarding");
     router.refresh();
   }
 
@@ -152,12 +181,39 @@ export function RegisterForm() {
             <Input
               id="password"
               type="password"
-              placeholder="최소 6자 이상"
+              placeholder="8자 이상, 대문자·숫자·특수문자 포함"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
             />
+            {password.length > 0 && (
+              <div className="space-y-1">
+                <div className="flex gap-1">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className={cn(
+                        "h-1 flex-1 rounded-full transition-all",
+                        i < strength.score ? strength.color : "bg-border"
+                      )}
+                    />
+                  ))}
+                </div>
+                <p
+                  className={cn(
+                    "text-xs",
+                    strength.score <= 1
+                      ? "text-red-400"
+                      : strength.score <= 2
+                        ? "text-amber-400"
+                        : "text-emerald-400"
+                  )}
+                >
+                  {strength.label}
+                </p>
+              </div>
+            )}
           </div>
 
           {error && (
