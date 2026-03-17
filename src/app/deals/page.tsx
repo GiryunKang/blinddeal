@@ -1,5 +1,8 @@
+import type { Metadata } from "next"
 import { Suspense } from "react"
 import { getDeals, type DealFilters } from "@/lib/actions/deals"
+
+export const metadata: Metadata = { title: "딜 마켓플레이스" }
 import { DealCard } from "@/components/deals/deal-card"
 import { DealFilters as DealFiltersComponent } from "@/components/deals/deal-filters"
 

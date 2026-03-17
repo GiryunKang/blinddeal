@@ -1,5 +1,8 @@
+import type { Metadata } from "next"
 import { Suspense } from "react"
 import { getExperts, type ExpertFilters, type ExpertType } from "@/lib/actions/experts"
+
+export const metadata: Metadata = { title: "전문가 네트워크" }
 import { ExpertCard } from "@/components/experts/expert-card"
 
 const EXPERT_TYPES: { value: ExpertType | "all"; label: string }[] = [

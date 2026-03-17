@@ -11,8 +11,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BlindDeal — 부동산 · M&A 전문 거래 플랫폼",
-  description: "부동산 · M&A 전문 거래 플랫폼",
+  title: {
+    default: 'BlindDeal — 부동산 · M&A 전문 거래 플랫폼',
+    template: '%s | BlindDeal'
+  },
+  description: '부동산과 M&A 딜을 공개 또는 비공개로 안전하게 거래하세요. 검증된 상대방과 에스크로 결제, NDA, 전문가 네트워크를 통한 풀 프로세스 거래 플랫폼.',
+  keywords: ['부동산', 'M&A', '딜', '거래', '투자', '에스크로', 'BlindDeal', '블라인드딜'],
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    url: 'https://blinddeal-ten.vercel.app',
+    siteName: 'BlindDeal',
+    title: 'BlindDeal — 부동산 · M&A 전문 거래 플랫폼',
+    description: '부동산과 M&A 딜을 공개 또는 비공개로 안전하게 거래하세요.',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({

@@ -1,4 +1,7 @@
+import type { Metadata } from "next"
 import { MainLayout } from "@/components/layout/main-layout";
+
+export const metadata: Metadata = { title: "에스크로 안내" }
 import {
   Shield,
   FileCheck,

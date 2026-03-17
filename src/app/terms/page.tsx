@@ -1,4 +1,7 @@
+import type { Metadata } from "next"
 import { MainLayout } from "@/components/layout/main-layout";
+
+export const metadata: Metadata = { title: "이용약관" }
 
 export default function TermsPage() {
   return (

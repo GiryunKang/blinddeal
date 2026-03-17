@@ -1,4 +1,7 @@
+import type { Metadata } from "next"
 import Link from "next/link"
+
+export const metadata: Metadata = { title: "커뮤니티" }
 import { Plus } from "lucide-react"
 import { getPosts } from "@/lib/actions/community"
 import { getUser } from "@/lib/supabase/auth"

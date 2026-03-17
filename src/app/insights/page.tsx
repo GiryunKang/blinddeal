@@ -1,4 +1,7 @@
+import type { Metadata } from "next"
 import { getArticles, type ArticleFilters } from "@/lib/actions/articles"
+
+export const metadata: Metadata = { title: "인사이트" }
 import { ArticleCard } from "@/components/insights/article-card"
 import Link from "next/link"
 
