@@ -8,19 +8,22 @@ import {
   TrendingUp,
   Eye,
   Heart,
-  MessageSquare,
   Lock,
   BarChart3,
+  Shield,
 } from "lucide-react"
 import { getDealBySlug } from "@/lib/actions/deals"
 import { getUser } from "@/lib/supabase/auth"
 import { getMatchedBuyersForDeal } from "@/lib/actions/deal-visibility"
+import { checkNDA } from "@/lib/actions/nda"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { formatKRW, formatDate } from "@/lib/utils"
 import { InterestButton } from "@/components/deals/interest-button"
+import { InquiryButton } from "@/components/deals/inquiry-button"
+import { NDAOverlay } from "@/components/deals/nda-overlay"
 import { VisibilityControl } from "@/components/deals/visibility-control"
 
 interface DealDetailPageProps {
@@ -61,7 +64,35 @@ export default async function DealDetailPage({
   }
 
   const currentUser = await getUser()
+  const isLoggedIn = !!currentUser
   const isOwner = currentUser?.id === deal.owner_id
+
+  // Check NDA status for private deals
+  let ndaSigned = false
+  let userInterested = false
+  if (currentUser && deal.visibility === "private" && !isOwner) {
+    const ndaResult = await checkNDA(deal.id)
+    ndaSigned = ndaResult.signed
+  } else if (deal.visibility === "public" || isOwner) {
+    ndaSigned = true // no NDA needed for public deals or owner
+  }
+
+  // Check if user has shown interest
+  if (currentUser) {
+    const { createClient } = await import("@/lib/supabase/server")
+    const supabase = await createClient()
+    const { data: interest } = await supabase
+      .from("deal_interests")
+      .select("id")
+      .eq("deal_id", deal.id)
+      .eq("user_id", currentUser.id)
+      .single()
+    userInterested = !!interest
+  }
+
+  // For private deals without NDA signed, show NDA overlay
+  const showNDAOverlay =
+    deal.visibility === "private" && !ndaSigned && !isOwner
 
   let matchedBuyerCount = 0
   if (isOwner) {
@@ -100,7 +131,15 @@ export default async function DealDetailPage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="grid gap-8 lg:grid-cols-3">
+      {showNDAOverlay && (
+        <NDAOverlay
+          dealId={deal.id}
+          dealTitle={deal.title}
+          dealCategory={deal.deal_category}
+          isLoggedIn={isLoggedIn}
+        />
+      )}
+      <div className={`grid gap-8 lg:grid-cols-3 ${showNDAOverlay ? "pointer-events-none select-none blur-md" : ""}`}>
         {/* Left Column */}
         <div className="space-y-6 lg:col-span-2">
           {/* Header */}
@@ -116,6 +155,12 @@ export default async function DealDetailPage({
               <Badge variant="outline">
                 {statusMap[deal.status] || deal.status}
               </Badge>
+              {deal.visibility === "private" && ndaSigned && !isOwner && (
+                <Badge className="bg-emerald-500/20 text-emerald-400">
+                  <Shield className="mr-1 size-3" />
+                  NDA 서명 완료
+                </Badge>
+              )}
             </div>
             <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
               {deal.title}
@@ -346,11 +391,20 @@ export default async function DealDetailPage({
               </CardContent>
               <Separator />
               <CardContent className="space-y-3 pb-4 pt-4">
-                <Button className="w-full" size="lg">
-                  <MessageSquare className="mr-2 size-4" />
-                  문의하기
-                </Button>
-                <InterestButton dealId={deal.id} />
+                {!isOwner && (
+                  <InquiryButton
+                    dealId={deal.id}
+                    dealTitle={deal.title}
+                    dealCategory={deal.deal_category}
+                    isLoggedIn={isLoggedIn}
+                  />
+                )}
+                <InterestButton
+                  dealId={deal.id}
+                  initialInterested={userInterested}
+                  initialCount={deal.interest_count ?? 0}
+                  isLoggedIn={isLoggedIn}
+                />
               </CardContent>
             </Card>
 
