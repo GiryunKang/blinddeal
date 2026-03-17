@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Eye, Heart } from "lucide-react"
+import { Eye, Heart, Lock } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatKRW } from "@/lib/utils"
@@ -22,9 +22,10 @@ interface DealCardProps {
       company_name?: string | null
     } | null
   }
+  isBlind?: boolean
 }
 
-export function DealCard({ deal }: DealCardProps) {
+export function DealCard({ deal, isBlind = false }: DealCardProps) {
   const categoryLabel = deal.deal_category === "real_estate" ? "부동산" : "M&A"
   const categoryColor =
     deal.deal_category === "real_estate"
@@ -38,19 +39,21 @@ export function DealCard({ deal }: DealCardProps) {
       : "bg-amber-500/20 text-amber-400"
 
   return (
-    <Link href={`/deals/${deal.slug}`} className="group block">
-      <Card className="overflow-hidden border-border/50 transition-all hover:border-border">
+    <Link href={isBlind ? "#" : `/deals/${deal.slug}`} className="group block">
+      <Card className="relative overflow-hidden border-border/50 transition-all hover:border-border">
         {/* Thumbnail */}
         <div className="relative aspect-[16/9] overflow-hidden bg-muted">
           {deal.thumbnail_url ? (
             <Image
               src={deal.thumbnail_url}
-              alt={deal.title}
+              alt={isBlind ? "비공개 딜" : deal.title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className={`object-cover transition-transform duration-300 group-hover:scale-105 ${
+                isBlind ? "blur-xl scale-110" : ""
+              }`}
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">
+            <div className={`flex h-full items-center justify-center text-muted-foreground ${isBlind ? "blur-md" : ""}`}>
               <svg
                 className="size-12 opacity-30"
                 fill="none"
@@ -66,47 +69,82 @@ export function DealCard({ deal }: DealCardProps) {
               </svg>
             </div>
           )}
-          {/* Badges overlay */}
+
+          {/* Badges overlay — always visible */}
           <div className="absolute left-2 top-2 flex gap-1.5">
             <Badge className={categoryColor}>{categoryLabel}</Badge>
             <Badge className={visibilityColor}>{visibilityLabel}</Badge>
           </div>
+
+          {/* Blind lock overlay on thumbnail */}
+          {isBlind && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/40 backdrop-blur-sm">
+                <Lock className="h-5 w-5 text-white/70" />
+              </div>
+            </div>
+          )}
         </div>
 
         <CardContent className="space-y-2 pt-3">
           {/* Title */}
-          <h3 className="line-clamp-1 text-base font-semibold text-foreground transition-colors group-hover:text-primary">
-            {deal.title}
-          </h3>
+          {isBlind ? (
+            <h3 className="line-clamp-1 select-none text-base font-semibold text-muted-foreground/40 blur-[5px]">
+              비공개 딜 제목 영역
+            </h3>
+          ) : (
+            <h3 className="line-clamp-1 text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+              {deal.title}
+            </h3>
+          )}
 
           {/* Description */}
-          <p className="line-clamp-2 text-sm text-muted-foreground">
-            {deal.description}
-          </p>
+          {isBlind ? (
+            <p className="line-clamp-2 select-none text-sm text-muted-foreground/30 blur-[4px]">
+              이 딜의 상세 내용은 인증된 사용자만 열람할 수 있습니다
+            </p>
+          ) : (
+            <p className="line-clamp-2 text-sm text-muted-foreground">
+              {deal.description}
+            </p>
+          )}
 
           {/* Price */}
-          <div className="text-lg font-bold text-primary">
-            {deal.asking_price ? formatKRW(deal.asking_price) : "가격 협의"}
-          </div>
-
-          {/* Footer: stats + owner */}
-          <div className="flex items-center justify-between pt-1 text-xs text-muted-foreground">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1">
-                <Eye className="size-3.5" />
-                {deal.view_count}
-              </span>
-              <span className="flex items-center gap-1">
-                <Heart className="size-3.5" />
-                {deal.interest_count}
-              </span>
+          {isBlind ? (
+            <div className="select-none text-lg font-bold text-muted-foreground/30 blur-[4px]">
+              ████████
             </div>
-            {deal.owner && (
-              <span className="truncate max-w-[120px]">
-                {deal.owner.company_name || deal.owner.display_name}
-              </span>
-            )}
-          </div>
+          ) : (
+            <div className="text-lg font-bold text-primary">
+              {deal.asking_price ? formatKRW(deal.asking_price) : "가격 협의"}
+            </div>
+          )}
+
+          {/* Blind notice or normal footer */}
+          {isBlind ? (
+            <div className="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-1.5">
+              <Lock className="h-3.5 w-3.5 text-amber-400" />
+              <span className="text-xs text-amber-400">열람 권한 필요</span>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between pt-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-3">
+                <span className="flex items-center gap-1">
+                  <Eye className="size-3.5" />
+                  {deal.view_count}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Heart className="size-3.5" />
+                  {deal.interest_count}
+                </span>
+              </div>
+              {deal.owner && (
+                <span className="max-w-[120px] truncate">
+                  {deal.owner.company_name || deal.owner.display_name}
+                </span>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </Link>

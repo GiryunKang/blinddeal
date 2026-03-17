@@ -21,7 +21,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Bell, LogOut, Settings, User as UserIcon } from "lucide-react";
 
-const navLinks = [
+const publicNavLinks = [
+  { href: "/deals", label: "마켓" },
+  { href: "/insights", label: "인사이트" },
+  { href: "/community", label: "커뮤니티" },
+  { href: "/experts", label: "전문가" },
+];
+
+const authNavLinks = [
+  { href: "/dashboard", label: "대시보드" },
   { href: "/deals", label: "마켓" },
   { href: "/insights", label: "인사이트" },
   { href: "/community", label: "커뮤니티" },
@@ -74,7 +82,7 @@ export function Header() {
 
         {/* Nav Links */}
         <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
+          {(user ? authNavLinks : publicNavLinks).map((link) => (
             <Link
               key={link.href}
               href={link.href}

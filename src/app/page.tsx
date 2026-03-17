@@ -407,8 +407,9 @@ function BlindDealCard({
   industry: string; requiredLevel: number; interests: number;
 }) {
   return (
-    <Card className="relative border-border/50 bg-card/50 p-5 transition-all hover:border-amber-500/20">
-      <div className="flex items-center gap-2">
+    <Card className="group relative overflow-hidden border-border/50 bg-card/50 transition-all hover:border-amber-500/20">
+      {/* Top section with badges — always visible */}
+      <div className="relative z-20 flex items-center gap-2 px-5 pt-5">
         <Badge variant="secondary" className={categoryColor === "blue" ? "bg-blue-500/10 text-blue-400" : "bg-purple-500/10 text-purple-400"}>
           {category}
         </Badge>
@@ -422,20 +423,48 @@ function BlindDealCard({
         <span className="ml-auto text-xs text-muted-foreground">{dealType}</span>
       </div>
 
-      {/* Blurred / Hidden content */}
-      <div className="mt-3 select-none">
-        <div className="h-5 w-3/4 rounded bg-muted/30 blur-[6px]" />
+      {/* Masked/redacted content area */}
+      <div className="relative mt-3 px-5">
+        {/* Blurred masked title */}
+        <div className="relative select-none">
+          <p className="text-base font-semibold tracking-wider text-muted-foreground/30" aria-hidden="true">
+            ██████ ████ ██████
+          </p>
+          <div className="absolute inset-0 backdrop-blur-[2px]" />
+        </div>
         <p className="mt-1 text-sm text-muted-foreground">{industry}</p>
-      </div>
-      <div className="mt-4 flex items-center justify-between">
-        <span className="text-lg font-bold text-muted-foreground/40 blur-[4px] select-none">₩000,000,000</span>
-        <span className="text-xs text-muted-foreground">관심 {interests}명</span>
+
+        {/* Blurred price */}
+        <div className="mt-3 flex items-center justify-between">
+          <div className="relative select-none">
+            <span className="text-lg font-bold text-muted-foreground/20">₩██,███,███,███</span>
+            <div className="absolute inset-0 backdrop-blur-[3px]" />
+          </div>
+          <span className="text-xs text-muted-foreground">관심 {interests}명</span>
+        </div>
       </div>
 
-      {/* Lock overlay */}
-      <div className="mt-4 flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2">
-        <Lock className="h-3.5 w-3.5 text-amber-400" />
-        <span className="text-xs text-amber-400">인증 등급 {requiredLevel} 이상 열람 가능</span>
+      {/* Gradient overlay fading to dark at bottom */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+      {/* Ambient glow behind card */}
+      <div className="pointer-events-none absolute -bottom-4 left-1/2 h-20 w-40 -translate-x-1/2 rounded-full bg-blue-500/5 blur-2xl" />
+
+      {/* Centered lock overlay */}
+      <div className="relative z-10 mx-5 mb-5 mt-5">
+        <div className="flex flex-col items-center gap-2 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-4 backdrop-blur-sm">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 shadow-lg shadow-blue-500/5">
+            <Lock className="h-4 w-4 text-white/70" />
+          </div>
+          <span className="text-xs font-medium text-white/70">비공개 딜</span>
+          <span className="text-[10px] text-white/40">인증 등급 {requiredLevel} 이상 열람 가능</span>
+          <Link
+            href="/profile/verification"
+            className="mt-1 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-[10px] font-medium text-white/60 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
+          >
+            인증하기
+          </Link>
+        </div>
       </div>
     </Card>
   );
