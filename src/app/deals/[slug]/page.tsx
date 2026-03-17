@@ -105,7 +105,7 @@ export default async function DealDetailPage({
   }
 
   const categoryLabel =
-    deal.deal_category === "real_estate" ? "부동산" : "M&A"
+    deal.deal_category === "real_estate" ? "부동산" : "M&A(인수합병)"
   const categoryColor =
     deal.deal_category === "real_estate"
       ? "bg-blue-500/20 text-blue-400"
@@ -122,9 +122,9 @@ export default async function DealDetailPage({
     pending_review: "검토 중",
     active: "활성",
     under_negotiation: "협상 중",
-    due_diligence: "실사 진행",
+    due_diligence: "실사(정밀조사) 진행",
     contract: "계약 진행",
-    escrow: "에스크로",
+    escrow: "에스크로(안심결제)",
     closed: "완료",
     cancelled: "취소",
   }
@@ -158,7 +158,7 @@ export default async function DealDetailPage({
               {deal.visibility === "private" && ndaSigned && !isOwner && (
                 <Badge className="bg-emerald-500/20 text-emerald-400">
                   <Shield className="mr-1 size-3" />
-                  NDA 서명 완료
+                  비밀유지계약(NDA) 서명 완료
                 </Badge>
               )}
             </div>

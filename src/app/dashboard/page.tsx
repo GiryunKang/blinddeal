@@ -17,7 +17,7 @@ const PIPELINE_STAGES = [
   { key: "pending_review", label: "검토중", color: "bg-blue-500", headerBg: "bg-blue-500/10", headerText: "text-blue-400", borderColor: "border-blue-500/20" },
   { key: "active", label: "활성", color: "bg-emerald-500", headerBg: "bg-emerald-500/10", headerText: "text-emerald-400", borderColor: "border-emerald-500/20" },
   { key: "under_negotiation", label: "협상중", color: "bg-amber-500", headerBg: "bg-amber-500/10", headerText: "text-amber-400", borderColor: "border-amber-500/20" },
-  { key: "due_diligence", label: "실사", color: "bg-purple-500", headerBg: "bg-purple-500/10", headerText: "text-purple-400", borderColor: "border-purple-500/20" },
+  { key: "due_diligence", label: "실사(정밀조사)", color: "bg-purple-500", headerBg: "bg-purple-500/10", headerText: "text-purple-400", borderColor: "border-purple-500/20" },
   { key: "closing", label: "계약중", color: "bg-indigo-500", headerBg: "bg-indigo-500/10", headerText: "text-indigo-400", borderColor: "border-indigo-500/20" },
   { key: "closed", label: "완료", color: "bg-green-500", headerBg: "bg-green-500/10", headerText: "text-green-400", borderColor: "border-green-500/20" },
 ] as const
@@ -80,7 +80,7 @@ export default async function DashboardPage() {
 
         {/* Pipeline section */}
         <div>
-          <h2 className="mb-4 text-lg font-bold">딜 파이프라인</h2>
+          <h2 className="mb-4 text-lg font-bold">거래 진행 현황</h2>
           <div className="flex gap-3 overflow-x-auto pb-4">
             {PIPELINE_STAGES.map((stage) => {
               const dealsInStage = myDeals.filter((d) => d.status === stage.key)

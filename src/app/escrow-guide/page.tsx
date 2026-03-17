@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { MainLayout } from "@/components/layout/main-layout";
 
-export const metadata: Metadata = { title: "에스크로 안내" }
+export const metadata: Metadata = { title: "에스크로(안심결제) 안내" }
 import {
   Shield,
   FileCheck,
@@ -96,8 +96,11 @@ export default function EscrowGuidePage() {
             <Lock className="h-8 w-8 text-primary" />
           </div>
           <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
-            안전한 에스크로 결제
+            에스크로(안심결제) 안내
           </h1>
+          <p className="mt-2 text-base text-muted-foreground/80">
+            에스크로란 거래 대금을 제3자(플랫폼)가 안전하게 보관하다가, 거래가 완료되면 매도자에게 전달하는 결제 방식입니다.
+          </p>
           <p className="mt-4 text-lg text-muted-foreground">
             BlindDeal의 에스크로 서비스는 거래 대금을 안전하게 보관하여
             매수자와 매도자 모두를 보호합니다. 신뢰할 수 있는 제3자 예치

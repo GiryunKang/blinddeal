@@ -85,6 +85,11 @@ export function NDADialog({
           </div>
         </div>
 
+        {/* Plain-language summary */}
+        <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 p-3 text-sm text-foreground">
+          이 계약은 딜 정보를 다른 사람에게 알리지 않겠다는 약속입니다. 서명하시면 비공개 딜의 상세 정보를 열람할 수 있습니다.
+        </div>
+
         {/* NDA Text */}
         <div className="space-y-3 rounded-lg border border-border/50 bg-muted/20 p-4 text-sm leading-relaxed text-muted-foreground">
           <p className="font-medium text-foreground">

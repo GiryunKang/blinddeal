@@ -35,6 +35,9 @@ export function NDAOverlay({
             <p className="mt-1 text-sm text-muted-foreground">
               이 딜의 상세 정보를 열람하려면 비밀유지계약(NDA)에 서명해야 합니다.
             </p>
+            <p className="mt-1 text-xs text-muted-foreground/70">
+              비밀유지계약이란 딜 정보를 외부에 공개하지 않겠다는 약속입니다.
+            </p>
           </div>
           {isLoggedIn ? (
             <Button
@@ -42,12 +45,12 @@ export function NDAOverlay({
               className="bg-amber-600 hover:bg-amber-700 text-white"
             >
               <Shield className="mr-2 size-4" />
-              NDA 서명하기
+              비밀유지계약(NDA) 서명하기
             </Button>
           ) : (
             <a href="/auth/login">
               <Button className="bg-amber-600 hover:bg-amber-700 text-white">
-                로그인 후 NDA 서명
+                로그인 후 비밀유지계약(NDA) 서명
               </Button>
             </a>
           )}

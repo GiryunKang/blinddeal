@@ -49,9 +49,14 @@ export function DDPanel({ dd }: DDPanelProps) {
       {/* Progress header */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">
-            실사 (Due Diligence)
-          </h3>
+          <div>
+            <h3 className="text-lg font-semibold text-foreground">
+              실사(Due Diligence) 진행 현황
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              거래 전 기업·자산의 재무, 법률, 운영 상태를 정밀 조사하는 과정입니다
+            </p>
+          </div>
           <div className="flex items-center gap-2 text-sm">
             {dd.status === "completed" ? (
               <span

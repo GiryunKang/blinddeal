@@ -49,6 +49,9 @@ export function LOIForm({ roomId, askingPrice, onSuccess }: LOIFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <p className="text-xs text-muted-foreground">
+        인수의향서(LOI)는 매수 의향과 조건을 공식적으로 제안하는 문서입니다.
+      </p>
       <div className="space-y-2">
         <Label htmlFor="proposed_price">제안 금액 (원)</Label>
         <Input
@@ -105,7 +108,7 @@ export function LOIForm({ roomId, askingPrice, onSuccess }: LOIFormProps) {
       </div>
 
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? "제출 중..." : "LOI 제출"}
+        {isPending ? "제출 중..." : "인수의향서(LOI) 제출"}
       </Button>
     </form>
   )

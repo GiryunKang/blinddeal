@@ -188,13 +188,13 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
                     render={
                       <Button size="sm" className="w-full">
                         <FileText className="mr-2 size-4" />
-                        LOI 제출
+                        인수의향서(LOI) 제출
                       </Button>
                     }
                   />
                   <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                      <DialogTitle>LOI(의향서) 제출</DialogTitle>
+                      <DialogTitle>인수의향서(LOI) 제출</DialogTitle>
                     </DialogHeader>
                     <LOIForm
                       roomId={room.id}
@@ -261,7 +261,7 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
       {lois.length > 0 && (
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle className="text-sm">LOI 내역</CardTitle>
+            <CardTitle className="text-sm">인수의향서(LOI) 내역</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {lois.map((loi) => (

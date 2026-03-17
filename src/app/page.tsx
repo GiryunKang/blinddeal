@@ -45,7 +45,7 @@ export default function HomePage() {
               가 이루어집니다
             </h1>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">
-              부동산과 M&A 딜을 공개 또는 비공개로 등록하세요.
+              부동산과 M&A(인수합병) 딜을 공개 또는 비공개로 등록하세요.
               <br className="hidden md:block" />
               검증된 상대방과 안전한 프로세스 위에서 거래합니다.
             </p>
@@ -232,14 +232,14 @@ export default function HomePage() {
             <ProcessStep
               step="03"
               icon={<MessageSquare className="h-5 w-5" />}
-              title="협상 & 실사"
-              description="플랫폼 내에서 안전하게 소통하고, NDA 서명 후 상세 자료를 공유합니다."
+              title="협상 & 실사(정밀조사)"
+              description="플랫폼 내에서 안전하게 소통하고, 비밀유지계약(NDA) 서명 후 상세 자료를 공유합니다."
             />
             <ProcessStep
               step="04"
               icon={<TrendingUp className="h-5 w-5" />}
-              title="계약 & 에스크로"
-              description="전문가 검토, 계약 체결, 에스크로 결제까지 한 곳에서 완료합니다."
+              title="계약 & 에스크로(안심결제)"
+              description="전문가 검토, 계약 체결, 에스크로(안심결제)까지 한 곳에서 완료합니다."
             />
           </div>
         </div>
@@ -256,18 +256,18 @@ export default function HomePage() {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
                 <Shield className="h-6 w-6" />
               </div>
-              <h3 className="font-semibold">에스크로 결제</h3>
+              <h3 className="font-semibold">에스크로(안심결제)</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                거래 대금은 에스크로 계좌에 안전하게 보관됩니다. 소유권 이전이 확인된 후에만 매도자에게 자금이 전달됩니다.
+                거래 대금은 제3자(플랫폼)가 안전하게 보관하다가, 소유권 이전이 확인된 후에만 매도자에게 전달됩니다.
               </p>
             </div>
             <div className="rounded-xl border border-border/50 bg-background/50 p-6">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
                 <FileCheck className="h-6 w-6" />
               </div>
-              <h3 className="font-semibold">법적 구속력 있는 NDA</h3>
+              <h3 className="font-semibold">법적 구속력 있는 비밀유지계약(NDA)</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                비공개 딜 열람 시 전자 서명하는 NDA는 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.
+                비공개 딜 열람 시 전자 서명하는 비밀유지계약(NDA)은 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.
               </p>
             </div>
             <div className="rounded-xl border border-border/50 bg-background/50 p-6">
@@ -292,7 +292,7 @@ export default function HomePage() {
             <TrustCard
               icon={<EyeOff className="h-6 w-6" />}
               title="원하는 만큼만 공개"
-              description="등록된 딜의 62%가 비공개로 운영됩니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. NDA 서명 후에만 상세 정보에 접근 가능합니다."
+              description="등록된 딜의 62%가 비공개로 운영됩니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. 비밀유지계약(NDA) 서명 후에만 상세 정보에 접근 가능합니다."
             />
             <TrustCard
               icon={<Shield className="h-6 w-6" />}
@@ -302,7 +302,7 @@ export default function HomePage() {
             <TrustCard
               icon={<Users className="h-6 w-6" />}
               title="전문가 네트워크"
-              description="120명 이상의 법무, 회계, 세무, 감정 전문가가 실사부터 계약까지 지원합니다. 평균 거래 완료 기간 45일, 거래 성사율 94%의 검증된 프로세스입니다."
+              description="120명 이상의 법무, 회계, 세무, 감정 전문가가 실사(기업·자산 정밀조사)부터 계약까지 지원합니다. 평균 거래 완료 기간 45일, 거래 성사율 94%의 검증된 프로세스입니다."
             />
           </div>
         </div>
