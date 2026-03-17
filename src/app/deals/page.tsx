@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
+import Link from "next/link"
+import { MapPin } from "lucide-react"
 import { getDeals, type DealFilters } from "@/lib/actions/deals"
 
 export const metadata: Metadata = { title: "딜 마켓플레이스" }
@@ -33,9 +35,18 @@ export default async function DealsPage({ searchParams }: DealsPageProps) {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
-          딜 마켓플레이스
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
+            딜 마켓플레이스
+          </h1>
+          <Link
+            href="/deals/map"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border/50 bg-card/50 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
+          >
+            <MapPin className="h-3.5 w-3.5" />
+            지도로 보기
+          </Link>
+        </div>
         <p className="mt-1 text-sm text-muted-foreground">
           총 {count}건의 딜이 등록되어 있습니다
         </p>

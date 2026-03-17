@@ -17,6 +17,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
 
 function getPasswordStrength(pw: string): {
   score: number;
@@ -106,6 +107,8 @@ export function RegisterForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <SocialLoginButtons />
+
           <Tabs
             value={userType}
             onValueChange={(val) =>

@@ -36,7 +36,7 @@ export default function HomePage() {
               <Lock className="h-3 w-3 text-blue-400" />
               검증된 딜만, 원하는 만큼만 공개합니다
             </div>
-            <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
               보이지 않는 곳에서
               <br />
               <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">

@@ -31,6 +31,7 @@ const publicNavLinks = [
 const authNavLinks = [
   { href: "/dashboard", label: "대시보드" },
   { href: "/deals", label: "마켓" },
+  { href: "/deals/matched", label: "맞춤 딜" },
   { href: "/insights", label: "인사이트" },
   { href: "/community", label: "커뮤니티" },
   { href: "/experts", label: "전문가" },
