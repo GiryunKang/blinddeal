@@ -1,3 +1,5 @@
+export const revalidate = 60 // Revalidate every 60 seconds
+
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import Link from "next/link"

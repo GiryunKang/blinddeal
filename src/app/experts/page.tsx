@@ -1,3 +1,5 @@
+export const revalidate = 300 // Revalidate every 5 minutes
+
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import { getExperts, type ExpertFilters, type ExpertType } from "@/lib/actions/experts"

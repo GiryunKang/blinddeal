@@ -1,3 +1,5 @@
+export const revalidate = 300 // Revalidate every 5 minutes
+
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"

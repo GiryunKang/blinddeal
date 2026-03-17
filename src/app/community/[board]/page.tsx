@@ -1,3 +1,5 @@
+export const revalidate = 60 // Revalidate every 60 seconds
+
 import Link from "next/link"
 import { Plus, ArrowLeft } from "lucide-react"
 import { getPosts } from "@/lib/actions/community"
