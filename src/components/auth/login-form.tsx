@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
 
 export function LoginForm() {
   const router = useRouter();
@@ -62,6 +63,8 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <SocialLoginButtons />
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">이메일</Label>
             <Input
