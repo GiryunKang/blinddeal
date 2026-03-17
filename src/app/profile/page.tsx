@@ -10,6 +10,9 @@ import {
   Settings,
   Bell,
   Target,
+  Pencil,
+  ShieldCheck,
+  CheckCircle,
 } from "lucide-react"
 import { getProfile, requireAuth } from "@/lib/supabase/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -113,8 +116,31 @@ export default async function ProfilePage() {
                   <Calendar className="size-4" />
                   <span>가입일: {formatDate(profile.created_at)}</span>
                 </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="size-4" />
+                  <span>
+                    인증 레벨: {profile.verification_level ?? 0}
+                  </span>
+                </div>
               </div>
             </div>
+          </div>
+
+          <Separator className="my-4" />
+
+          <div className="flex flex-wrap gap-3">
+            <Link href="/profile/edit">
+              <Button variant="outline" size="sm">
+                <Pencil className="size-4" />
+                프로필 수정
+              </Button>
+            </Link>
+            <Link href="/profile/verification">
+              <Button variant="outline" size="sm">
+                <ShieldCheck className="size-4" />
+                인증 관리
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
