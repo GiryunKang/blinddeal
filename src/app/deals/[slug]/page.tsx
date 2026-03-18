@@ -11,15 +11,19 @@ import {
   Lock,
   BarChart3,
   Shield,
+  CheckCircle2,
+  AlertTriangle,
+  Building2,
+  Layers,
+  Ruler,
+  Landmark,
 } from "lucide-react"
 import { getDealBySlug } from "@/lib/actions/deals"
 import { getUser } from "@/lib/supabase/auth"
 import { getMatchedBuyersForDeal } from "@/lib/actions/deal-visibility"
 import { checkNDA } from "@/lib/actions/nda"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { formatKRW, formatDate } from "@/lib/utils"
 import { InterestButton } from "@/components/deals/interest-button"
 import { InquiryButton } from "@/components/deals/inquiry-button"
@@ -34,21 +38,49 @@ function StatCard({
   icon: Icon,
   label,
   value,
+  gradient = false,
 }: {
   icon: React.ComponentType<{ className?: string }>
   label: string
   value: string | number | null | undefined
+  gradient?: boolean
 }) {
   if (!value && value !== 0) return null
   return (
-    <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-3">
-      <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary/10">
-        <Icon className="size-4 text-primary" />
+    <div className="flex items-center gap-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.05] hover:border-white/[0.1]">
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/10">
+        <Icon className="size-4.5 text-blue-400" />
       </div>
-      <div>
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-sm font-medium text-foreground">{String(value)}</p>
+      <div className="min-w-0">
+        <p className="text-xs text-muted-foreground/70 font-medium">{label}</p>
+        <p
+          className={`text-sm font-semibold truncate mt-0.5 ${
+            gradient
+              ? "bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
+              : "text-foreground"
+          }`}
+        >
+          {String(value)}
+        </p>
       </div>
+    </div>
+  )
+}
+
+function MiniStat({
+  icon: Icon,
+  value,
+  label,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  value: string | number
+  label: string
+}) {
+  return (
+    <div className="flex items-center gap-2 text-muted-foreground">
+      <Icon className="size-4" />
+      <span className="text-sm font-medium text-foreground">{value}</span>
+      <span className="text-xs">{label}</span>
     </div>
   )
 }
@@ -106,16 +138,16 @@ export default async function DealDetailPage({
 
   const categoryLabel =
     deal.deal_category === "real_estate" ? "부동산" : "M&A(인수합병)"
-  const categoryColor =
+  const categoryBadgeClass =
     deal.deal_category === "real_estate"
-      ? "bg-blue-500/20 text-blue-400"
-      : "bg-purple-500/20 text-purple-400"
+      ? "bg-blue-500/20 border-blue-500/30 text-blue-300"
+      : "bg-purple-500/20 border-purple-500/30 text-purple-300"
 
   const visibilityLabel = deal.visibility === "public" ? "공개" : "비공개"
-  const visibilityColor =
+  const visibilityBadgeClass =
     deal.visibility === "public"
-      ? "bg-emerald-500/20 text-emerald-400"
-      : "bg-amber-500/20 text-amber-400"
+      ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300"
+      : "bg-amber-500/20 border-amber-500/30 text-amber-300"
 
   const statusMap: Record<string, string> = {
     draft: "초안",
@@ -130,7 +162,10 @@ export default async function DealDetailPage({
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen">
+      {/* Background gradient decoration */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-blue-500/[0.04] via-indigo-500/[0.02] to-transparent" />
+
       {showNDAOverlay && (
         <NDAOverlay
           dealId={deal.id}
@@ -139,86 +174,102 @@ export default async function DealDetailPage({
           isLoggedIn={isLoggedIn}
         />
       )}
-      <div className={`grid gap-8 lg:grid-cols-3 ${showNDAOverlay ? "pointer-events-none select-none blur-md" : ""}`}>
-        {/* Left Column */}
-        <div className="space-y-6 lg:col-span-2">
-          {/* Header */}
-          <div>
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <Badge className={categoryColor}>{categoryLabel}</Badge>
-              <Badge className={visibilityColor}>
-                {deal.visibility === "private" && (
-                  <Lock className="mr-1 size-3" />
-                )}
-                {visibilityLabel}
-              </Badge>
-              <Badge variant="outline">
-                {statusMap[deal.status] || deal.status}
-              </Badge>
-              {deal.visibility === "private" && ndaSigned && !isOwner && (
-                <Badge className="bg-emerald-500/20 text-emerald-400">
-                  <Shield className="mr-1 size-3" />
-                  비밀유지계약(NDA) 서명 완료
-                </Badge>
+
+      <div
+        className={`relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 ${
+          showNDAOverlay ? "pointer-events-none select-none blur-md" : ""
+        }`}
+      >
+        {/* Hero Header */}
+        <div className="mb-8">
+          {/* Badges row */}
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <span
+              className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-md border ${categoryBadgeClass}`}
+            >
+              {categoryLabel}
+            </span>
+            <span
+              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-md border ${visibilityBadgeClass}`}
+            >
+              {deal.visibility === "private" && (
+                <Lock className="mr-0.5 size-3" />
               )}
-            </div>
-            <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
-              {deal.title}
-            </h1>
-            <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Eye className="size-4" />
-                조회 {deal.view_count}
+              {visibilityLabel}
+            </span>
+            <Badge variant="outline" className="backdrop-blur-md">
+              {statusMap[deal.status] || deal.status}
+            </Badge>
+            {deal.visibility === "private" && ndaSigned && !isOwner && (
+              <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-md border bg-emerald-500/20 border-emerald-500/30 text-emerald-300">
+                <Shield className="size-3" />
+                비밀유지계약(NDA) 서명 완료
               </span>
-              <span className="flex items-center gap-1">
-                <Heart className="size-4" />
-                관심 {deal.interest_count}
-              </span>
-              <span className="flex items-center gap-1">
-                <Calendar className="size-4" />
-                {formatDate(deal.created_at)}
-              </span>
-            </div>
+            )}
           </div>
 
-          {/* Images */}
-          {deal.image_urls && deal.image_urls.length > 0 && (
-            <div className="grid gap-2 sm:grid-cols-2">
-              {deal.image_urls.map((url: string, index: number) => (
-                <div
-                  key={index}
-                  className="relative aspect-[16/9] overflow-hidden rounded-lg bg-muted"
-                >
-                  <Image
-                    src={url}
-                    alt={`${deal.title} 이미지 ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          {/* Title — large gradient text */}
+          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            {deal.title}
+          </h1>
 
-          {/* Description */}
-          <Card className="border-border/50">
-            <CardHeader>
-              <CardTitle>상세 설명</CardTitle>
-            </CardHeader>
-            <CardContent>
+          {/* Meta stats row */}
+          <div className="mt-4 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+            <MiniStat icon={Eye} value={deal.view_count} label="조회" />
+            <MiniStat icon={Heart} value={deal.interest_count} label="관심" />
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Calendar className="size-4" />
+              <span className="text-sm">{formatDate(deal.created_at)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Left Column */}
+          <div className="space-y-8 lg:col-span-2">
+            {/* Images Gallery */}
+            {deal.image_urls && deal.image_urls.length > 0 && (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {deal.image_urls.map((url: string, index: number) => (
+                  <div
+                    key={index}
+                    className={`group/img relative overflow-hidden rounded-2xl bg-muted border border-border/30 ${
+                      index === 0 && deal.image_urls.length > 1
+                        ? "sm:col-span-2 aspect-[16/9]"
+                        : "aspect-[16/10]"
+                    }`}
+                  >
+                    <Image
+                      src={url}
+                      alt={`${deal.title} 이미지 ${index + 1}`}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover/img:scale-105"
+                    />
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover/img:bg-black/10" />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Description — glass card */}
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+              <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <div className="h-5 w-1 rounded-full bg-gradient-to-b from-blue-400 to-indigo-400" />
+                상세 설명
+              </h2>
               <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                 {deal.description}
               </p>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Detail Info Card */}
-          {deal.deal_category === "real_estate" ? (
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle>부동산 정보</CardTitle>
-              </CardHeader>
-              <CardContent>
+            {/* Detail Info Card */}
+            {deal.deal_category === "real_estate" ? (
+              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+                <h2 className="text-lg font-semibold text-foreground mb-5 flex items-center gap-2">
+                  <div className="h-5 w-1 rounded-full bg-gradient-to-b from-blue-400 to-indigo-400" />
+                  부동산 정보
+                </h2>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <StatCard
                     icon={MapPin}
@@ -230,25 +281,27 @@ export default async function DealDetailPage({
                     }
                   />
                   <StatCard
-                    icon={Building}
+                    icon={Ruler}
                     label="대지면적"
                     value={
                       deal.property_area_sqm
                         ? `${deal.property_area_sqm}m²`
                         : null
                     }
+                    gradient
                   />
                   <StatCard
-                    icon={Building}
+                    icon={Building2}
                     label="건축면적"
                     value={
                       deal.building_area_sqm
                         ? `${deal.building_area_sqm}m²`
                         : null
                     }
+                    gradient
                   />
                   <StatCard
-                    icon={Building}
+                    icon={Layers}
                     label="층수"
                     value={
                       deal.floor_count ? `${deal.floor_count}층` : null
@@ -262,19 +315,18 @@ export default async function DealDetailPage({
                     }
                   />
                   <StatCard
-                    icon={MapPin}
+                    icon={Landmark}
                     label="용도지역"
                     value={deal.zoning}
                   />
                 </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle>기업 정보</CardTitle>
-              </CardHeader>
-              <CardContent>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+                <h2 className="text-lg font-semibold text-foreground mb-5 flex items-center gap-2">
+                  <div className="h-5 w-1 rounded-full bg-gradient-to-b from-purple-400 to-pink-400" />
+                  기업 정보
+                </h2>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <StatCard
                     icon={Building}
@@ -289,6 +341,7 @@ export default async function DealDetailPage({
                         ? formatKRW(deal.annual_revenue)
                         : null
                     }
+                    gradient
                   />
                   <StatCard
                     icon={TrendingUp}
@@ -298,6 +351,7 @@ export default async function DealDetailPage({
                         ? formatKRW(deal.annual_profit)
                         : null
                     }
+                    gradient
                   />
                   <StatCard
                     icon={Users}
@@ -318,105 +372,104 @@ export default async function DealDetailPage({
                     }
                   />
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+            )}
 
-          {/* Highlights */}
-          {deal.highlight_points && deal.highlight_points.length > 0 && (
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle>핵심 매력 포인트</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
+            {/* Highlights — premium green card */}
+            {deal.highlight_points && deal.highlight_points.length > 0 && (
+              <div className="rounded-2xl border border-emerald-500/10 bg-emerald-500/[0.03] p-6 backdrop-blur-sm">
+                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <div className="h-5 w-1 rounded-full bg-gradient-to-b from-emerald-400 to-green-400" />
+                  핵심 매력 포인트
+                </h2>
+                <ul className="space-y-3">
                   {deal.highlight_points.map(
                     (point: string, index: number) => (
                       <li
                         key={index}
-                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                        className="flex items-start gap-3 text-sm text-muted-foreground"
                       >
-                        <span className="mt-1 block size-1.5 shrink-0 rounded-full bg-emerald-400" />
-                        {point}
+                        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                        <span>{point}</span>
                       </li>
                     )
                   )}
                 </ul>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+            )}
 
-          {/* Risks */}
-          {deal.risk_factors && deal.risk_factors.length > 0 && (
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle>리스크 요소</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
+            {/* Risks — premium amber/red card */}
+            {deal.risk_factors && deal.risk_factors.length > 0 && (
+              <div className="rounded-2xl border border-amber-500/10 bg-amber-500/[0.03] p-6 backdrop-blur-sm">
+                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <div className="h-5 w-1 rounded-full bg-gradient-to-b from-amber-400 to-red-400" />
+                  리스크 요소
+                </h2>
+                <ul className="space-y-3">
                   {deal.risk_factors.map(
                     (risk: string, index: number) => (
                       <li
                         key={index}
-                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                        className="flex items-start gap-3 text-sm text-muted-foreground"
                       >
-                        <span className="mt-1 block size-1.5 shrink-0 rounded-full bg-amber-400" />
-                        {risk}
+                        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-400" />
+                        <span>{risk}</span>
                       </li>
                     )
                   )}
                 </ul>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
 
-        {/* Right Column — Sticky Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-8 space-y-6">
-            {/* Price Card */}
-            <Card className="border-border/50">
-              <CardContent className="pt-4">
-                <p className="text-sm text-muted-foreground">매각 희망가</p>
-                <p className="mt-1 text-2xl font-bold text-primary">
+          {/* Right Column — Sticky Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8 space-y-6">
+              {/* Price Card — premium glass */}
+              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-md overflow-hidden relative">
+                {/* Subtle gradient accent at top */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+
+                <p className="text-sm text-muted-foreground font-medium">매각 희망가</p>
+                <p className="mt-2 text-3xl font-bold bg-gradient-to-r from-blue-400 via-blue-300 to-indigo-400 bg-clip-text text-transparent">
                   {deal.asking_price
                     ? formatKRW(deal.asking_price)
                     : "가격 협의"}
                 </p>
                 {deal.price_negotiable && (
-                  <p className="mt-0.5 text-xs text-muted-foreground">
+                  <p className="mt-1 text-xs text-muted-foreground/70">
                     가격 협의 가능
                   </p>
                 )}
-              </CardContent>
-              <Separator />
-              <CardContent className="space-y-3 pb-4 pt-4">
-                {!isOwner && (
-                  <InquiryButton
+
+                {/* Divider */}
+                <div className="my-5 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+
+                {/* CTA Buttons */}
+                <div className="space-y-3">
+                  {!isOwner && (
+                    <InquiryButton
+                      dealId={deal.id}
+                      dealTitle={deal.title}
+                      dealCategory={deal.deal_category}
+                      isLoggedIn={isLoggedIn}
+                    />
+                  )}
+                  <InterestButton
                     dealId={deal.id}
-                    dealTitle={deal.title}
-                    dealCategory={deal.deal_category}
+                    initialInterested={userInterested}
+                    initialCount={deal.interest_count ?? 0}
                     isLoggedIn={isLoggedIn}
                   />
-                )}
-                <InterestButton
-                  dealId={deal.id}
-                  initialInterested={userInterested}
-                  initialCount={deal.interest_count ?? 0}
-                  isLoggedIn={isLoggedIn}
-                />
-              </CardContent>
-            </Card>
+                </div>
+              </div>
 
-            {/* Owner Info */}
-            {deal.owner && (
-              <Card className="border-border/50">
-                <CardHeader>
-                  <CardTitle className="text-sm">등록자 정보</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+              {/* Owner Info — premium glass */}
+              {deal.owner && (
+                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm">
+                  <h3 className="text-sm font-semibold text-foreground mb-4">등록자 정보</h3>
+                  <div className="flex items-center gap-3.5">
+                    <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/10 text-lg font-semibold text-blue-400">
                       {(
                         deal.owner.display_name ||
                         deal.owner.company_name ||
@@ -425,45 +478,52 @@ export default async function DealDetailPage({
                         .charAt(0)
                         .toUpperCase()}
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-foreground truncate">
                         {deal.owner.company_name ||
                           deal.owner.display_name}
                       </p>
                       {deal.owner.verification_level > 0 && (
-                        <p className="text-xs text-emerald-400">
-                          인증 레벨 {deal.owner.verification_level}
-                        </p>
+                        <div className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5">
+                          <Shield className="size-3 text-emerald-400" />
+                          <span className="text-[10px] font-medium text-emerald-400">
+                            인증 레벨 {deal.owner.verification_level}
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>
                   {deal.owner.bio && (
-                    <p className="mt-3 text-xs text-muted-foreground line-clamp-3">
+                    <p className="mt-4 text-xs text-muted-foreground leading-relaxed line-clamp-3 border-t border-white/[0.04] pt-4">
                       {deal.owner.bio}
                     </p>
                   )}
-                </CardContent>
-              </Card>
-            )}
+                </div>
+              )}
 
-            {/* Owner-only: Visibility Control & Analytics */}
-            {isOwner && (
-              <>
-                <VisibilityControl
-                  dealId={deal.id}
-                  currentVisibility={deal.visibility}
-                  currentRequiredLevel={deal.required_verification_level ?? 0}
-                  matchedBuyerCount={matchedBuyerCount}
-                  dealSlug={slug}
-                />
-                <a href={`/deals/${slug}/analytics`}>
-                  <Button variant="outline" className="w-full" size="sm">
-                    <BarChart3 className="mr-2 size-4" />
-                    관심도 분석 대시보드
-                  </Button>
-                </a>
-              </>
-            )}
+              {/* Owner-only: Visibility Control & Analytics */}
+              {isOwner && (
+                <>
+                  <VisibilityControl
+                    dealId={deal.id}
+                    currentVisibility={deal.visibility}
+                    currentRequiredLevel={deal.required_verification_level ?? 0}
+                    matchedBuyerCount={matchedBuyerCount}
+                    dealSlug={slug}
+                  />
+                  <a href={`/deals/${slug}/analytics`}>
+                    <Button
+                      variant="outline"
+                      className="w-full rounded-xl border-white/[0.08] bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.06] transition-all duration-300"
+                      size="sm"
+                    >
+                      <BarChart3 className="mr-2 size-4" />
+                      관심도 분석 대시보드
+                    </Button>
+                  </a>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

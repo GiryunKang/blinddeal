@@ -3,7 +3,7 @@ export const revalidate = 60 // Revalidate every 60 seconds
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import Link from "next/link"
-import { MapPin } from "lucide-react"
+import { MapPin, Sparkles } from "lucide-react"
 import { getDeals, type DealFilters } from "@/lib/actions/deals"
 
 export const metadata: Metadata = { title: "딜 마켓플레이스" }
@@ -34,28 +34,34 @@ export default async function DealsPage({ searchParams }: DealsPageProps) {
   const { deals, count } = await getDeals(filters)
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      {/* Subtle gradient background at top */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-blue-500/[0.03] via-indigo-500/[0.02] to-transparent" />
+
       {/* Header */}
-      <div className="mb-6">
+      <div className="relative mb-8">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
-            딜 마켓플레이스
-          </h1>
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="h-6 w-6 text-blue-400" />
+            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              딜 마켓플레이스
+            </h1>
+          </div>
           <Link
             href="/deals/map"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border/50 bg-card/50 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-white/5 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:text-foreground hover:border-blue-500/30 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.15)]"
           >
             <MapPin className="h-3.5 w-3.5" />
             지도로 보기
           </Link>
         </div>
-        <p className="mt-1 text-sm text-muted-foreground">
-          총 {count}건의 딜이 등록되어 있습니다
+        <p className="mt-2 text-sm text-muted-foreground">
+          총 <span className="font-semibold text-foreground">{count}</span>건의 프리미엄 딜이 등록되어 있습니다
         </p>
       </div>
 
-      {/* Filters */}
-      <div className="mb-6">
+      {/* Filters — glass effect bar */}
+      <div className="relative mb-8 rounded-2xl border border-border/50 bg-card/50 p-4 backdrop-blur-md">
         <Suspense
           fallback={
             <div className="h-10 animate-pulse rounded-lg bg-muted" />
@@ -73,10 +79,10 @@ export default async function DealsPage({ searchParams }: DealsPageProps) {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20">
-          <div className="rounded-full bg-muted p-4">
+        <div className="flex flex-col items-center justify-center py-24">
+          <div className="rounded-full bg-muted/50 p-5 backdrop-blur-md border border-border/30">
             <svg
-              className="size-8 text-muted-foreground"
+              className="size-10 text-muted-foreground/50"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -89,10 +95,10 @@ export default async function DealsPage({ searchParams }: DealsPageProps) {
               />
             </svg>
           </div>
-          <h3 className="mt-4 text-lg font-medium text-foreground">
+          <h3 className="mt-5 text-lg font-semibold text-foreground">
             등록된 딜이 없습니다
           </h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1.5 text-sm text-muted-foreground">
             검색 조건을 변경하거나 새로운 딜을 등록해보세요
           </p>
         </div>
