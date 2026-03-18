@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Eye, Heart, Lock, Building2 } from "lucide-react"
 import { formatKRW } from "@/lib/utils"
+import { ClassifiedStamp } from "@/components/effects/classified-stamp"
 
 interface DealCardProps {
   deal: {
@@ -38,7 +39,11 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
 
   return (
     <Link href={isBlind ? "#" : `/deals/${deal.slug}`} className="group block">
-      <div className="relative rounded-2xl overflow-hidden bg-card border border-border/50 transition-all duration-300 hover:border-blue-500/30 hover:translate-y-[-4px] hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.15)]">
+      <div className={`relative rounded-2xl overflow-hidden bg-card border transition-all duration-300 hover:translate-y-[-4px] ${
+        isBlind
+          ? "watermark-confidential border-red-500/15 hover:border-amber-500/25 hover:shadow-[0_20px_60px_-15px_rgba(239,68,68,0.1)]"
+          : "border-border/50 hover:border-blue-500/30 hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.15)]"
+      }`}>
         {/* Image Area */}
         <div className="relative aspect-[16/10] overflow-hidden">
           {/* Gradient overlay */}
@@ -93,12 +98,15 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
           )}
         </div>
 
-        {/* Blind overlay */}
+        {/* Blind overlay with classified stamp */}
         {isBlind && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm">
+            {/* Classified stamp */}
+            <ClassifiedStamp level={3} />
+
             <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
               {/* Pulsing glow */}
-              <div className="absolute inset-0 rounded-full bg-blue-500/20 animate-pulse" />
+              <div className="absolute inset-0 rounded-full bg-red-500/15 animate-pulse" />
               <Lock className="relative h-6 w-6 text-white/80" />
             </div>
             <p className="mt-3 text-sm font-medium text-white/70">인증 후 열람 가능</p>
@@ -113,8 +121,8 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
         <div className="p-5">
           {/* Title */}
           {isBlind ? (
-            <h3 className="line-clamp-1 select-none text-lg font-semibold text-muted-foreground/30 blur-[5px]">
-              비공개 딜 제목 영역
+            <h3 className="line-clamp-1 select-none text-lg font-semibold">
+              <span className="redacted">██████ ████ ██████</span>
             </h3>
           ) : (
             <h3 className="line-clamp-1 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-blue-400">
@@ -124,8 +132,8 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
 
           {/* Description */}
           {isBlind ? (
-            <p className="line-clamp-2 select-none text-sm text-muted-foreground/20 blur-[4px] mt-1.5">
-              이 딜의 상세 내용은 인증된 사용자만 열람할 수 있습니다
+            <p className="line-clamp-2 select-none text-sm mt-1.5">
+              <span className="redacted">████████ ██████ ████ ██████████</span>
             </p>
           ) : (
             <p className="line-clamp-2 text-sm text-muted-foreground mt-1.5">
@@ -140,8 +148,8 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
             </div>
           )}
           {isBlind && (
-            <div className="mt-3 select-none text-xl font-bold text-muted-foreground/20 blur-[5px]">
-              ████████
+            <div className="mt-3 select-none text-xl font-bold">
+              <span className="redacted">&#8361;██,███,███,███</span>
             </div>
           )}
 

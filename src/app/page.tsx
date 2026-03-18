@@ -19,11 +19,14 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { formatKRW } from "@/lib/utils";
+import { SpotlightHero } from "@/components/effects/spotlight-hero";
+import { ClassifiedStamp } from "@/components/effects/classified-stamp";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section — Premium BlindDeal Identity */}
+      <SpotlightHero>
       <section className="relative overflow-hidden border-b border-border/30">
         {/* Grid dot background */}
         <div className="grid-bg pointer-events-none absolute inset-0" />
@@ -80,6 +83,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      </SpotlightHero>
 
       {/* Social Proof Bar — Glassmorphism */}
       <section className="relative border-b border-border/30">
@@ -455,7 +459,10 @@ function BlindDealCard({
   industry: string; requiredLevel: number; interests: number;
 }) {
   return (
-    <Card className="hover-lift group relative overflow-hidden border-white/[0.06] bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-amber-500/15">
+    <Card className="watermark-confidential hover-lift group relative overflow-hidden border-red-500/10 bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-amber-500/20">
+      {/* Classified stamp overlay */}
+      <ClassifiedStamp level={requiredLevel} />
+
       {/* Top section with badges — always visible */}
       <div className="relative z-20 flex items-center gap-2 px-5 pt-5">
         <Badge variant="secondary" className={categoryColor === "blue" ? "bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/20" : "bg-purple-500/10 text-purple-400 ring-1 ring-purple-500/20"}>
@@ -473,19 +480,21 @@ function BlindDealCard({
 
       {/* Masked/redacted content area */}
       <div className="relative mt-3 px-5">
-        {/* Blurred masked title */}
+        {/* Redacted title — monospace, uneven widths */}
         <div className="relative select-none">
-          <p className="text-base font-semibold tracking-wider text-muted-foreground/20" aria-hidden="true">
-            ██████ ████ ██████
+          <p className="redacted text-base font-semibold tracking-wider" aria-hidden="true">
+            <span className="inline-block">██████</span>{" "}
+            <span className="inline-block">████</span>{" "}
+            <span className="inline-block">████████</span>
           </p>
           <div className="absolute inset-0 backdrop-blur-[2px]" />
         </div>
         <p className="mt-1 text-sm text-muted-foreground/60">{industry}</p>
 
-        {/* Blurred price */}
+        {/* Redacted price */}
         <div className="mt-3 flex items-center justify-between">
           <div className="relative select-none">
-            <span className="text-lg font-bold text-muted-foreground/15">&#8361;██,███,███,███</span>
+            <span className="redacted text-lg font-bold">&#8361;██,███,███,███</span>
             <div className="absolute inset-0 backdrop-blur-[3px]" />
           </div>
           <span className="text-xs text-muted-foreground/60">관심 {interests}명</span>
@@ -495,8 +504,8 @@ function BlindDealCard({
       {/* Gradient overlay fading to dark at bottom */}
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-      {/* Ambient glow behind card */}
-      <div className="pointer-events-none absolute -bottom-4 left-1/2 h-24 w-48 -translate-x-1/2 rounded-full bg-blue-500/8 blur-3xl" />
+      {/* Ambient glow behind card — red/amber tint for classified feel */}
+      <div className="pointer-events-none absolute -bottom-4 left-1/2 h-24 w-48 -translate-x-1/2 rounded-full bg-red-500/5 blur-3xl" />
 
       {/* Centered lock overlay */}
       <div className="relative z-10 mx-5 mb-5 mt-5">

@@ -332,3 +332,48 @@
 .fade-in-up {
   animation: fade-in-up 0.6s ease-out forwards;
 }
+
+/* ─── Classified Document Effects ─── */
+
+/* Classified document watermark */
+.watermark-confidential {
+  position: relative;
+}
+.watermark-confidential::after {
+  content: 'CONFIDENTIAL';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: ui-monospace, monospace;
+  color: rgba(239, 68, 68, 0.06);
+  letter-spacing: 0.5em;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 20;
+}
+
+/* Redaction bar style */
+.redacted {
+  background: linear-gradient(90deg,
+    hsl(var(--foreground)) 0%,
+    hsl(var(--foreground)) 100%
+  );
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-family: ui-monospace, monospace;
+  user-select: none;
+}
+
+/* Stamp animation */
+@keyframes stamp-appear {
+  0% { transform: translate(-50%, -50%) rotate(-12deg) scale(2); opacity: 0; }
+  50% { transform: translate(-50%, -50%) rotate(-12deg) scale(0.9); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) rotate(-12deg) scale(1); opacity: 1; }
+}
+.stamp-animate {
+  animation: stamp-appear 0.5s ease-out forwards;
+}
