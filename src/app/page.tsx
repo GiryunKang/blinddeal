@@ -17,10 +17,12 @@ import {
   FileCheck,
   Scale,
   CheckCircle,
+  MessageSquareHeart,
 } from "lucide-react";
 import { formatKRW } from "@/lib/utils";
 import { SpotlightHero } from "@/components/effects/spotlight-hero";
 import { ClassifiedStamp } from "@/components/effects/classified-stamp";
+import { InquiryForm } from "@/components/inquiry/inquiry-form";
 
 export default function HomePage() {
   return (
@@ -84,32 +86,6 @@ export default function HomePage() {
         </div>
       </section>
       </SpotlightHero>
-
-      {/* Social Proof Bar — Glassmorphism */}
-      <section className="relative border-b border-border/30">
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="animated-border glass-card rounded-2xl px-6 py-8 md:px-10">
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-              <div className="count-animate text-center" style={{ opacity: 0 }}>
-                <div className="shimmer-text text-3xl font-bold md:text-4xl">&#8361;1.2T+</div>
-                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">누적 거래액</div>
-              </div>
-              <div className="count-animate text-center" style={{ opacity: 0 }}>
-                <div className="shimmer-text text-3xl font-bold md:text-4xl">2,400+</div>
-                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">검증된 딜</div>
-              </div>
-              <div className="count-animate text-center" style={{ opacity: 0 }}>
-                <div className="shimmer-text text-3xl font-bold md:text-4xl">8,700+</div>
-                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">활성 사용자</div>
-              </div>
-              <div className="count-animate text-center" style={{ opacity: 0 }}>
-                <div className="shimmer-text text-3xl font-bold md:text-4xl">94%</div>
-                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">거래 성사율</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Quick Deal Registration CTA — Premium Cards */}
       <section className="relative border-b border-border/30">
@@ -180,7 +156,6 @@ export default function HomePage() {
             location="경기 성남"
             amount={45000000000}
             visibility="public"
-            interests={23}
             tags={["수도권", "물류", "임대수익"]}
           />
           {/* Private Deal — Blurred/Hidden */}
@@ -190,7 +165,6 @@ export default function HomePage() {
             dealType="기업 인수"
             industry="헬스케어"
             requiredLevel={3}
-            interests={47}
           />
           {/* Public Deal */}
           <DealPreviewCard
@@ -201,7 +175,6 @@ export default function HomePage() {
             location="제주"
             amount={78000000000}
             visibility="public"
-            interests={15}
             tags={["관광", "레저", "개발"]}
           />
           {/* Private Deal — Blurred/Hidden */}
@@ -211,7 +184,6 @@ export default function HomePage() {
             dealType="오피스"
             industry="강남 핵심권"
             requiredLevel={2}
-            interests={31}
           />
           {/* Public Deal */}
           <DealPreviewCard
@@ -222,7 +194,6 @@ export default function HomePage() {
             location="서울"
             amount={null}
             visibility="public"
-            interests={38}
             tags={["IT", "SaaS", "ARR 50억"]}
           />
           {/* Private Deal */}
@@ -232,7 +203,6 @@ export default function HomePage() {
             dealType="사업부 매각"
             industry="제조/화학"
             requiredLevel={4}
-            interests={12}
           />
         </div>
       </section>
@@ -333,46 +303,70 @@ export default function HomePage() {
             <TrustCard
               icon={<EyeOff className="h-6 w-6" />}
               title="원하는 만큼만 공개"
-              description="등록된 딜의 62%가 비공개로 운영됩니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. 비밀유지계약(NDA) 서명 후에만 상세 정보에 접근 가능합니다."
+              description="등록된 딜을 비공개로 운영할 수 있습니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. 비밀유지계약(NDA) 서명 후에만 상세 정보에 접근 가능합니다."
               color="blue"
             />
             <TrustCard
               icon={<Shield className="h-6 w-6" />}
               title="단계적 인증 체계"
-              description="4단계 인증 시스템을 통해 매수자의 자격을 검증합니다. 인증 등급이 높을수록 더 큰 규모의 비공개 딜에 접근할 수 있으며, 현재 8,700명 이상의 검증된 사용자가 활동 중입니다."
+              description="4단계 인증 시스템을 통해 매수자의 자격을 검증합니다. 인증 등급이 높을수록 더 큰 규모의 비공개 딜에 접근할 수 있으며, 검증된 사용자만 접근할 수 있습니다."
               color="indigo"
             />
             <TrustCard
               icon={<Users className="h-6 w-6" />}
               title="전문가 네트워크"
-              description="120명 이상의 법무, 회계, 세무, 감정 전문가가 실사(기업·자산 정밀조사)부터 계약까지 지원합니다. 평균 거래 완료 기간 45일, 거래 성사율 94%의 검증된 프로세스입니다."
+              description="법무, 회계, 세무, 감정 전문가가 실사(기업·자산 정밀조사)부터 계약까지 지원합니다. 체계적인 프로세스로 거래를 지원합니다."
               color="purple"
             />
           </div>
         </div>
       </section>
 
-      {/* Partner / Credential Logos */}
+      {/* Partner Recruitment */}
       <section className="relative border-t border-border/30">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
-          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">신뢰할 수 있는 <span className="gradient-text">파트너십</span></h2>
-          <p className="mb-10 text-center text-sm text-muted-foreground">함께하는 전문 기관들</p>
+          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">함께할 <span className="gradient-text">전문 기관</span>을 모집합니다</h2>
+          <p className="mb-10 text-center text-sm text-muted-foreground">법무법인, 회계법인, 감정평가법인, 신탁회사 파트너를 찾고 있습니다</p>
 
-          <div className="flex flex-wrap items-center justify-center gap-5">
-            {["법무법인 A", "회계법인 B", "감정평가법인 C", "신탁회사 D"].map((partner) => (
-              <div
-                key={partner}
-                className="glass-card flex h-16 items-center justify-center rounded-xl px-10 text-sm font-medium text-muted-foreground/70 transition-all hover:border-white/15 hover:text-muted-foreground"
-              >
-                {partner}
-              </div>
-            ))}
+          <div className="flex justify-center">
+            <a href="mailto:83482@daum.net">
+              <Button size="lg" variant="outline" className="gap-2 border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
+                파트너 제휴 문의
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </a>
           </div>
+        </div>
+      </section>
 
-          <p className="mt-8 text-center text-xs text-muted-foreground/40">
-            실제 파트너 기관은 서비스 런칭 시 공개됩니다
-          </p>
+      {/* Inquiry / Meeting Request Form */}
+      <section id="inquiry" className="relative border-t border-border/30">
+        {/* Gradient background */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-indigo-500/[0.03] to-purple-500/[0.05]" />
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-indigo-500/8 blur-[140px]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
+          <div className="mx-auto max-w-2xl">
+            {/* Section Header */}
+            <div className="mb-10 text-center">
+              <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-xs font-medium text-muted-foreground backdrop-blur-xl">
+                <MessageSquareHeart className="h-3.5 w-3.5 text-indigo-400" />
+                <span>회원가입 없이 간편하게</span>
+              </div>
+              <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
+                딜을 찾거나 등록하고 <span className="gradient-text">싶으신가요?</span>
+              </h2>
+              <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+                회원가입 없이 간편하게 문의하세요. 전문 담당자가 직접 연락드립니다.
+              </p>
+            </div>
+
+            {/* Glass Card Form Container */}
+            <div className="animated-border glass-card inner-glow rounded-2xl p-6 md:p-10">
+              <InquiryForm />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -412,11 +406,11 @@ export default function HomePage() {
 /* ─── Components ─── */
 
 function DealPreviewCard({
-  title, category, categoryColor, dealType, location, amount, visibility, interests, tags,
+  title, category, categoryColor, dealType, location, amount, visibility, tags,
 }: {
   title: string; category: string; categoryColor: "blue" | "purple"; dealType: string;
   location: string; amount: number | null; visibility: "public" | "private";
-  interests: number; tags: string[];
+  tags: string[];
 }) {
   return (
     <Card className="hover-lift inner-glow group overflow-hidden border-white/[0.06] bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-white/[0.12] hover:bg-white/[0.04]">
@@ -428,6 +422,9 @@ function DealPreviewCard({
           <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">
             <Eye className="mr-1 h-3 w-3" />공개
           </Badge>
+          <Badge variant="secondary" className="bg-white/[0.06] text-muted-foreground/60 ring-1 ring-white/[0.08] text-[10px]">
+            예시
+          </Badge>
           <span className="ml-auto text-xs text-muted-foreground/60">{dealType}</span>
         </div>
         <div className="mt-3 inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
@@ -436,9 +433,8 @@ function DealPreviewCard({
         </div>
         <h3 className="mt-1.5 text-base font-semibold leading-tight">{title}</h3>
         <p className="mt-1.5 text-sm text-muted-foreground/70">{location}</p>
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4">
           <span className="text-lg font-bold text-primary">{formatKRW(amount)}</span>
-          <span className="text-xs text-muted-foreground/60">관심 {interests}명</span>
         </div>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {tags.map((tag) => (
@@ -453,10 +449,10 @@ function DealPreviewCard({
 }
 
 function BlindDealCard({
-  category, categoryColor, dealType, industry, requiredLevel, interests,
+  category, categoryColor, dealType, industry, requiredLevel,
 }: {
   category: string; categoryColor: "blue" | "purple"; dealType: string;
-  industry: string; requiredLevel: number; interests: number;
+  industry: string; requiredLevel: number;
 }) {
   return (
     <Card className="watermark-confidential hover-lift group relative overflow-hidden border-red-500/10 bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-amber-500/20">
@@ -475,6 +471,9 @@ function BlindDealCard({
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot" />
           관리자 검증
         </span>
+        <Badge variant="secondary" className="bg-white/[0.06] text-muted-foreground/60 ring-1 ring-white/[0.08] text-[10px]">
+          예시
+        </Badge>
         <span className="ml-auto text-xs text-muted-foreground/60">{dealType}</span>
       </div>
 
@@ -492,12 +491,11 @@ function BlindDealCard({
         <p className="mt-1 text-sm text-muted-foreground/60">{industry}</p>
 
         {/* Redacted price */}
-        <div className="mt-3 flex items-center justify-between">
-          <div className="relative select-none">
+        <div className="mt-3">
+          <div className="relative inline-block select-none">
             <span className="redacted text-lg font-bold">&#8361;██,███,███,███</span>
             <div className="absolute inset-0 backdrop-blur-[3px]" />
           </div>
-          <span className="text-xs text-muted-foreground/60">관심 {interests}명</span>
         </div>
       </div>
 

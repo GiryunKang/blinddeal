@@ -279,23 +279,40 @@ export function Header() {
                     <Link
                       href="/auth/login"
                       onClick={() => setMobileOpen(false)}
-                      className="mt-4 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-blue-500/25"
+                      className="mt-4 flex items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:border-white/[0.2] hover:bg-white/[0.06]"
                     >
                       로그인
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-blue-500/25"
+                    >
+                      회원가입
                     </Link>
                   </nav>
                 </SheetContent>
               </Sheet>
 
-              <Link href="/auth/login" className="hidden md:block">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="rounded-xl border-white/[0.1] bg-transparent transition-all duration-300 hover:border-white/[0.2] hover:bg-white/[0.05]"
-                >
-                  로그인
-                </Button>
-              </Link>
+              <div className="hidden items-center gap-2 md:flex">
+                <Link href="/auth/login">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-xl border-white/[0.1] bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:border-white/[0.2] hover:bg-white/[0.06]"
+                  >
+                    로그인
+                  </Button>
+                </Link>
+                <Link href="/auth/register">
+                  <Button
+                    size="sm"
+                    className="rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:from-blue-400 hover:to-indigo-400 hover:shadow-blue-500/30"
+                  >
+                    회원가입
+                  </Button>
+                </Link>
+              </div>
             </>
           )}
         </div>
