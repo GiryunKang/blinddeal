@@ -12,6 +12,8 @@ import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const redirect = searchParams?.get("redirect") || "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +40,7 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/");
+    router.push(redirect);
     router.refresh();
   }
 
