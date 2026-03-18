@@ -30,9 +30,12 @@ const dealCategories = [
 
 const budgetRanges = [
   { value: "~10억", label: "~10억" },
-  { value: "10~100억", label: "10~100억" },
-  { value: "100~1000억", label: "100~1,000억" },
-  { value: "1000억~", label: "1,000억~" },
+  { value: "10~50억", label: "10~50억" },
+  { value: "50~100억", label: "50~100억" },
+  { value: "100~200억", label: "100~200억" },
+  { value: "200~500억", label: "200~500억" },
+  { value: "500~1000억", label: "500~1,000억" },
+  { value: "1000억~", label: "1,000억 이상" },
 ]
 
 export function InquiryForm() {
