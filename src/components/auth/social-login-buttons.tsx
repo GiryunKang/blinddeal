@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 function KakaoIcon() {
   return (
@@ -74,7 +73,7 @@ export function SocialLoginButtons() {
         <Button
           type="button"
           variant="outline"
-          className="w-full gap-2 hover:bg-yellow-50 hover:border-yellow-300 dark:hover:bg-yellow-500/10 dark:hover:border-yellow-500/30"
+          className="w-full gap-2 rounded-xl border-white/[0.08] bg-white/[0.03] py-5 transition-all duration-300 hover:border-yellow-500/30 hover:bg-yellow-500/5 hover:shadow-lg hover:shadow-yellow-500/5"
           onClick={handleKakaoLogin}
         >
           <KakaoIcon /> 카카오로 시작하기
@@ -82,18 +81,19 @@ export function SocialLoginButtons() {
         <Button
           type="button"
           variant="outline"
-          className="w-full gap-2"
+          className="w-full gap-2 rounded-xl border-white/[0.08] bg-white/[0.03] py-5 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-lg hover:shadow-white/5"
           onClick={handleGoogleLogin}
         >
           <GoogleIcon /> Google로 시작하기
         </Button>
       </div>
-      <div className="relative my-4">
+      {/* Separator */}
+      <div className="relative my-5">
         <div className="absolute inset-0 flex items-center">
-          <Separator />
+          <div className="w-full border-t border-white/[0.06]" />
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">또는</span>
+        <div className="relative flex justify-center">
+          <span className="bg-background px-4 text-xs text-muted-foreground/50">또는</span>
         </div>
       </div>
     </>
