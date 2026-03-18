@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MainLayout } from "@/components/layout/main-layout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,40 +23,55 @@ import { formatKRW } from "@/lib/utils";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section — BlindDeal Identity */}
+      {/* Hero Section — Premium BlindDeal Identity */}
       <section className="relative overflow-hidden border-b border-border/30">
-        {/* Ambient glow */}
-        <div className="pointer-events-none absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-blue-500/5 blur-3xl" />
-        <div className="pointer-events-none absolute -top-20 left-1/4 h-[300px] w-[400px] rounded-full bg-indigo-500/5 blur-3xl" />
+        {/* Grid dot background */}
+        <div className="grid-bg pointer-events-none absolute inset-0" />
 
-        <div className="mx-auto max-w-7xl px-4 pb-16 pt-20">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/50 px-4 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-sm">
-              <Lock className="h-3 w-3 text-blue-400" />
-              검증된 딜만, 원하는 만큼만 공개합니다
+        {/* Ambient glows — larger, more dramatic */}
+        <div className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-blue-500/8 blur-[120px]" />
+        <div className="pointer-events-none absolute -top-20 left-1/4 h-[400px] w-[500px] rounded-full bg-indigo-500/8 blur-[100px]" />
+        <div className="pointer-events-none absolute top-20 right-1/4 h-[300px] w-[400px] rounded-full bg-purple-500/6 blur-[100px]" />
+
+        {/* Floating particles — pure CSS */}
+        <div className="pointer-events-none absolute left-[10%] top-[20%] h-1 w-1 rounded-full bg-blue-400/40 float-particle" />
+        <div className="pointer-events-none absolute left-[25%] top-[40%] h-1.5 w-1.5 rounded-full bg-indigo-400/30 float-particle" style={{ animationDelay: '1s' }} />
+        <div className="pointer-events-none absolute left-[70%] top-[15%] h-1 w-1 rounded-full bg-cyan-400/40 float-particle" style={{ animationDelay: '2s' }} />
+        <div className="pointer-events-none absolute left-[85%] top-[45%] h-1.5 w-1.5 rounded-full bg-purple-400/30 float-particle" style={{ animationDelay: '3s' }} />
+        <div className="pointer-events-none absolute left-[50%] top-[10%] h-1 w-1 rounded-full bg-blue-300/30 float-particle" style={{ animationDelay: '4s' }} />
+        <div className="pointer-events-none absolute left-[40%] top-[55%] h-0.5 w-0.5 rounded-full bg-indigo-300/50 float-particle" style={{ animationDelay: '1.5s' }} />
+        <div className="pointer-events-none absolute left-[60%] top-[35%] h-1 w-1 rounded-full bg-cyan-300/30 float-particle" style={{ animationDelay: '2.5s' }} />
+        <div className="pointer-events-none absolute left-[15%] top-[60%] h-0.5 w-0.5 rounded-full bg-purple-300/40 float-particle" style={{ animationDelay: '0.5s' }} />
+
+        <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-24 md:pb-28 md:pt-32">
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-xs font-medium text-muted-foreground backdrop-blur-xl">
+              <Lock className="h-3.5 w-3.5 text-blue-400" />
+              <span>검증된 딜만, 원하는 만큼만 공개합니다</span>
+              <span className="h-1 w-1 rounded-full bg-blue-400 pulse-dot" />
             </div>
-            <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
               보이지 않는 곳에서
               <br />
-              <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              <span className="gradient-text">
                 가장 큰 거래
               </span>
               가 이루어집니다
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
               부동산과 M&A(인수합병) 딜을 공개 또는 비공개로 등록하세요.
               <br className="hidden md:block" />
               검증된 상대방과 안전한 프로세스 위에서 거래합니다.
             </p>
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link href="/deals/new">
-                <Button size="lg" className="gap-2 px-8 text-base">
+                <Button size="lg" className="glow-button relative gap-2 px-10 py-3 text-base font-semibold">
                   <Plus className="h-4 w-4" />
                   딜 등록하기
                 </Button>
               </Link>
               <Link href="/deals">
-                <Button size="lg" variant="outline" className="gap-2 px-8 text-base">
+                <Button size="lg" variant="outline" className="gap-2 border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
                   딜 둘러보기
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -67,83 +81,92 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Social Proof Bar */}
-      <section className="border-b border-border/30 bg-card/20">
-        <div className="mx-auto max-w-7xl px-4 py-6">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white md:text-3xl">₩1.2T+</div>
-              <div className="mt-1 text-xs text-muted-foreground">누적 거래액</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white md:text-3xl">2,400+</div>
-              <div className="mt-1 text-xs text-muted-foreground">검증된 딜</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white md:text-3xl">8,700+</div>
-              <div className="mt-1 text-xs text-muted-foreground">활성 사용자</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white md:text-3xl">94%</div>
-              <div className="mt-1 text-xs text-muted-foreground">거래 성사율</div>
+      {/* Social Proof Bar — Glassmorphism */}
+      <section className="relative border-b border-border/30">
+        <div className="mx-auto max-w-7xl px-4 py-8">
+          <div className="animated-border glass-card rounded-2xl px-6 py-8 md:px-10">
+            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+              <div className="count-animate text-center" style={{ opacity: 0 }}>
+                <div className="shimmer-text text-3xl font-bold md:text-4xl">&#8361;1.2T+</div>
+                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">누적 거래액</div>
+              </div>
+              <div className="count-animate text-center" style={{ opacity: 0 }}>
+                <div className="shimmer-text text-3xl font-bold md:text-4xl">2,400+</div>
+                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">검증된 딜</div>
+              </div>
+              <div className="count-animate text-center" style={{ opacity: 0 }}>
+                <div className="shimmer-text text-3xl font-bold md:text-4xl">8,700+</div>
+                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">활성 사용자</div>
+              </div>
+              <div className="count-animate text-center" style={{ opacity: 0 }}>
+                <div className="shimmer-text text-3xl font-bold md:text-4xl">94%</div>
+                <div className="mt-2 text-xs font-medium tracking-wider text-muted-foreground/80 uppercase">거래 성사율</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Deal Registration CTA */}
-      <section className="border-b border-border/30 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <div className="grid gap-4 md:grid-cols-2">
+      {/* Quick Deal Registration CTA — Premium Cards */}
+      <section className="relative border-b border-border/30">
+        {/* Subtle gradient background */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-blue-500/[0.03] via-indigo-500/[0.03] to-purple-500/[0.03]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-12">
+          <div className="grid gap-5 md:grid-cols-2">
             <Link href="/deals/new?category=real_estate">
-              <Card className="group cursor-pointer border-border/50 bg-card/50 p-6 transition-all hover:border-blue-500/30 hover:bg-card/80">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 transition-colors group-hover:bg-blue-500/20">
-                    <Building2 className="h-6 w-6" />
+              <div className="hover-lift group relative cursor-pointer overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 backdrop-blur-sm transition-all hover:border-blue-500/20 hover:bg-white/[0.04]">
+                {/* Hover glow */}
+                <div className="pointer-events-none absolute -right-20 -top-20 h-40 w-40 rounded-full bg-blue-500/10 opacity-0 blur-3xl transition-opacity group-hover:opacity-100" />
+                <div className="relative flex items-start gap-5">
+                  <div className="icon-glow relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400 ring-1 ring-blue-500/20 transition-all group-hover:ring-blue-500/40">
+                    <Building2 className="h-7 w-7" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold">부동산 딜 등록</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold">부동산 딜 등록</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                       오피스, 물류센터, 토지, 리테일, 개발 프로젝트 — 3분이면 등록 완료
                     </p>
                   </div>
-                  <ArrowRight className="ml-auto mt-1 h-4 w-4 shrink-0 text-muted-foreground/50 transition-transform group-hover:translate-x-1 group-hover:text-blue-400" />
+                  <ArrowRight className="ml-auto mt-2 h-5 w-5 shrink-0 text-muted-foreground/30 transition-all group-hover:translate-x-1 group-hover:text-blue-400" />
                 </div>
-              </Card>
+              </div>
             </Link>
             <Link href="/deals/new?category=ma">
-              <Card className="group cursor-pointer border-border/50 bg-card/50 p-6 transition-all hover:border-purple-500/30 hover:bg-card/80">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400 transition-colors group-hover:bg-purple-500/20">
-                    <Briefcase className="h-6 w-6" />
+              <div className="hover-lift group relative cursor-pointer overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 backdrop-blur-sm transition-all hover:border-purple-500/20 hover:bg-white/[0.04]">
+                {/* Hover glow */}
+                <div className="pointer-events-none absolute -right-20 -top-20 h-40 w-40 rounded-full bg-purple-500/10 opacity-0 blur-3xl transition-opacity group-hover:opacity-100" />
+                <div className="relative flex items-start gap-5">
+                  <div className="icon-glow relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 text-purple-400 ring-1 ring-purple-500/20 transition-all group-hover:ring-purple-500/40">
+                    <Briefcase className="h-7 w-7" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold">M&A 딜 등록</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold">M&A 딜 등록</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                       기업 인수, 지분 매각, 사업부 매각, 합병 — 비공개로도 안전하게
                     </p>
                   </div>
-                  <ArrowRight className="ml-auto mt-1 h-4 w-4 shrink-0 text-muted-foreground/50 transition-transform group-hover:translate-x-1 group-hover:text-purple-400" />
+                  <ArrowRight className="ml-auto mt-2 h-5 w-5 shrink-0 text-muted-foreground/30 transition-all group-hover:translate-x-1 group-hover:text-purple-400" />
                 </div>
-              </Card>
+              </div>
             </Link>
           </div>
         </div>
       </section>
 
       {/* Blind Deal Showcase — 공개 vs 비공개 */}
-      <section className="mx-auto max-w-7xl px-4 py-14">
-        <div className="mb-8 flex items-center justify-between">
+      <section className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
+        <div className="mb-10 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold">실시간 딜</h2>
-            <p className="mt-1 text-sm text-muted-foreground">공개 딜은 누구나, 비공개 딜은 검증 후 열람</p>
+            <h2 className="text-2xl font-bold md:text-3xl">실시간 딜</h2>
+            <p className="mt-2 text-sm text-muted-foreground">공개 딜은 누구나, 비공개 딜은 검증 후 열람</p>
           </div>
-          <Link href="/deals" className="text-sm text-primary hover:underline">
+          <Link href="/deals" className="group flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80">
             전체 보기
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {/* Public Deal */}
           <DealPreviewCard
             title="판교 프라임 물류센터"
@@ -210,72 +233,85 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="border-t border-border/30 bg-card/30">
-        <div className="mx-auto max-w-7xl px-4 py-14">
-          <h2 className="mb-2 text-center text-xl font-bold">어떻게 작동하나요?</h2>
-          <p className="mb-10 text-center text-sm text-muted-foreground">파는 사람도, 사는 사람도 안전하게</p>
+      {/* How It Works — Gradient Orbs + Connector */}
+      <section className="relative border-t border-border/30">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
+          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">어떻게 작동하나요?</h2>
+          <p className="mb-14 text-center text-sm text-muted-foreground">파는 사람도, 사는 사람도 안전하게</p>
 
-          <div className="grid gap-6 md:grid-cols-4">
-            <ProcessStep
-              step="01"
-              icon={<Plus className="h-5 w-5" />}
-              title="딜 등록"
-              description="부동산 또는 M&A 딜을 등록하세요. 공개/비공개를 직접 선택합니다."
-            />
-            <ProcessStep
-              step="02"
-              icon={<Shield className="h-5 w-5" />}
-              title="검증 & 매칭"
-              description="비공개 딜은 자격이 검증된 상대방에게만 노출됩니다. 조건에 맞는 딜을 자동 매칭합니다."
-            />
-            <ProcessStep
-              step="03"
-              icon={<MessageSquare className="h-5 w-5" />}
-              title="협상 & 실사(정밀조사)"
-              description="플랫폼 내에서 안전하게 소통하고, 비밀유지계약(NDA) 서명 후 상세 자료를 공유합니다."
-            />
-            <ProcessStep
-              step="04"
-              icon={<TrendingUp className="h-5 w-5" />}
-              title="계약 & 에스크로(안심결제)"
-              description="전문가 검토, 계약 체결, 에스크로(안심결제)까지 한 곳에서 완료합니다."
-            />
+          {/* Step connector line — hidden on mobile */}
+          <div className="relative">
+            <div className="pointer-events-none absolute left-0 right-0 top-[52px] hidden h-[2px] md:block">
+              <div className="step-connector mx-auto h-full w-[calc(100%-120px)] rounded-full opacity-30" />
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-4">
+              <ProcessStep
+                step="01"
+                icon={<Plus className="h-5 w-5" />}
+                title="딜 등록"
+                description="부동산 또는 M&A 딜을 등록하세요. 공개/비공개를 직접 선택합니다."
+                color="blue"
+              />
+              <ProcessStep
+                step="02"
+                icon={<Shield className="h-5 w-5" />}
+                title="검증 & 매칭"
+                description="비공개 딜은 자격이 검증된 상대방에게만 노출됩니다. 조건에 맞는 딜을 자동 매칭합니다."
+                color="indigo"
+              />
+              <ProcessStep
+                step="03"
+                icon={<MessageSquare className="h-5 w-5" />}
+                title="협상 & 실사(정밀조사)"
+                description="플랫폼 내에서 안전하게 소통하고, 비밀유지계약(NDA) 서명 후 상세 자료를 공유합니다."
+                color="purple"
+              />
+              <ProcessStep
+                step="04"
+                icon={<TrendingUp className="h-5 w-5" />}
+                title="계약 & 에스크로(안심결제)"
+                description="전문가 검토, 계약 체결, 에스크로(안심결제)까지 한 곳에서 완료합니다."
+                color="cyan"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Trust & Security Section */}
-      <section className="border-t border-border/30 bg-card/50">
-        <div className="mx-auto max-w-7xl px-4 py-14">
-          <h2 className="mb-2 text-center text-xl font-bold">안전한 거래를 위한 보호 장치</h2>
-          <p className="mb-10 text-center text-sm text-muted-foreground">모든 거래 단계에서 보호받으세요</p>
+      {/* Trust & Security Section — Glass Cards */}
+      <section className="relative border-t border-border/30">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
+          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">안전한 거래를 위한 보호 장치</h2>
+          <p className="mb-14 text-center text-sm text-muted-foreground">모든 거래 단계에서 보호받으세요</p>
 
           <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-xl border border-border/50 bg-background/50 p-6">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
-                <Shield className="h-6 w-6" />
+            <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-blue-500/15">
+              <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/15 to-blue-600/5 text-blue-400 ring-1 ring-blue-500/20">
+                <Shield className="h-7 w-7" />
               </div>
-              <h3 className="font-semibold">에스크로(안심결제)</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <h3 className="text-lg font-semibold">에스크로(안심결제)</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 거래 대금은 제3자(플랫폼)가 안전하게 보관하다가, 소유권 이전이 확인된 후에만 매도자에게 전달됩니다.
               </p>
             </div>
-            <div className="rounded-xl border border-border/50 bg-background/50 p-6">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
-                <FileCheck className="h-6 w-6" />
+            <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-indigo-500/15">
+              <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-indigo-600/5 text-indigo-400 ring-1 ring-indigo-500/20">
+                <FileCheck className="h-7 w-7" />
               </div>
-              <h3 className="font-semibold">법적 구속력 있는 비밀유지계약(NDA)</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <h3 className="text-lg font-semibold">법적 구속력 있는 비밀유지계약(NDA)</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 비공개 딜 열람 시 전자 서명하는 비밀유지계약(NDA)은 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.
               </p>
             </div>
-            <div className="rounded-xl border border-border/50 bg-background/50 p-6">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
-                <Scale className="h-6 w-6" />
+            <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-purple-500/15">
+              <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/15 to-purple-600/5 text-purple-400 ring-1 ring-purple-500/20">
+                <Scale className="h-7 w-7" />
               </div>
-              <h3 className="font-semibold">분쟁 해결 프로세스</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <h3 className="text-lg font-semibold">분쟁 해결 프로세스</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 거래 과정에서 분쟁 발생 시 플랫폼의 중재 프로세스와 전문가 자문을 통해 공정하게 해결합니다.
               </p>
             </div>
@@ -283,72 +319,82 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trust Indicators */}
-      <section className="border-t border-border/30">
-        <div className="mx-auto max-w-7xl px-4 py-14">
-          <h2 className="mb-2 text-center text-xl font-bold">왜 BlindDeal인가?</h2>
-          <p className="mb-10 text-center text-sm text-muted-foreground">차별화된 거래 환경</p>
+      {/* Trust Indicators — Why BlindDeal */}
+      <section className="relative border-t border-border/30">
+        <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
+          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">왜 <span className="gradient-text">BlindDeal</span>인가?</h2>
+          <p className="mb-14 text-center text-sm text-muted-foreground">차별화된 거래 환경</p>
           <div className="grid gap-8 md:grid-cols-3">
             <TrustCard
               icon={<EyeOff className="h-6 w-6" />}
               title="원하는 만큼만 공개"
               description="등록된 딜의 62%가 비공개로 운영됩니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. 비밀유지계약(NDA) 서명 후에만 상세 정보에 접근 가능합니다."
+              color="blue"
             />
             <TrustCard
               icon={<Shield className="h-6 w-6" />}
               title="단계적 인증 체계"
               description="4단계 인증 시스템을 통해 매수자의 자격을 검증합니다. 인증 등급이 높을수록 더 큰 규모의 비공개 딜에 접근할 수 있으며, 현재 8,700명 이상의 검증된 사용자가 활동 중입니다."
+              color="indigo"
             />
             <TrustCard
               icon={<Users className="h-6 w-6" />}
               title="전문가 네트워크"
               description="120명 이상의 법무, 회계, 세무, 감정 전문가가 실사(기업·자산 정밀조사)부터 계약까지 지원합니다. 평균 거래 완료 기간 45일, 거래 성사율 94%의 검증된 프로세스입니다."
+              color="purple"
             />
           </div>
         </div>
       </section>
 
       {/* Partner / Credential Logos */}
-      <section className="border-t border-border/30 bg-card/20">
-        <div className="mx-auto max-w-7xl px-4 py-14">
-          <h2 className="mb-2 text-center text-xl font-bold">신뢰할 수 있는 파트너십</h2>
-          <p className="mb-8 text-center text-sm text-muted-foreground">함께하는 전문 기관들</p>
+      <section className="relative border-t border-border/30">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
+          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">신뢰할 수 있는 <span className="gradient-text">파트너십</span></h2>
+          <p className="mb-10 text-center text-sm text-muted-foreground">함께하는 전문 기관들</p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-5">
             {["법무법인 A", "회계법인 B", "감정평가법인 C", "신탁회사 D"].map((partner) => (
               <div
                 key={partner}
-                className="flex h-14 items-center justify-center rounded-lg border border-border/30 bg-muted/10 px-8 text-sm font-medium text-muted-foreground/60"
+                className="glass-card flex h-16 items-center justify-center rounded-xl px-10 text-sm font-medium text-muted-foreground/70 transition-all hover:border-white/15 hover:text-muted-foreground"
               >
                 {partner}
               </div>
             ))}
           </div>
 
-          <p className="mt-6 text-center text-xs text-muted-foreground/50">
+          <p className="mt-8 text-center text-xs text-muted-foreground/40">
             실제 파트너 기관은 서비스 런칭 시 공개됩니다
           </p>
         </div>
       </section>
 
-      {/* Bottom CTA */}
-      <section className="border-t border-border/30">
-        <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-          <h2 className="text-2xl font-bold md:text-3xl">
-            보이지 않는 딜을 시작하세요
+      {/* Bottom CTA — Full gradient section */}
+      <section className="relative overflow-hidden border-t border-border/30">
+        {/* Dramatic gradient background */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.07] via-indigo-500/[0.05] to-purple-500/[0.07]" />
+        <div className="pointer-events-none absolute -bottom-40 left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[120px]" />
+        <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-20 text-center md:py-28">
+          <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
+            보이지 않는 딜을 <span className="gradient-text">시작하세요</span>
           </h2>
-          <p className="mt-3 text-muted-foreground">
+          <p className="mx-auto mt-4 max-w-lg text-muted-foreground md:text-lg">
             지금 바로 딜을 등록하거나, 조건에 맞는 딜을 찾아보세요.
           </p>
-          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link href="/deals/new">
-              <Button size="lg" className="gap-2 px-8">
+              <span className="animated-border glow-button relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-10 py-3.5 text-base font-semibold text-white transition-all hover:from-blue-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-blue-500/25">
                 <Plus className="h-4 w-4" />
                 딜 등록하기
-              </Button>
+              </span>
             </Link>
             <Link href="/auth/register">
-              <Button size="lg" variant="outline" className="px-8">
+              <Button size="lg" variant="outline" className="border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
                 무료 가입하기
               </Button>
             </Link>
@@ -369,32 +415,34 @@ function DealPreviewCard({
   interests: number; tags: string[];
 }) {
   return (
-    <Card className="group border-border/50 bg-card/50 p-5 transition-all hover:border-border hover:bg-card/80">
-      <div className="flex items-center gap-2">
-        <Badge variant="secondary" className={categoryColor === "blue" ? "bg-blue-500/10 text-blue-400" : "bg-purple-500/10 text-purple-400"}>
-          {category}
-        </Badge>
-        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-400">
-          <Eye className="mr-1 h-3 w-3" />공개
-        </Badge>
-        <span className="ml-auto text-xs text-muted-foreground">{dealType}</span>
-      </div>
-      <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
-        <CheckCircle className="h-3 w-3" />
-        검증완료
-      </div>
-      <h3 className="mt-1 font-semibold leading-tight">{title}</h3>
-      <p className="mt-1 text-sm text-muted-foreground">{location}</p>
-      <div className="mt-4 flex items-center justify-between">
-        <span className="text-lg font-bold text-primary">{formatKRW(amount)}</span>
-        <span className="text-xs text-muted-foreground">관심 {interests}명</span>
-      </div>
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {tags.map((tag) => (
-          <span key={tag} className="rounded-md bg-muted/50 px-2 py-0.5 text-[10px] text-muted-foreground">
-            {tag}
-          </span>
-        ))}
+    <Card className="hover-lift inner-glow group overflow-hidden border-white/[0.06] bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-white/[0.12] hover:bg-white/[0.04]">
+      <div className="p-5">
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className={categoryColor === "blue" ? "bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/20" : "bg-purple-500/10 text-purple-400 ring-1 ring-purple-500/20"}>
+            {category}
+          </Badge>
+          <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">
+            <Eye className="mr-1 h-3 w-3" />공개
+          </Badge>
+          <span className="ml-auto text-xs text-muted-foreground/60">{dealType}</span>
+        </div>
+        <div className="mt-3 inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot" />
+          검증완료
+        </div>
+        <h3 className="mt-1.5 text-base font-semibold leading-tight">{title}</h3>
+        <p className="mt-1.5 text-sm text-muted-foreground/70">{location}</p>
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-lg font-bold text-primary">{formatKRW(amount)}</span>
+          <span className="text-xs text-muted-foreground/60">관심 {interests}명</span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {tags.map((tag) => (
+            <span key={tag} className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2.5 py-0.5 text-[10px] text-muted-foreground/70">
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
     </Card>
   );
@@ -407,60 +455,60 @@ function BlindDealCard({
   industry: string; requiredLevel: number; interests: number;
 }) {
   return (
-    <Card className="group relative overflow-hidden border-border/50 bg-card/50 transition-all hover:border-amber-500/20">
+    <Card className="hover-lift group relative overflow-hidden border-white/[0.06] bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-amber-500/15">
       {/* Top section with badges — always visible */}
       <div className="relative z-20 flex items-center gap-2 px-5 pt-5">
-        <Badge variant="secondary" className={categoryColor === "blue" ? "bg-blue-500/10 text-blue-400" : "bg-purple-500/10 text-purple-400"}>
+        <Badge variant="secondary" className={categoryColor === "blue" ? "bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/20" : "bg-purple-500/10 text-purple-400 ring-1 ring-purple-500/20"}>
           {category}
         </Badge>
-        <Badge variant="secondary" className="bg-amber-500/10 text-amber-400">
+        <Badge variant="secondary" className="bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20">
           <EyeOff className="mr-1 h-3 w-3" />비공개
         </Badge>
         <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
-          <CheckCircle className="h-3 w-3" />
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot" />
           관리자 검증
         </span>
-        <span className="ml-auto text-xs text-muted-foreground">{dealType}</span>
+        <span className="ml-auto text-xs text-muted-foreground/60">{dealType}</span>
       </div>
 
       {/* Masked/redacted content area */}
       <div className="relative mt-3 px-5">
         {/* Blurred masked title */}
         <div className="relative select-none">
-          <p className="text-base font-semibold tracking-wider text-muted-foreground/30" aria-hidden="true">
+          <p className="text-base font-semibold tracking-wider text-muted-foreground/20" aria-hidden="true">
             ██████ ████ ██████
           </p>
           <div className="absolute inset-0 backdrop-blur-[2px]" />
         </div>
-        <p className="mt-1 text-sm text-muted-foreground">{industry}</p>
+        <p className="mt-1 text-sm text-muted-foreground/60">{industry}</p>
 
         {/* Blurred price */}
         <div className="mt-3 flex items-center justify-between">
           <div className="relative select-none">
-            <span className="text-lg font-bold text-muted-foreground/20">₩██,███,███,███</span>
+            <span className="text-lg font-bold text-muted-foreground/15">&#8361;██,███,███,███</span>
             <div className="absolute inset-0 backdrop-blur-[3px]" />
           </div>
-          <span className="text-xs text-muted-foreground">관심 {interests}명</span>
+          <span className="text-xs text-muted-foreground/60">관심 {interests}명</span>
         </div>
       </div>
 
       {/* Gradient overlay fading to dark at bottom */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
       {/* Ambient glow behind card */}
-      <div className="pointer-events-none absolute -bottom-4 left-1/2 h-20 w-40 -translate-x-1/2 rounded-full bg-blue-500/5 blur-2xl" />
+      <div className="pointer-events-none absolute -bottom-4 left-1/2 h-24 w-48 -translate-x-1/2 rounded-full bg-blue-500/8 blur-3xl" />
 
       {/* Centered lock overlay */}
       <div className="relative z-10 mx-5 mb-5 mt-5">
-        <div className="flex flex-col items-center gap-2 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-4 backdrop-blur-sm">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 shadow-lg shadow-blue-500/5">
-            <Lock className="h-4 w-4 text-white/70" />
+        <div className="glass-card flex flex-col items-center gap-2.5 rounded-xl px-4 py-5">
+          <div className="pulse-glow flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5">
+            <Lock className="h-4.5 w-4.5 text-white/80" />
           </div>
-          <span className="text-xs font-medium text-white/70">비공개 딜</span>
+          <span className="text-xs font-medium text-white/80">비공개 딜</span>
           <span className="text-[10px] text-white/40">인증 등급 {requiredLevel} 이상 열람 가능</span>
           <Link
             href="/profile/verification"
-            className="mt-1 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-[10px] font-medium text-white/60 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
+            className="mt-1 rounded-full border border-white/10 bg-white/5 px-5 py-1.5 text-[10px] font-medium text-white/60 transition-all hover:border-blue-400/30 hover:bg-blue-500/10 hover:text-white"
           >
             인증하기
           </Link>
@@ -471,34 +519,80 @@ function BlindDealCard({
 }
 
 function ProcessStep({
-  step, icon, title, description,
+  step, icon, title, description, color,
 }: {
   step: string; icon: React.ReactNode; title: string; description: string;
+  color: "blue" | "indigo" | "purple" | "cyan";
 }) {
+  const gradientMap = {
+    blue: "from-blue-500/30 to-blue-600/10",
+    indigo: "from-indigo-500/30 to-indigo-600/10",
+    purple: "from-purple-500/30 to-purple-600/10",
+    cyan: "from-cyan-500/30 to-cyan-600/10",
+  };
+  const textColorMap = {
+    blue: "text-blue-400",
+    indigo: "text-indigo-400",
+    purple: "text-purple-400",
+    cyan: "text-cyan-400",
+  };
+  const ringMap = {
+    blue: "ring-blue-500/30",
+    indigo: "ring-indigo-500/30",
+    purple: "ring-purple-500/30",
+    cyan: "ring-cyan-500/30",
+  };
+
   return (
-    <div className="text-center">
-      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-        {icon}
+    <div className="hover-lift group text-center">
+      {/* Gradient orb */}
+      <div className="relative mx-auto mb-5">
+        <div className="gradient-orb pointer-events-none absolute -inset-4 opacity-50 blur-xl" />
+        <div className={`relative mx-auto flex h-[72px] w-[72px] items-center justify-center rounded-2xl bg-gradient-to-br ${gradientMap[color]} ${textColorMap[color]} ring-1 ${ringMap[color]} transition-all group-hover:scale-105`}>
+          {icon}
+        </div>
       </div>
-      <div className="mb-1 text-xs font-bold text-muted-foreground">{step}</div>
-      <h3 className="font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+      <div className="gradient-text mb-2 text-xs font-bold tracking-widest">{step}</div>
+      <h3 className="text-base font-semibold">{title}</h3>
+      <p className="mx-auto mt-2.5 max-w-[240px] text-sm leading-relaxed text-muted-foreground">{description}</p>
     </div>
   );
 }
 
 function TrustCard({
-  icon, title, description,
+  icon, title, description, color,
 }: {
   icon: React.ReactNode; title: string; description: string;
+  color: "blue" | "indigo" | "purple";
 }) {
+  const gradientMap = {
+    blue: "from-blue-500/15 to-blue-600/5",
+    indigo: "from-indigo-500/15 to-indigo-600/5",
+    purple: "from-purple-500/15 to-purple-600/5",
+  };
+  const textColorMap = {
+    blue: "text-blue-400",
+    indigo: "text-indigo-400",
+    purple: "text-purple-400",
+  };
+  const ringMap = {
+    blue: "ring-blue-500/20",
+    indigo: "ring-indigo-500/20",
+    purple: "ring-purple-500/20",
+  };
+  const hoverBorderMap = {
+    blue: "hover:border-blue-500/15",
+    indigo: "hover:border-indigo-500/15",
+    purple: "hover:border-purple-500/15",
+  };
+
   return (
-    <div className="rounded-xl border border-border/50 bg-card/30 p-6">
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+    <div className={`animated-border hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all ${hoverBorderMap[color]}`}>
+      <div className={`icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${gradientMap[color]} ${textColorMap[color]} ring-1 ${ringMap[color]}`}>
         {icon}
       </div>
-      <h3 className="font-semibold">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+      <h3 className="text-lg font-semibold">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{description}</p>
     </div>
   );
 }
