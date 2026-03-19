@@ -23,10 +23,14 @@ import { formatKRW } from "@/lib/utils";
 import { SpotlightHero } from "@/components/effects/spotlight-hero";
 import { ClassifiedStamp } from "@/components/effects/classified-stamp";
 import { InquiryForm } from "@/components/inquiry/inquiry-form";
+import { LandingHeader } from "@/components/layout/landing-header";
+import { Footer } from "@/components/layout/footer";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
+      {/* Transparent header that becomes solid on scroll */}
+      <LandingHeader />
       {/* Hero Section — Premium BlindDeal Identity */}
       <SpotlightHero>
       <section className="relative overflow-hidden border-b border-border/30">
@@ -48,7 +52,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute left-[60%] top-[35%] h-1 w-1 rounded-full bg-cyan-300/30 float-particle" style={{ animationDelay: '2.5s' }} />
         <div className="pointer-events-none absolute left-[15%] top-[60%] h-0.5 w-0.5 rounded-full bg-purple-300/40 float-particle" style={{ animationDelay: '0.5s' }} />
 
-        <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-24 md:pb-28 md:pt-32">
+        <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-32 md:pb-28 md:pt-40">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-xs font-medium text-muted-foreground backdrop-blur-xl">
               <Lock className="h-3.5 w-3.5 text-blue-400" />
@@ -399,6 +403,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

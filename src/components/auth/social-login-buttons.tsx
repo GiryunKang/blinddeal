@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 function KakaoIcon() {
   return (
@@ -52,19 +53,33 @@ function GoogleIcon() {
 
 export function SocialLoginButtons() {
   async function handleKakaoLogin() {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "kakao",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "kakao",
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+      });
+      if (error) {
+        toast.error("소셜 로그인 설정이 준비 중입니다. 이메일로 가입해주세요.");
+      }
+    } catch {
+      toast.error("소셜 로그인 설정이 준비 중입니다. 이메일로 가입해주세요.");
+    }
   }
 
   async function handleGoogleLogin() {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+      });
+      if (error) {
+        toast.error("소셜 로그인 설정이 준비 중입니다. 이메일로 가입해주세요.");
+      }
+    } catch {
+      toast.error("소셜 로그인 설정이 준비 중입니다. 이메일로 가입해주세요.");
+    }
   }
 
   return (
