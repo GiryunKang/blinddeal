@@ -60,7 +60,7 @@ export async function createDeal(formData: FormData) {
       asking_price: askingPrice,
       visibility,
       required_verification_level: requiredVerificationLevel,
-      status: "pending_review",
+      status: "active",
     }
 
     // Real estate fields
