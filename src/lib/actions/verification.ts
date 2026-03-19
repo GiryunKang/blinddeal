@@ -4,84 +4,102 @@ import { createClient } from "@/lib/supabase/server"
 import { requireAuth } from "@/lib/supabase/auth"
 
 export async function getVerificationStatus() {
-  const user = await requireAuth()
-  const supabase = await createClient()
+  try {
+    const user = await requireAuth()
+    const supabase = await createClient()
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("verification_level")
-    .eq("id", user.id)
-    .single()
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("verification_level")
+      .eq("id", user.id)
+      .single()
 
-  const { data: records } = await supabase
-    .from("verification_records")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
+    const { data: records } = await supabase
+      .from("verification_records")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
 
-  return {
-    level: profile?.verification_level ?? 0,
-    records: records ?? [],
+    return {
+      success: true,
+      level: profile?.verification_level ?? 0,
+      records: records ?? [],
+    }
+  } catch (err) {
+    console.error("Unexpected error fetching verification status:", err)
+    return { success: false, level: 0, records: [] }
   }
 }
 
 export async function submitVerification(type: string, formData: FormData) {
-  const user = await requireAuth()
-  const supabase = await createClient()
+  try {
+    const user = await requireAuth()
+    const supabase = await createClient()
 
-  const file = formData.get("file") as File | null
-  let documentUrl: string | null = null
+    const file = formData.get("file") as File | null
+    let documentUrl: string | null = null
 
-  if (file && file.size > 0) {
-    const fileExt = file.name.split(".").pop()
-    const fileName = `${user.id}/${type}/${Date.now()}.${fileExt}`
+    if (file && file.size > 0) {
+      const fileExt = file.name.split(".").pop()
+      const fileName = `${user.id}/${type}/${Date.now()}.${fileExt}`
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("verifications")
-      .upload(fileName, file)
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("verifications")
+        .upload(fileName, file)
 
-    if (uploadError) {
-      throw new Error("파일 업로드에 실패했습니다: " + uploadError.message)
+      if (uploadError) {
+        console.error("Verification file upload error:", uploadError)
+        return { success: false, error: "파일 업로드에 실패했습니다." }
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("verifications")
+        .getPublicUrl(uploadData.path)
+
+      documentUrl = urlData.publicUrl
     }
 
-    const { data: urlData } = supabase.storage
-      .from("verifications")
-      .getPublicUrl(uploadData.path)
+    const notes = formData.get("notes") as string | null
 
-    documentUrl = urlData.publicUrl
+    const { error } = await supabase.from("verification_records").insert({
+      user_id: user.id,
+      verification_type: type,
+      document_url: documentUrl,
+      notes: notes || null,
+      status: "pending",
+    })
+
+    if (error) {
+      console.error("Verification submission error:", error)
+      return { success: false, error: "인증 요청 제출에 실패했습니다." }
+    }
+
+    return { success: true }
+  } catch (err) {
+    console.error("Unexpected error submitting verification:", err)
+    return { success: false, error: "인증 요청 처리 중 오류가 발생했습니다." }
   }
-
-  const notes = formData.get("notes") as string | null
-
-  const { error } = await supabase.from("verification_records").insert({
-    user_id: user.id,
-    verification_type: type,
-    document_url: documentUrl,
-    notes: notes || null,
-    status: "pending",
-  })
-
-  if (error) {
-    throw new Error("인증 요청 제출에 실패했습니다: " + error.message)
-  }
-
-  return { success: true }
 }
 
 export async function getMyVerificationRecords() {
-  const user = await requireAuth()
-  const supabase = await createClient()
+  try {
+    const user = await requireAuth()
+    const supabase = await createClient()
 
-  const { data, error } = await supabase
-    .from("verification_records")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
+    const { data, error } = await supabase
+      .from("verification_records")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
 
-  if (error) {
-    console.error("Error fetching verification records:", error)
+    if (error) {
+      console.error("Error fetching verification records:", error)
+      return []
+    }
+
+    return data ?? []
+  } catch (err) {
+    console.error("Unexpected error fetching verification records:", err)
     return []
   }
-
-  return data ?? []
 }

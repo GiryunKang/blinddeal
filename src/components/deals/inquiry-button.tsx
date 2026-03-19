@@ -31,19 +31,19 @@ export function InquiryButton({
     }
 
     startTransition(async () => {
-      try {
-        const result = await startInquiry(dealId)
+      const result = await startInquiry(dealId)
 
-        if ("needsNDA" in result && result.needsNDA) {
-          setShowNDA(true)
-          return
-        }
+      if (!result.success) {
+        return
+      }
 
-        if ("roomId" in result && result.roomId) {
-          router.push(`/rooms/${result.roomId}`)
-        }
-      } catch (error) {
-        console.error("Inquiry failed:", error)
+      if ("needsNDA" in result && result.needsNDA) {
+        setShowNDA(true)
+        return
+      }
+
+      if ("roomId" in result && result.roomId) {
+        router.push(`/rooms/${result.roomId}`)
       }
     })
   }

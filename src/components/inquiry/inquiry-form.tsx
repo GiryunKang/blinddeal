@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -14,6 +14,9 @@ import {
   CheckCircle,
   Loader2,
 } from "lucide-react"
+
+const RATE_LIMIT_KEY = "blinddeal_inquiry_last_submit"
+const COOLDOWN_SECONDS = 60
 
 const inquiryTypes = [
   { value: "buy" as const, label: "딜을 찾고 있어요", icon: Search },
@@ -38,6 +41,14 @@ const budgetRanges = [
   { value: "1000억~", label: "1,000억 이상" },
 ]
 
+function getRemainingCooldown(): number {
+  if (typeof window === "undefined") return 0
+  const lastSubmit = localStorage.getItem(RATE_LIMIT_KEY)
+  if (!lastSubmit) return 0
+  const elapsed = Math.floor((Date.now() - parseInt(lastSubmit, 10)) / 1000)
+  return Math.max(0, COOLDOWN_SECONDS - elapsed)
+}
+
 export function InquiryForm() {
   const [inquiryType, setInquiryType] = useState<"buy" | "sell" | "meeting" | "partnership">("buy")
   const [dealCategory, setDealCategory] = useState<"real_estate" | "ma" | "both" | null>(null)
@@ -45,9 +56,34 @@ export function InquiryForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState("")
+  const [cooldown, setCooldown] = useState(0)
+
+  // Check cooldown on mount and tick countdown
+  useEffect(() => {
+    setCooldown(getRemainingCooldown())
+  }, [])
+
+  useEffect(() => {
+    if (cooldown <= 0) return
+    const timer = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [cooldown])
+
+  const isCoolingDown = cooldown > 0
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+
+    if (isCoolingDown) return
+
     setIsSubmitting(true)
     setError("")
 
@@ -69,6 +105,9 @@ export function InquiryForm() {
 
     if (result.success) {
       setIsSuccess(true)
+      // Start cooldown
+      localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()))
+      setCooldown(COOLDOWN_SECONDS)
     } else {
       setError(result.error || "문의 제출에 실패했습니다.")
     }
@@ -86,12 +125,24 @@ export function InquiryForm() {
           <br />
           감사합니다.
         </p>
+        {cooldown > 0 && (
+          <p className="text-xs text-muted-foreground">
+            {cooldown}초 후 다시 문의할 수 있습니다
+          </p>
+        )}
       </div>
     )
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Cooldown notice */}
+      {isCoolingDown && (
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-400">
+          {cooldown}초 후 다시 문의할 수 있습니다
+        </div>
+      )}
+
       {/* Inquiry Type */}
       <div className="space-y-3">
         <Label className="text-sm font-medium text-foreground/80">어떤 도움이 필요하신가요?</Label>
@@ -104,6 +155,7 @@ export function InquiryForm() {
                 key={type.value}
                 type="button"
                 onClick={() => setInquiryType(type.value)}
+                disabled={isCoolingDown}
                 className={`group relative flex flex-col items-center gap-2 rounded-xl border px-3 py-4 text-center transition-all ${
                   isSelected
                     ? "border-blue-500/40 bg-blue-500/10 text-blue-400"
@@ -128,6 +180,7 @@ export function InquiryForm() {
             id="inquiry-name"
             name="name"
             required
+            disabled={isCoolingDown}
             placeholder="홍길동"
             className="h-10 border-white/[0.08] bg-white/[0.03] focus-visible:border-blue-500/40"
           />
@@ -141,6 +194,7 @@ export function InquiryForm() {
             name="email"
             type="email"
             required
+            disabled={isCoolingDown}
             placeholder="email@example.com"
             className="h-10 border-white/[0.08] bg-white/[0.03] focus-visible:border-blue-500/40"
           />
@@ -155,6 +209,7 @@ export function InquiryForm() {
             id="inquiry-phone"
             name="phone"
             type="tel"
+            disabled={isCoolingDown}
             placeholder="010-0000-0000"
             className="h-10 border-white/[0.08] bg-white/[0.03] focus-visible:border-blue-500/40"
           />
@@ -164,6 +219,7 @@ export function InquiryForm() {
           <Input
             id="inquiry-company"
             name="company"
+            disabled={isCoolingDown}
             placeholder="(주)블라인드딜"
             className="h-10 border-white/[0.08] bg-white/[0.03] focus-visible:border-blue-500/40"
           />
@@ -181,6 +237,7 @@ export function InquiryForm() {
                 key={cat.value}
                 type="button"
                 onClick={() => setDealCategory(isSelected ? null : cat.value)}
+                disabled={isCoolingDown}
                 className={`rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
                   isSelected
                     ? "border-indigo-500/40 bg-indigo-500/10 text-indigo-400"
@@ -205,6 +262,7 @@ export function InquiryForm() {
                 key={range.value}
                 type="button"
                 onClick={() => setBudgetRange(isSelected ? "" : range.value)}
+                disabled={isCoolingDown}
                 className={`rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
                   isSelected
                     ? "border-purple-500/40 bg-purple-500/10 text-purple-400"
@@ -227,6 +285,7 @@ export function InquiryForm() {
           id="inquiry-description"
           name="description"
           required
+          disabled={isCoolingDown}
           rows={4}
           placeholder="찾고 있는 딜이나 등록하고 싶은 딜에 대해 자유롭게 설명해주세요"
           className="border-white/[0.08] bg-white/[0.03] focus-visible:border-blue-500/40"
@@ -240,6 +299,7 @@ export function InquiryForm() {
           id="inquiry-preferences"
           name="preferences"
           rows={3}
+          disabled={isCoolingDown}
           placeholder="지역, 업종, 시기 등 추가 희망 사항이 있으면 기재해주세요"
           className="border-white/[0.08] bg-white/[0.03] focus-visible:border-blue-500/40"
         />
@@ -253,7 +313,7 @@ export function InquiryForm() {
       {/* Submit */}
       <Button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isCoolingDown}
         className="glow-button relative h-12 w-full gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-semibold text-white transition-all hover:from-blue-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50"
       >
         {isSubmitting ? (
@@ -261,6 +321,8 @@ export function InquiryForm() {
             <Loader2 className="h-4 w-4 animate-spin" />
             제출 중...
           </>
+        ) : isCoolingDown ? (
+          `${cooldown}초 후 다시 문의 가능`
         ) : (
           "문의 보내기"
         )}

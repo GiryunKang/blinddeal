@@ -14,10 +14,10 @@ interface DealCardProps {
     visibility: string
     asking_price: number | null
     thumbnail_url: string | null
-    view_count: number
-    interest_count: number
+    view_count?: number | null
+    interest_count?: number | null
     owner?: {
-      display_name: string
+      display_name?: string | null
       company_name?: string | null
     } | null
   }
@@ -158,17 +158,15 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
             <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Eye className="w-3.5 h-3.5" />
-                {deal.view_count.toLocaleString()}
+                {(deal.view_count ?? 0).toLocaleString()}
               </span>
               <span className="flex items-center gap-1">
                 <Heart className="w-3.5 h-3.5" />
-                {deal.interest_count.toLocaleString()}
+                {(deal.interest_count ?? 0).toLocaleString()}
               </span>
-              {deal.owner && (
-                <span className="ml-auto max-w-[120px] truncate text-muted-foreground/60">
-                  {deal.owner.company_name || deal.owner.display_name}
-                </span>
-              )}
+              <span className="ml-auto max-w-[120px] truncate text-muted-foreground/60">
+                {deal.owner?.company_name || deal.owner?.display_name || "익명"}
+              </span>
             </div>
           )}
 

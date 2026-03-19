@@ -1,6 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
 import { createDeal } from "@/lib/actions/deal-mutations"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -34,9 +37,36 @@ const maDealTypes = [
 
 export function DealForm() {
   const [category, setCategory] = useState<"real_estate" | "ma">("real_estate")
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+
+  function handleSubmit(formData: FormData) {
+    setError(null)
+
+    startTransition(async () => {
+      const result = await createDeal(formData)
+
+      if (!result.success) {
+        setError(result.error || "딜 등록에 실패했습니다.")
+        toast.error(result.error || "딜 등록에 실패했습니다.")
+        return
+      }
+
+      toast.success("딜이 성공적으로 등록되었습니다.")
+      router.push(`/deals/${result.slug}`)
+    })
+  }
 
   return (
-    <form action={createDeal} className="space-y-6">
+    <form action={handleSubmit} className="space-y-6">
+      {/* Error display */}
+      {error && (
+        <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3">
+          <p className="text-sm text-destructive">{error}</p>
+        </div>
+      )}
+
       {/* Category Tabs */}
       <Tabs
         value={category}
@@ -67,6 +97,7 @@ export function DealForm() {
                 name="title"
                 placeholder="딜 제목을 입력하세요"
                 required
+                disabled={isPending}
               />
             </div>
 
@@ -78,13 +109,14 @@ export function DealForm() {
                 placeholder="딜에 대한 상세 설명을 입력하세요"
                 rows={5}
                 required
+                disabled={isPending}
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="deal_type">딜 유형</Label>
-                <Select name="deal_type" required>
+                <Select name="deal_type" required disabled={isPending}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="유형 선택" />
                   </SelectTrigger>
@@ -108,6 +140,7 @@ export function DealForm() {
                   name="asking_price"
                   type="number"
                   placeholder="미입력 시 '가격 협의'"
+                  disabled={isPending}
                 />
               </div>
             </div>
@@ -115,7 +148,7 @@ export function DealForm() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="visibility">공개 여부</Label>
-                <Select name="visibility" defaultValue="public">
+                <Select name="visibility" defaultValue="public" disabled={isPending}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="공개 여부" />
                   </SelectTrigger>
@@ -133,6 +166,7 @@ export function DealForm() {
                 <Select
                   name="required_verification_level"
                   defaultValue="0"
+                  disabled={isPending}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="인증 등급" />
@@ -164,11 +198,12 @@ export function DealForm() {
                     id="address"
                     name="address"
                     placeholder="상세 주소"
+                    disabled={isPending}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="city">도시</Label>
-                  <Input id="city" name="city" placeholder="서울, 부산 등" />
+                  <Input id="city" name="city" placeholder="서울, 부산 등" disabled={isPending} />
                 </div>
               </div>
 
@@ -179,6 +214,7 @@ export function DealForm() {
                     id="district"
                     name="district"
                     placeholder="강남구 등"
+                    disabled={isPending}
                   />
                 </div>
                 <div className="space-y-2">
@@ -187,29 +223,32 @@ export function DealForm() {
                     id="zoning"
                     name="zoning"
                     placeholder="상업지역, 주거지역 등"
+                    disabled={isPending}
                   />
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="property_area_sqm">대지면적 (m²)</Label>
+                  <Label htmlFor="property_area_sqm">대지면적 (m2)</Label>
                   <Input
                     id="property_area_sqm"
                     name="property_area_sqm"
                     type="number"
                     step="0.01"
                     placeholder="0.00"
+                    disabled={isPending}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="building_area_sqm">건축면적 (m²)</Label>
+                  <Label htmlFor="building_area_sqm">건축면적 (m2)</Label>
                   <Input
                     id="building_area_sqm"
                     name="building_area_sqm"
                     type="number"
                     step="0.01"
                     placeholder="0.00"
+                    disabled={isPending}
                   />
                 </div>
               </div>
@@ -222,6 +261,7 @@ export function DealForm() {
                     name="floor_count"
                     type="number"
                     placeholder="0"
+                    disabled={isPending}
                   />
                 </div>
                 <div className="space-y-2">
@@ -231,6 +271,7 @@ export function DealForm() {
                     name="built_year"
                     type="number"
                     placeholder="2020"
+                    disabled={isPending}
                   />
                 </div>
               </div>
@@ -251,6 +292,7 @@ export function DealForm() {
                     id="industry"
                     name="industry"
                     placeholder="IT, 제조, 유통 등"
+                    disabled={isPending}
                   />
                 </div>
                 <div className="space-y-2">
@@ -260,6 +302,7 @@ export function DealForm() {
                     name="founded_year"
                     type="number"
                     placeholder="2010"
+                    disabled={isPending}
                   />
                 </div>
               </div>
@@ -272,6 +315,7 @@ export function DealForm() {
                     name="annual_revenue"
                     type="number"
                     placeholder="0"
+                    disabled={isPending}
                   />
                 </div>
                 <div className="space-y-2">
@@ -281,6 +325,7 @@ export function DealForm() {
                     name="annual_profit"
                     type="number"
                     placeholder="0"
+                    disabled={isPending}
                   />
                 </div>
               </div>
@@ -292,6 +337,7 @@ export function DealForm() {
                   name="employee_count"
                   type="number"
                   placeholder="0"
+                  disabled={isPending}
                 />
               </div>
             </CardContent>
@@ -314,6 +360,7 @@ export function DealForm() {
               name="highlight_points"
               placeholder={"역세권 도보 3분\n최근 리모델링 완료\n안정적 임대 수익"}
               rows={3}
+              disabled={isPending}
             />
           </div>
 
@@ -326,6 +373,7 @@ export function DealForm() {
               name="risk_factors"
               placeholder={"노후 건물\n공실 위험\n주변 재개발 불확실"}
               rows={3}
+              disabled={isPending}
             />
           </div>
         </CardContent>
@@ -333,8 +381,9 @@ export function DealForm() {
 
       {/* Submit */}
       <div className="flex justify-end">
-        <Button type="submit" size="lg">
-          딜 등록하기
+        <Button type="submit" size="lg" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+          {isPending ? "등록 중..." : "딜 등록하기"}
         </Button>
       </div>
     </form>

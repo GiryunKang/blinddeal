@@ -108,10 +108,9 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
 
   function handleStatusChange(newStatus: "active" | "completed" | "cancelled") {
     startTransition(async () => {
-      try {
-        await updateRoomStatus(room.id, newStatus)
-      } catch (error) {
-        console.error("Failed to update status:", error)
+      const result = await updateRoomStatus(room.id, newStatus)
+      if (!result.success) {
+        // Status change failed silently on server
       }
     })
   }

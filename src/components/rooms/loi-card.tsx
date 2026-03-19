@@ -47,8 +47,8 @@ export function LOICard({ loi, currentUserId }: LOICardProps) {
     startTransition(async () => {
       try {
         await respondToLOI(loi.id, responseStatus)
-      } catch (error) {
-        console.error("Failed to respond to LOI:", error)
+      } catch {
+        // Error handled by server action
       }
     })
   }

@@ -3,12 +3,13 @@ export const revalidate = 60 // Revalidate every 60 seconds
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import Link from "next/link"
-import { MapPin, Sparkles } from "lucide-react"
+import { MapPin, Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
 import { getDeals, type DealFilters } from "@/lib/actions/deals"
 
 export const metadata: Metadata = { title: "딜 마켓플레이스" }
 import { DealCard } from "@/components/deals/deal-card"
 import { DealFilters as DealFiltersComponent } from "@/components/deals/deal-filters"
+import { Button } from "@/components/ui/button"
 
 interface DealsPageProps {
   searchParams: Promise<{
@@ -23,15 +24,34 @@ interface DealsPageProps {
 export default async function DealsPage({ searchParams }: DealsPageProps) {
   const params = await searchParams
 
+  const currentPage = params.page ? parseInt(params.page, 10) : 1
+  const limit = 12
+
   const filters: DealFilters = {
     category: params.category as DealFilters["category"],
     visibility: params.visibility as DealFilters["visibility"],
     sortBy: (params.sortBy as DealFilters["sortBy"]) || "latest",
     search: params.search,
-    page: params.page ? parseInt(params.page, 10) : 1,
+    page: currentPage,
+    limit,
   }
 
   const { deals, count } = await getDeals(filters)
+
+  const totalPages = Math.ceil(count / limit)
+  const hasPrev = currentPage > 1
+  const hasNext = currentPage < totalPages
+
+  // Build pagination URL preserving existing search params
+  function buildPageUrl(page: number) {
+    const p = new URLSearchParams()
+    if (params.category) p.set("category", params.category)
+    if (params.visibility) p.set("visibility", params.visibility)
+    if (params.sortBy) p.set("sortBy", params.sortBy)
+    if (params.search) p.set("search", params.search)
+    p.set("page", String(page))
+    return `/deals?${p.toString()}`
+  }
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -73,11 +93,52 @@ export default async function DealsPage({ searchParams }: DealsPageProps) {
 
       {/* Deal Grid */}
       {deals.length > 0 ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {deals.map((deal) => (
-            <DealCard key={deal.id} deal={deal} />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {deals.map((deal) => (
+              <DealCard key={deal.id} deal={deal} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-10 flex items-center justify-center gap-4">
+              {hasPrev ? (
+                <Link href={buildPageUrl(currentPage - 1)}>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <ChevronLeft className="size-4" />
+                    이전
+                  </Button>
+                </Link>
+              ) : (
+                <Button variant="outline" size="sm" className="gap-1.5" disabled>
+                  <ChevronLeft className="size-4" />
+                  이전
+                </Button>
+              )}
+
+              <span className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">{currentPage}</span>
+                {" / "}
+                <span>{totalPages}</span>
+              </span>
+
+              {hasNext ? (
+                <Link href={buildPageUrl(currentPage + 1)}>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    다음
+                    <ChevronRight className="size-4" />
+                  </Button>
+                </Link>
+              ) : (
+                <Button variant="outline" size="sm" className="gap-1.5" disabled>
+                  다음
+                  <ChevronRight className="size-4" />
+                </Button>
+              )}
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col items-center justify-center py-24">
           <div className="rounded-full bg-muted/50 p-5 backdrop-blur-md border border-border/30">

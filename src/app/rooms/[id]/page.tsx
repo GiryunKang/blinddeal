@@ -13,11 +13,13 @@ interface RoomDetailPageProps {
 export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
   const { id } = await params
   const user = await requireAuth()
-  const room = await getRoom(id)
+  const roomResult = await getRoom(id)
 
-  if (!room) {
+  if (!roomResult.success || !roomResult.data) {
     notFound()
   }
+
+  const room = roomResult.data
 
   const [messages, lois] = await Promise.all([
     getMessages(id),

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { Send } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { sendMessage } from "@/lib/actions/rooms"
@@ -21,11 +22,13 @@ export function MessageInput({ roomId }: MessageInputProps) {
     if (!trimmed) return
 
     startTransition(async () => {
-      try {
-        await sendMessage(roomId, trimmed)
+      const result = await sendMessage(roomId, trimmed)
+
+      if (result.success) {
         setContent("")
-      } catch (error) {
-        console.error("Failed to send message:", error)
+      } else {
+        toast.error(result.error || "메시지 전송에 실패했습니다")
+        // Keep the message text in input on failure (don't clear)
       }
     })
   }

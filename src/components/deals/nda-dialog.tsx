@@ -47,12 +47,10 @@ export function NDADialog({
 
   function handleSign() {
     startTransition(async () => {
-      try {
-        await signNDA(dealId)
+      const result = await signNDA(dealId)
+      if (result.success) {
         router.refresh()
         onOpenChange(false)
-      } catch (error) {
-        console.error("NDA signing failed:", error)
       }
     })
   }

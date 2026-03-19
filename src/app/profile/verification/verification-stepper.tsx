@@ -246,14 +246,12 @@ function UploadForm({ type, label }: { type: string; label: string }) {
     }
 
     startTransition(async () => {
-      try {
-        await submitVerification(type, formData)
+      const result = await submitVerification(type, formData)
+      if (result.success) {
         setSuccess(true)
         router.refresh()
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "제출에 실패했습니다."
-        )
+      } else {
+        setError(result.error || "제출에 실패했습니다.")
       }
     })
   }

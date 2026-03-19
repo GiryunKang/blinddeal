@@ -42,6 +42,7 @@ export function RegisterForm() {
   const [loading, setLoading] = useState(false);
 
   const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const isPasswordValid = strength.score >= 4;
 
   function validatePassword(pw: string): string | null {
     if (pw.length < 8) return "비밀번호는 최소 8자 이상이어야 합니다.";
@@ -245,6 +246,22 @@ export function RegisterForm() {
                 <p className={cn("text-xs", strength.textColor)}>
                   {strength.label}
                 </p>
+                {strength.score < 4 && (
+                  <ul className="mt-1 space-y-0.5 text-[11px] text-muted-foreground">
+                    <li className={password.length >= 8 ? "text-emerald-400" : ""}>
+                      {password.length >= 8 ? "\u2713" : "\u2022"} 8자 이상
+                    </li>
+                    <li className={/[A-Z]/.test(password) ? "text-emerald-400" : ""}>
+                      {/[A-Z]/.test(password) ? "\u2713" : "\u2022"} 대문자 1개 이상
+                    </li>
+                    <li className={/[0-9]/.test(password) ? "text-emerald-400" : ""}>
+                      {/[0-9]/.test(password) ? "\u2713" : "\u2022"} 숫자 1개 이상
+                    </li>
+                    <li className={/[^A-Za-z0-9]/.test(password) ? "text-emerald-400" : ""}>
+                      {/[^A-Za-z0-9]/.test(password) ? "\u2713" : "\u2022"} 특수문자 1개 이상
+                    </li>
+                  </ul>
+                )}
               </div>
             )}
           </div>
@@ -283,7 +300,7 @@ export function RegisterForm() {
           {/* Submit button */}
           <Button
             type="submit"
-            disabled={loading}
+            disabled={loading || !isPasswordValid}
             className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 py-5 font-medium text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:brightness-110 disabled:opacity-50"
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

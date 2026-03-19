@@ -39,8 +39,8 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
     startTransition(async () => {
       try {
         await updateEscrowStatus(escrow.id, newStatus)
-      } catch (error) {
-        console.error("Failed to update escrow status:", error)
+      } catch {
+        // Error handled by server action
       }
     })
   }

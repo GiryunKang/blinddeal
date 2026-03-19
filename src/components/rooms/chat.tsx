@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { WifiOff } from "lucide-react"
 import {
   Avatar,
   AvatarFallback,
@@ -34,6 +35,7 @@ interface ChatProps {
 
 export function Chat({ roomId, initialMessages, currentUserId }: ChatProps) {
   const [messages, setMessages] = useState<MessageWithSender[]>(initialMessages)
+  const [connectionError, setConnectionError] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -77,7 +79,13 @@ export function Chat({ roomId, initialMessages, currentUserId }: ChatProps) {
           })
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") {
+          setConnectionError(false)
+        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          setConnectionError(true)
+        }
+      })
 
     return () => {
       supabase.removeChannel(channel)
@@ -86,6 +94,14 @@ export function Chat({ roomId, initialMessages, currentUserId }: ChatProps) {
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10">
+      {/* Connection error banner */}
+      {connectionError && (
+        <div className="flex items-center gap-2 border-b border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-400">
+          <WifiOff className="size-4" />
+          <span>실시간 연결이 끊어졌습니다. 페이지를 새로고침해주세요.</span>
+        </div>
+      )}
+
       {/* Messages */}
       <div
         ref={scrollContainerRef}

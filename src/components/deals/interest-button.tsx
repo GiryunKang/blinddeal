@@ -33,16 +33,14 @@ export function InterestButton({
     }
 
     startTransition(async () => {
-      try {
-        const result = await toggleDealInterest(dealId)
-        setInterested(result.interested)
+      const result = await toggleDealInterest(dealId)
+      if (result.success) {
+        setInterested(result.interested ?? false)
         setCount((prev) => (result.interested ? prev + 1 : prev - 1))
 
         // Trigger pulse animation
         setAnimate(true)
         setTimeout(() => setAnimate(false), 300)
-      } catch {
-        // Silently handle errors
       }
     })
   }

@@ -13,7 +13,8 @@ import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
 export function LoginForm() {
   const router = useRouter();
   const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-  const redirect = searchParams?.get("redirect") || "/";
+  const rawRedirect = searchParams?.get("redirect") || "/";
+  const redirect = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") ? rawRedirect : "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);

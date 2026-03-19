@@ -41,8 +41,8 @@ export function VisibilityControl({
         )
         setSaved(true)
         setTimeout(() => setSaved(false), 2000)
-      } catch (e) {
-        console.error(e)
+      } catch {
+        // Error handled by server action
       }
     })
   }

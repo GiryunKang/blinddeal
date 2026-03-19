@@ -36,8 +36,8 @@ export function LOIForm({ roomId, askingPrice, onSuccess }: LOIFormProps) {
           valid_until: validUntil,
         })
         onSuccess?.()
-      } catch (error) {
-        console.error("Failed to create LOI:", error)
+      } catch {
+        // Error handled by server action
       }
     })
   }
