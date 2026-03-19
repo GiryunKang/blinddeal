@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Mail, Lock } from "lucide-react";
-import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
 
 export function LoginForm() {
   const router = useRouter();
@@ -76,8 +75,6 @@ export function LoginForm() {
       {/* Glass card */}
       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 shadow-xl backdrop-blur-xl">
         <form onSubmit={handleSubmit} className="space-y-5">
-          <SocialLoginButtons />
-
           {/* Email field */}
           <div className="space-y-2">
             <Label htmlFor="email" className="text-xs font-medium text-muted-foreground">

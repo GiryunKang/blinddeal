@@ -16,7 +16,6 @@ import {
   Plus,
   FileCheck,
   Scale,
-  CheckCircle,
   MessageSquareHeart,
 } from "lucide-react";
 import { formatKRW } from "@/lib/utils";
@@ -25,6 +24,7 @@ import { ClassifiedStamp } from "@/components/effects/classified-stamp";
 import { InquiryForm } from "@/components/inquiry/inquiry-form";
 import { LandingHeader } from "@/components/layout/landing-header";
 import { Footer } from "@/components/layout/footer";
+import { FloatingCTA } from "@/components/effects/floating-cta";
 
 export default function HomePage() {
   return (
@@ -142,7 +142,7 @@ export default function HomePage() {
         <div className="mb-10 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold md:text-3xl">실시간 딜</h2>
-            <p className="mt-2 text-sm text-muted-foreground">공개 딜은 누구나, 비공개 딜은 검증 후 열람</p>
+            <p className="mt-2 text-sm text-muted-foreground">이런 딜들이 BlindDeal에 등록됩니다</p>
           </div>
           <Link href="/deals" className="group flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80">
             전체 보기
@@ -152,16 +152,57 @@ export default function HomePage() {
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {/* Public Deal */}
-          <DealPreviewCard
-            title="판교 프라임 물류센터"
-            category="부동산"
-            categoryColor="blue"
-            dealType="물류센터"
-            location="경기 성남"
-            amount={45000000000}
-            visibility="public"
-            tags={["수도권", "물류", "임대수익"]}
-          />
+          <Link href="/deals" className="block">
+            <DealPreviewCard
+              title="판교 프라임 물류센터"
+              category="부동산"
+              categoryColor="blue"
+              dealType="물류센터"
+              location="경기 성남"
+              amount={45000000000}
+  
+              tags={["수도권", "물류", "임대수익"]}
+            />
+          </Link>
+          {/* Public Deal */}
+          <Link href="/deals" className="block">
+            <DealPreviewCard
+              title="제주 리조트 개발 프로젝트"
+              category="부동산"
+              categoryColor="blue"
+              dealType="개발"
+              location="제주"
+              amount={78000000000}
+  
+              tags={["관광", "레저", "개발"]}
+            />
+          </Link>
+          {/* Public Deal */}
+          <Link href="/deals" className="block">
+            <DealPreviewCard
+              title="SaaS 기업 지분 매각"
+              category="M&A"
+              categoryColor="purple"
+              dealType="지분 매각"
+              location="서울"
+              amount={null}
+  
+              tags={["IT", "SaaS", "ARR 50억"]}
+            />
+          </Link>
+          {/* Public Deal */}
+          <Link href="/deals" className="block">
+            <DealPreviewCard
+              title="강남 프라임 오피스 빌딩"
+              category="부동산"
+              categoryColor="blue"
+              dealType="오피스"
+              location="서울 강남"
+              amount={120000000000}
+  
+              tags={["강남", "오피스", "프라임"]}
+            />
+          </Link>
           {/* Private Deal — Blurred/Hidden */}
           <BlindDealCard
             category="M&A"
@@ -169,36 +210,6 @@ export default function HomePage() {
             dealType="기업 인수"
             industry="헬스케어"
             requiredLevel={3}
-          />
-          {/* Public Deal */}
-          <DealPreviewCard
-            title="제주 리조트 개발 프로젝트"
-            category="부동산"
-            categoryColor="blue"
-            dealType="개발"
-            location="제주"
-            amount={78000000000}
-            visibility="public"
-            tags={["관광", "레저", "개발"]}
-          />
-          {/* Private Deal — Blurred/Hidden */}
-          <BlindDealCard
-            category="부동산"
-            categoryColor="blue"
-            dealType="오피스"
-            industry="강남 핵심권"
-            requiredLevel={2}
-          />
-          {/* Public Deal */}
-          <DealPreviewCard
-            title="SaaS 기업 지분 매각"
-            category="M&A"
-            categoryColor="purple"
-            dealType="지분 매각"
-            location="서울"
-            amount={null}
-            visibility="public"
-            tags={["IT", "SaaS", "ARR 50억"]}
           />
           {/* Private Deal */}
           <BlindDealCard
@@ -297,6 +308,36 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Inquiry / Meeting Request Form */}
+      <section id="inquiry-section" className="relative border-t border-border/30">
+        {/* Gradient background */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-indigo-500/[0.03] to-purple-500/[0.05]" />
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-indigo-500/8 blur-[140px]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
+          <div className="mx-auto max-w-2xl">
+            {/* Section Header */}
+            <div className="mb-10 text-center">
+              <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-xs font-medium text-muted-foreground backdrop-blur-xl">
+                <MessageSquareHeart className="h-3.5 w-3.5 text-indigo-400" />
+                <span>회원가입 없이 간편하게</span>
+              </div>
+              <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
+                딜을 찾거나 등록하고 <span className="gradient-text">싶으신가요?</span>
+              </h2>
+              <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+                회원가입 없이 간편하게 문의하세요. 전문 담당자가 직접 연락드립니다.
+              </p>
+            </div>
+
+            {/* Glass Card Form Container */}
+            <div className="animated-border glass-card inner-glow rounded-2xl p-6 md:p-10">
+              <InquiryForm />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Trust Indicators — Why BlindDeal */}
       <section className="relative border-t border-border/30">
         <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
@@ -344,36 +385,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Inquiry / Meeting Request Form */}
-      <section id="inquiry" className="relative border-t border-border/30">
-        {/* Gradient background */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-indigo-500/[0.03] to-purple-500/[0.05]" />
-        <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-indigo-500/8 blur-[140px]" />
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
-          <div className="mx-auto max-w-2xl">
-            {/* Section Header */}
-            <div className="mb-10 text-center">
-              <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-xs font-medium text-muted-foreground backdrop-blur-xl">
-                <MessageSquareHeart className="h-3.5 w-3.5 text-indigo-400" />
-                <span>회원가입 없이 간편하게</span>
-              </div>
-              <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
-                딜을 찾거나 등록하고 <span className="gradient-text">싶으신가요?</span>
-              </h2>
-              <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
-                회원가입 없이 간편하게 문의하세요. 전문 담당자가 직접 연락드립니다.
-              </p>
-            </div>
-
-            {/* Glass Card Form Container */}
-            <div className="animated-border glass-card inner-glow rounded-2xl p-6 md:p-10">
-              <InquiryForm />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Bottom CTA — Full gradient section */}
       <section className="relative overflow-hidden border-t border-border/30">
         {/* Dramatic gradient background */}
@@ -404,6 +415,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Floating CTA */}
+      <FloatingCTA />
+
       {/* Footer */}
       <Footer />
     </div>
@@ -413,14 +427,14 @@ export default function HomePage() {
 /* ─── Components ─── */
 
 function DealPreviewCard({
-  title, category, categoryColor, dealType, location, amount, visibility, tags,
+  title, category, categoryColor, dealType, location, amount, tags,
 }: {
   title: string; category: string; categoryColor: "blue" | "purple"; dealType: string;
-  location: string; amount: number | null; visibility: "public" | "private";
+  location: string; amount: number | null;
   tags: string[];
 }) {
   return (
-    <Card className="hover-lift inner-glow group overflow-hidden border-white/[0.06] bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-white/[0.12] hover:bg-white/[0.04]">
+    <Card className="hover-lift inner-glow group cursor-pointer overflow-hidden border-white/[0.06] bg-white/[0.02] p-0 backdrop-blur-sm transition-all hover:border-white/[0.12] hover:bg-white/[0.04]">
       <div className="p-5">
         <div className="flex items-center gap-2">
           <Badge variant="secondary" className={categoryColor === "blue" ? "bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/20" : "bg-purple-500/10 text-purple-400 ring-1 ring-purple-500/20"}>
@@ -428,9 +442,6 @@ function DealPreviewCard({
           </Badge>
           <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">
             <Eye className="mr-1 h-3 w-3" />공개
-          </Badge>
-          <Badge variant="secondary" className="bg-white/[0.06] text-muted-foreground/60 ring-1 ring-white/[0.08] text-[10px]">
-            예시
           </Badge>
           <span className="ml-auto text-xs text-muted-foreground/60">{dealType}</span>
         </div>
@@ -478,9 +489,6 @@ function BlindDealCard({
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot" />
           관리자 검증
         </span>
-        <Badge variant="secondary" className="bg-white/[0.06] text-muted-foreground/60 ring-1 ring-white/[0.08] text-[10px]">
-          예시
-        </Badge>
         <span className="ml-auto text-xs text-muted-foreground/60">{dealType}</span>
       </div>
 

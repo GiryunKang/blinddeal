@@ -16,8 +16,8 @@ const companyLinks = [
 
 const supportLinks = [
   { href: "mailto:83482@daum.net", label: "문의하기" },
-  { href: "/community", label: "커뮤니티" },
-  { href: "/about", label: "소개" },
+  { href: "/community", label: "게시판" },
+  { href: "/about", label: "회사 소개" },
 ];
 
 export function Footer() {
@@ -95,8 +95,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 border-t border-border/30 pt-6">
           <p className="text-center text-xs text-muted-foreground">
-            &copy; 2026 BlindDeal. All rights reserved. | 사업자등록번호:
-            000-00-00000 | 대표: 강기륜
+            &copy; 2026 BlindDeal. All rights reserved. | 사업자등록 준비 중 | 대표: 강기륜
           </p>
         </div>
       </div>

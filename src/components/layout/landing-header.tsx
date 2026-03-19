@@ -26,7 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Bell, LogOut, Settings, User as UserIcon, Menu, Plus } from "lucide-react";
+import { Bell, LogOut, Settings, User as UserIcon, Menu, Plus, MessageSquareHeart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const publicNavLinks = [
@@ -297,10 +297,25 @@ export function LandingHeader() {
                         {link.label}
                       </Link>
                     ))}
+                    <a
+                      href="#inquiry-section"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setMobileOpen(false);
+                        setTimeout(() => {
+                          const el = document.getElementById("inquiry-section");
+                          if (el) el.scrollIntoView({ behavior: "smooth" });
+                        }, 300);
+                      }}
+                      className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:border-white/[0.2] hover:bg-white/[0.06]"
+                    >
+                      <MessageSquareHeart className="h-4 w-4" />
+                      문의하기
+                    </a>
                     <Link
                       href="/auth/login"
                       onClick={() => setMobileOpen(false)}
-                      className="mt-4 flex items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:border-white/[0.2] hover:bg-white/[0.06]"
+                      className="flex items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:border-white/[0.2] hover:bg-white/[0.06]"
                     >
                       로그인
                     </Link>
@@ -316,6 +331,23 @@ export function LandingHeader() {
               </Sheet>
 
               <div className="hidden items-center gap-2 md:flex">
+                <a
+                  href="#inquiry-section"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById("inquiry-section");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="gap-1.5 rounded-xl text-muted-foreground transition-all duration-300 hover:text-foreground"
+                  >
+                    <MessageSquareHeart className="h-3.5 w-3.5" />
+                    문의
+                  </Button>
+                </a>
                 <Link href="/auth/login">
                   <Button
                     size="sm"

@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Mail, Lock, User, Building2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
 
 function getPasswordStrength(pw: string): {
   score: number;
@@ -115,8 +114,6 @@ export function RegisterForm() {
       {/* Glass card */}
       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 shadow-xl backdrop-blur-xl">
         <form onSubmit={handleSubmit} className="space-y-5">
-          <SocialLoginButtons />
-
           {/* User type tabs */}
           <div className="flex rounded-xl border border-white/[0.08] bg-white/[0.02] p-1">
             <button

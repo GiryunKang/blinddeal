@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -49,10 +49,18 @@ function getRemainingCooldown(): number {
   return Math.max(0, COOLDOWN_SECONDS - elapsed)
 }
 
+function formatPhoneNumber(value: string): string {
+  const digits = value.replace(/\D/g, "")
+  if (digits.length <= 3) return digits
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`
+}
+
 export function InquiryForm() {
   const [inquiryType, setInquiryType] = useState<"buy" | "sell" | "meeting" | "partnership">("buy")
   const [dealCategory, setDealCategory] = useState<"real_estate" | "ma" | "both" | null>(null)
   const [budgetRange, setBudgetRange] = useState("")
+  const [phone, setPhone] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState("")
@@ -211,6 +219,9 @@ export function InquiryForm() {
             type="tel"
             disabled={isCoolingDown}
             placeholder="010-0000-0000"
+            value={phone}
+            onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
+            maxLength={13}
             className="h-10 border-white/[0.08] bg-white/[0.03] focus-visible:border-blue-500/40"
           />
         </div>
