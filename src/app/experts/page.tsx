@@ -6,6 +6,8 @@ import { getExperts, type ExpertFilters, type ExpertType } from "@/lib/actions/e
 
 export const metadata: Metadata = { title: "전문가 네트워크" }
 import { ExpertCard } from "@/components/experts/expert-card"
+import { Users, Mail } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 const EXPERT_TYPES: { value: ExpertType | "all"; label: string }[] = [
   { value: "all", label: "전체" },
@@ -93,26 +95,20 @@ export default async function ExpertsPage({ searchParams }: ExpertsPageProps) {
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="rounded-full bg-muted p-4">
-            <svg
-              className="size-8 text-muted-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
+            <Users className="size-8 text-muted-foreground" />
           </div>
           <h3 className="mt-4 text-lg font-medium text-foreground">
-            등록된 전문가가 없습니다
+            전문가 네트워크를 구축 중입니다
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            검색 조건을 변경해보세요
+            법무, 회계, 세무, 감정 전문가를 모집하고 있습니다
           </p>
+          <a href="mailto:83482@daum.net" className="mt-4">
+            <Button size="sm" variant="outline" className="gap-1.5">
+              <Mail className="size-3.5" />
+              전문가 등록 문의
+            </Button>
+          </a>
         </div>
       )}
     </div>

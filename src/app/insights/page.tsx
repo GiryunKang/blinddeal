@@ -5,6 +5,7 @@ import { getArticles, type ArticleFilters } from "@/lib/actions/articles"
 
 export const metadata: Metadata = { title: "인사이트" }
 import { ArticleCard } from "@/components/insights/article-card"
+import { BookOpen } from "lucide-react"
 import Link from "next/link"
 
 const categories = [
@@ -84,25 +85,13 @@ export default async function InsightsPage({
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="rounded-full bg-muted p-4">
-            <svg
-              className="size-8 text-muted-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-              />
-            </svg>
+            <BookOpen className="size-8 text-muted-foreground" />
           </div>
           <h3 className="mt-4 text-lg font-medium text-foreground">
-            등록된 아티클이 없습니다
+            아직 인사이트 글이 없습니다
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            새로운 인사이트가 곧 업데이트됩니다
+            업계 동향과 분석 글이 곧 업데이트됩니다
           </p>
         </div>
       )}

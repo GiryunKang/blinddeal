@@ -1,16 +1,20 @@
+import type { Metadata } from "next"
 import Link from "next/link"
-import { MessageSquare, Clock } from "lucide-react"
+import { MessageSquare, Clock, ArrowRight } from "lucide-react"
 import { requireAuth } from "@/lib/supabase/auth"
 import { getRooms } from "@/lib/actions/rooms"
 import { MainLayout } from "@/components/layout/main-layout"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
 import { formatDate, formatKRW } from "@/lib/utils"
+
+export const metadata: Metadata = { title: "거래 채팅" }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   pending: {
@@ -33,7 +37,8 @@ const statusConfig: Record<string, { label: string; className: string }> = {
 
 export default async function RoomsPage() {
   const user = await requireAuth()
-  const rooms = await getRooms()
+  const roomsResult = await getRooms()
+  const rooms = roomsResult.data ?? []
 
   return (
     <MainLayout>
@@ -115,11 +120,17 @@ export default async function RoomsPage() {
             <MessageSquare className="size-8 text-muted-foreground" />
           </div>
           <h3 className="mt-4 text-lg font-medium text-foreground">
-            대화방이 없습니다
+            아직 진행 중인 거래가 없습니다
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            딜 마켓에서 관심 있는 딜에 문의해보세요
+            딜 마켓플레이스에서 관심 있는 딜에 문의해보세요
           </p>
+          <Link href="/deals" className="mt-4">
+            <Button size="sm" className="gap-1.5">
+              딜 둘러보기
+              <ArrowRight className="size-3.5" />
+            </Button>
+          </Link>
         </div>
       )}
     </MainLayout>

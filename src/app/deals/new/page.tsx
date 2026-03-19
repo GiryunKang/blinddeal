@@ -1,5 +1,8 @@
+import type { Metadata } from "next"
 import { requireAuth } from "@/lib/supabase/auth"
 import { DealForm } from "@/components/deals/deal-form"
+
+export const metadata: Metadata = { title: "딜 등록" }
 
 export default async function NewDealPage() {
   await requireAuth()

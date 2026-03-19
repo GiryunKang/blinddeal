@@ -1,8 +1,11 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { requireAuth } from "@/lib/supabase/auth"
 import { getVerificationStatus } from "@/lib/actions/verification"
 import { VerificationBadge } from "@/components/profile/verification-badge"
 import { VerificationStepper } from "./verification-stepper"
+
+export const metadata: Metadata = { title: "인증 관리" }
 
 export default async function VerificationPage() {
   await requireAuth()

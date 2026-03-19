@@ -190,7 +190,7 @@ export function NotificationList({
               <Bell className="size-8 text-muted-foreground" />
             </div>
             <h3 className="mt-4 text-base font-medium text-foreground">
-              알림이 없습니다
+              새로운 알림이 없습니다
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               새로운 소식이 있으면 여기에 표시됩니다

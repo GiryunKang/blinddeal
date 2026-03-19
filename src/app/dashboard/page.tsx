@@ -1,7 +1,9 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { MainLayout } from "@/components/layout/main-layout"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   FileText,
   Heart,
@@ -11,9 +13,12 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
+  Plus,
 } from "lucide-react"
 import { getMyDeals, getMyInterests, getMyRooms, getMyDealStats } from "@/lib/actions/my-deals"
 import { formatKRW } from "@/lib/utils"
+
+export const metadata: Metadata = { title: "대시보드" }
 
 const PIPELINE_STAGES = [
   { key: "draft", label: "초안", accentColor: "from-gray-500 to-gray-600", headerText: "text-gray-400", dotColor: "bg-gray-500" },
@@ -92,6 +97,21 @@ export default async function DashboardPage() {
         {/* Pipeline section */}
         <div>
           <h2 className="mb-5 text-lg font-bold tracking-tight">거래 진행 현황</h2>
+          {myDeals.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.02] py-16 backdrop-blur-xl">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/[0.05]">
+                <FileText className="h-5 w-5 text-muted-foreground/50" />
+              </div>
+              <p className="mt-4 text-sm font-medium text-foreground">아직 등록한 딜이 없습니다</p>
+              <p className="mt-1 text-sm text-muted-foreground">첫 딜을 등록하고 거래를 시작해보세요</p>
+              <Link href="/deals/new" className="mt-4">
+                <Button size="sm" className="gap-1.5">
+                  <Plus className="size-3.5" />
+                  첫 딜 등록하기
+                </Button>
+              </Link>
+            </div>
+          ) : (
           <div className="flex gap-3 overflow-x-auto pb-4">
             {PIPELINE_STAGES.map((stage) => {
               const dealsInStage = myDeals.filter((d) => d.status === stage.key)
@@ -133,6 +153,7 @@ export default async function DashboardPage() {
               )
             })}
           </div>
+          )}
         </div>
 
         {/* Activity Feed */}

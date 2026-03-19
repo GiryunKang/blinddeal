@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = { title: "커뮤니티" }
-import { Plus } from "lucide-react"
+import { Plus, MessageCircle } from "lucide-react"
 import { getPosts } from "@/lib/actions/community"
 import { getUser } from "@/lib/supabase/auth"
 import { PostCard } from "@/components/community/post-card"
@@ -96,26 +96,22 @@ export default async function CommunityPage({
       ) : (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="rounded-full bg-muted p-4">
-            <svg
-              className="size-8 text-muted-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
+            <MessageCircle className="size-8 text-muted-foreground" />
           </div>
           <h3 className="mt-4 text-lg font-medium text-foreground">
-            등록된 게시글이 없습니다
+            아직 게시글이 없습니다
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
             첫 게시글을 작성해보세요
           </p>
+          {user && (
+            <Link href="/community/new" className="mt-4">
+              <Button size="sm" className="gap-1.5">
+                <Plus className="size-3.5" />
+                첫 게시글 작성하기
+              </Button>
+            </Link>
+          )}
         </div>
       )}
 

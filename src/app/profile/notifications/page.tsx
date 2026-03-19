@@ -1,8 +1,11 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { requireAuth } from "@/lib/supabase/auth"
 import { getNotifications } from "@/lib/actions/matching"
 import { NotificationList } from "@/components/notifications/notification-list"
+
+export const metadata: Metadata = { title: "알림" }
 
 interface NotificationsPageProps {
   searchParams: Promise<{ page?: string }>

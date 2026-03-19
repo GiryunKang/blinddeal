@@ -15,9 +15,9 @@ const companyLinks = [
 ];
 
 const supportLinks = [
-  { href: "/contact", label: "문의하기" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/notices", label: "공지사항" },
+  { href: "mailto:83482@daum.net", label: "문의하기" },
+  { href: "/community", label: "커뮤니티" },
+  { href: "/about", label: "소개" },
 ];
 
 export function Footer() {

@@ -9,7 +9,7 @@ import { MatchScoreBadge } from "@/components/deals/match-score-badge"
 import { formatKRW, formatDate } from "@/lib/utils"
 
 export const metadata = {
-  title: "맞춤 딜 | BlindDeal",
+  title: "맞춤 딜",
 }
 
 interface MatchedDealsPageProps {
@@ -44,14 +44,14 @@ export default async function MatchedDealsPage({
           맞춤 딜을 받아보세요
         </h1>
         <p className="mt-3 text-muted-foreground">
-          관심 분야, 투자 규모, 지역 등 매칭 설정을 완료하면
+          매칭 조건을 설정하면 맞춤 딜을 추천해드립니다.
           <br />
-          최적의 딜을 자동으로 추천해 드립니다.
+          관심 분야, 투자 규모, 지역 등을 설정해보세요.
         </p>
         <Link href="/profile/matches">
           <Button className="mt-6" size="lg">
             <Settings className="mr-2 size-4" />
-            매칭 설정하기
+            매칭 조건 설정하기
           </Button>
         </Link>
       </div>
