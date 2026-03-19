@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { LoginForm } from "@/components/auth/login-form";
 import Link from "next/link";
 import { Shield, Wallet, Users } from "lucide-react";
@@ -83,7 +84,9 @@ export default function LoginPage() {
 
       {/* Right Panel — Login Form */}
       <div className="flex w-full items-center justify-center bg-background px-6 lg:w-1/2">
-        <LoginForm />
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );

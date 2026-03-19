@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,8 @@ import { SocialLoginButtons } from "@/components/auth/social-login-buttons";
 
 export function LoginForm() {
   const router = useRouter();
-  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-  const rawRedirect = searchParams?.get("redirect") || "/";
+  const searchParams = useSearchParams();
+  const rawRedirect = searchParams.get("redirect") || "/";
   const redirect = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") ? rawRedirect : "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

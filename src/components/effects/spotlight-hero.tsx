@@ -4,9 +4,11 @@ import { useRef, useState, useCallback, useEffect } from "react"
 export function SpotlightHero({ children }: { children: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState({ x: 50, y: 50 })
+  const [mounted, setMounted] = useState(false)
   const [isTouchDevice, setIsTouchDevice] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0)
   }, [])
 
@@ -19,7 +21,8 @@ export function SpotlightHero({ children }: { children: React.ReactNode }) {
     })
   }, [])
 
-  if (isTouchDevice) {
+  // Before mount or on touch devices, render plain container (matches SSR output)
+  if (!mounted || isTouchDevice) {
     return <div className="relative overflow-hidden">{children}</div>
   }
 

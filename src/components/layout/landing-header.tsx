@@ -48,9 +48,14 @@ const authNavLinks = [
 export function LandingHeader() {
   const router = useRouter();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();
@@ -87,7 +92,8 @@ export function LandingHeader() {
   const displayName =
     user?.user_metadata?.display_name ?? user?.email?.split("@")[0] ?? "";
   const initials = displayName.slice(0, 2).toUpperCase();
-  const navLinks = user ? authNavLinks : publicNavLinks;
+  // Before mount, always render the public nav to match SSR
+  const navLinks = mounted && user ? authNavLinks : publicNavLinks;
 
   return (
     <header
@@ -137,7 +143,7 @@ export function LandingHeader() {
 
         {/* Right Side */}
         <div className="ml-auto flex items-center gap-3">
-          {user ? (
+          {mounted && user ? (
             <>
               {/* Notifications */}
               <Link href="/notifications">
