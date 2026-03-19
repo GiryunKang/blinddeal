@@ -90,7 +90,7 @@ export function RegisterForm() {
       return;
     }
 
-    router.push("/auth/onboarding");
+    router.push("/auth/verify-email");
     router.refresh();
   }
 

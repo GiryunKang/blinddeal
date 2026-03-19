@@ -41,7 +41,17 @@ export function LoginForm() {
       return;
     }
 
-    router.push(redirect);
+    // Check if onboarding is completed
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .single();
+
+    if (profile && !profile.onboarding_completed) {
+      router.push("/auth/onboarding");
+    } else {
+      router.push(redirect);
+    }
     router.refresh();
   }
 
