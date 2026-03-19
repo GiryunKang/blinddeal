@@ -17,6 +17,9 @@ import {
   FileCheck,
   Scale,
   MessageSquareHeart,
+  Calculator,
+  FileSearch,
+  ChevronDown,
 } from "lucide-react";
 import { formatKRW } from "@/lib/utils";
 import { SpotlightHero } from "@/components/effects/spotlight-hero";
@@ -87,6 +90,14 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
+
+          {/* Scroll-down indicator */}
+          <div className="mt-12 flex justify-center">
+            <div className="flex flex-col items-center gap-2 text-muted-foreground/40">
+              <span className="text-[10px] font-medium tracking-widest uppercase">Scroll</span>
+              <ChevronDown className="h-5 w-5 animate-bounce" />
+            </div>
+          </div>
         </div>
       </section>
       </SpotlightHero>
@@ -152,7 +163,7 @@ export default function HomePage() {
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {/* Public Deal */}
-          <Link href="/deals" className="block">
+          <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="판교 프라임 물류센터"
               category="부동산"
@@ -165,7 +176,7 @@ export default function HomePage() {
             />
           </Link>
           {/* Public Deal */}
-          <Link href="/deals" className="block">
+          <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="제주 리조트 개발 프로젝트"
               category="부동산"
@@ -178,7 +189,7 @@ export default function HomePage() {
             />
           </Link>
           {/* Public Deal */}
-          <Link href="/deals" className="block">
+          <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="SaaS 기업 지분 매각"
               category="M&A"
@@ -191,7 +202,7 @@ export default function HomePage() {
             />
           </Link>
           {/* Public Deal */}
-          <Link href="/deals" className="block">
+          <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="강남 프라임 오피스 빌딩"
               category="부동산"
@@ -373,6 +384,26 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
           <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">함께할 <span className="gradient-text">전문 기관</span>을 모집합니다</h2>
           <p className="mb-10 text-center text-sm text-muted-foreground">법무법인, 회계법인, 감정평가법인, 신탁회사 파트너를 찾고 있습니다</p>
+
+          {/* Partner type badges */}
+          <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
+            <div className="flex items-center gap-2.5 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-2.5">
+              <Scale className="h-5 w-5 text-blue-400" />
+              <span className="text-sm font-medium text-blue-400">법무</span>
+            </div>
+            <div className="flex items-center gap-2.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 px-4 py-2.5">
+              <Calculator className="h-5 w-5 text-indigo-400" />
+              <span className="text-sm font-medium text-indigo-400">회계</span>
+            </div>
+            <div className="flex items-center gap-2.5 rounded-xl border border-purple-500/20 bg-purple-500/5 px-4 py-2.5">
+              <FileSearch className="h-5 w-5 text-purple-400" />
+              <span className="text-sm font-medium text-purple-400">감정평가</span>
+            </div>
+            <div className="flex items-center gap-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-2.5">
+              <Building2 className="h-5 w-5 text-cyan-400" />
+              <span className="text-sm font-medium text-cyan-400">신탁</span>
+            </div>
+          </div>
 
           <div className="flex justify-center">
             <a href="mailto:83482@daum.net">

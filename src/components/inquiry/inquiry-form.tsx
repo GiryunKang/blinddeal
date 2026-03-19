@@ -129,7 +129,7 @@ export function InquiryForm() {
         </div>
         <h3 className="text-xl font-semibold">문의가 접수되었습니다</h3>
         <p className="max-w-sm text-sm text-muted-foreground">
-          빠른 시일 내에 연락드리겠습니다.
+          영업일 기준 1일 이내에 담당자가 연락드리겠습니다.
           <br />
           감사합니다.
         </p>
@@ -144,6 +144,11 @@ export function InquiryForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Required fields note */}
+      <p className="text-xs text-muted-foreground">
+        <span className="text-red-400">*</span> 표시된 항목은 필수 입력입니다
+      </p>
+
       {/* Cooldown notice */}
       {isCoolingDown && (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-400">
@@ -171,7 +176,7 @@ export function InquiryForm() {
                 }`}
               >
                 <Icon className={`h-5 w-5 ${isSelected ? "text-blue-400" : "text-muted-foreground/60"}`} />
-                <span className="text-xs font-medium leading-tight">{type.label}</span>
+                <span className="text-[11px] font-medium leading-tight sm:text-xs">{type.label}</span>
               </button>
             )
           })}

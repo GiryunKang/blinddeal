@@ -7,13 +7,14 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Mail, Lock } from "lucide-react";
+import { Loader2, Mail, Lock, CheckCircle } from "lucide-react";
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawRedirect = searchParams.get("redirect") || "/";
   const redirect = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") ? rawRedirect : "/";
+  const message = searchParams.get("message");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -72,6 +73,14 @@ export function LoginForm() {
         </p>
       </div>
 
+      {/* Password changed success */}
+      {message === "password_changed" && (
+        <div className="flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
+          <CheckCircle className="h-4 w-4 shrink-0 text-emerald-400" />
+          <p className="text-sm text-emerald-400">비밀번호가 변경되었습니다. 새 비밀번호로 로그인하세요.</p>
+        </div>
+      )}
+
       {/* Glass card */}
       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 shadow-xl backdrop-blur-xl">
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -113,6 +122,16 @@ export function LoginForm() {
                 className="rounded-xl border-white/[0.08] bg-white/[0.03] pl-10 transition-all duration-300 placeholder:text-muted-foreground/30 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
               />
             </div>
+          </div>
+
+          {/* Forgot password */}
+          <div className="flex justify-end -mt-2">
+            <Link
+              href="/auth/forgot-password"
+              className="text-xs text-muted-foreground transition-colors duration-300 hover:text-blue-400"
+            >
+              비밀번호를 잊으셨나요?
+            </Link>
           </div>
 
           {/* Error */}

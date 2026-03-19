@@ -141,9 +141,15 @@ export function LandingHeader() {
           ))}
         </nav>
 
-        {/* Right Side */}
+        {/* Right Side — use opacity transition to prevent hydration flicker */}
         <div className="ml-auto flex items-center gap-3">
-          {mounted && user ? (
+          {!mounted ? (
+            /* SSR / pre-mount: empty placeholder to avoid hydration mismatch */
+            <div className="flex items-center gap-2 opacity-0 transition-opacity duration-300">
+              <div className="h-8 w-20 rounded-xl" />
+              <div className="h-8 w-20 rounded-xl" />
+            </div>
+          ) : user ? (
             <>
               {/* Notifications */}
               <Link href="/notifications">

@@ -6,15 +6,21 @@ export const metadata: Metadata = { title: "개인정보처리방침" }
 export default function PrivacyPage() {
   return (
     <MainLayout>
-      <div className="mx-auto max-w-3xl py-12">
-        <h1 className="text-3xl font-bold tracking-tight">
-          개인정보처리방침
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          시행일: 2026년 3월 1일
-        </p>
+      {/* Hero header */}
+      <section className="relative overflow-hidden border-b border-border/30">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-indigo-500/[0.03] to-purple-500/[0.05]" />
+        <div className="pointer-events-none absolute -top-40 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-500/8 blur-[120px]" />
+        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center md:py-20">
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">개인정보처리방침</h1>
+          <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
+          <p className="mt-4 text-sm text-muted-foreground">
+            시행일: 2026년 3월 1일
+          </p>
+        </div>
+      </section>
 
-        <div className="mt-10 space-y-10 text-sm leading-relaxed text-muted-foreground">
+      <div className="mx-auto max-w-3xl px-4 py-12 md:py-16">
+        <div className="prose-container space-y-12 text-sm leading-relaxed text-muted-foreground">
           <p>
             주식회사 블라인드딜(이하 &ldquo;회사&rdquo;)은 개인정보
             보호법에 따라 이용자의 개인정보를 보호하고, 이와 관련한 고충을
@@ -23,11 +29,12 @@ export default function PrivacyPage() {
           </p>
 
           {/* 1. 수집 항목 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              1. 개인정보 수집 항목
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/15 to-purple-500/10 text-xs font-bold text-indigo-400 ring-1 ring-indigo-500/20">1</span>
+              개인정보 수집 항목
             </h2>
-            <div className="mt-3 space-y-4">
+            <div className="space-y-4 pl-11">
               <div>
                 <h3 className="font-medium text-foreground">
                   필수 수집 항목
@@ -64,11 +71,12 @@ export default function PrivacyPage() {
           </section>
 
           {/* 2. 수집 목적 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              2. 개인정보 수집 및 이용 목적
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/15 to-purple-500/10 text-xs font-bold text-indigo-400 ring-1 ring-indigo-500/20">2</span>
+              개인정보 수집 및 이용 목적
             </h2>
-            <ul className="mt-3 list-inside list-disc space-y-2">
+            <ul className="list-inside list-disc space-y-2 pl-11">
               <li>
                 <span className="font-medium text-foreground">
                   회원 관리:
@@ -109,19 +117,20 @@ export default function PrivacyPage() {
           </section>
 
           {/* 3. 보유 기간 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              3. 개인정보 보유 및 이용 기간
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/15 to-purple-500/10 text-xs font-bold text-indigo-400 ring-1 ring-indigo-500/20">3</span>
+              개인정보 보유 및 이용 기간
             </h2>
-            <p className="mt-3">
+            <p className="pl-11">
               회사는 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를
               지체 없이 파기합니다. 단, 관련 법령에 의해 보존할 필요가 있는
               경우 아래와 같이 관련 법령이 정한 기간 동안 보존합니다.
             </p>
-            <div className="mt-4 overflow-hidden rounded-lg border border-border/50">
+            <div className="mt-4 overflow-hidden rounded-xl border border-white/[0.08] pl-11">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-border/50 bg-muted/30">
+                  <tr className="border-b border-white/[0.06] bg-white/[0.03]">
                     <th className="px-4 py-3 font-medium text-foreground">
                       보존 항목
                     </th>
@@ -133,7 +142,7 @@ export default function PrivacyPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/50">
+                <tbody className="divide-y divide-white/[0.06]">
                   <tr>
                     <td className="px-4 py-3">계약 또는 청약철회 기록</td>
                     <td className="px-4 py-3">5년</td>
@@ -164,15 +173,16 @@ export default function PrivacyPage() {
           </section>
 
           {/* 4. 제3자 제공 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              4. 개인정보의 제3자 제공
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/15 to-purple-500/10 text-xs font-bold text-indigo-400 ring-1 ring-indigo-500/20">4</span>
+              개인정보의 제3자 제공
             </h2>
-            <p className="mt-3">
+            <p className="pl-11">
               회사는 원칙적으로 이용자의 개인정보를 외부에 제공하지 않습니다.
               다만, 다음의 경우에는 예외로 합니다.
             </p>
-            <ul className="mt-2 list-inside list-disc space-y-2">
+            <ul className="list-inside list-disc space-y-2 pl-11">
               <li>이용자가 사전에 동의한 경우</li>
               <li>
                 거래 성사 시 거래 상대방에게 필요한 최소한의 정보 (이름,
@@ -190,11 +200,12 @@ export default function PrivacyPage() {
           </section>
 
           {/* 5. 파기 절차 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              5. 개인정보 파기 절차 및 방법
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/15 to-purple-500/10 text-xs font-bold text-indigo-400 ring-1 ring-indigo-500/20">5</span>
+              개인정보 파기 절차 및 방법
             </h2>
-            <div className="mt-3 space-y-3">
+            <div className="space-y-3 pl-11">
               <div>
                 <h3 className="font-medium text-foreground">파기 절차</h3>
                 <p className="mt-1">
@@ -219,11 +230,12 @@ export default function PrivacyPage() {
           </section>
 
           {/* 6. 이용자 권리 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              6. 이용자 및 법정대리인의 권리와 행사 방법
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/15 to-purple-500/10 text-xs font-bold text-indigo-400 ring-1 ring-indigo-500/20">6</span>
+              이용자 및 법정대리인의 권리와 행사 방법
             </h2>
-            <ul className="mt-3 list-inside list-disc space-y-2">
+            <ul className="list-inside list-disc space-y-2 pl-11">
               <li>
                 이용자는 언제든지 자신의 개인정보를 조회하거나 수정할 수
                 있습니다.
@@ -244,16 +256,17 @@ export default function PrivacyPage() {
           </section>
 
           {/* 7. 개인정보 보호책임자 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              7. 개인정보 보호책임자
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500/15 to-purple-500/10 text-xs font-bold text-indigo-400 ring-1 ring-indigo-500/20">7</span>
+              개인정보 보호책임자
             </h2>
-            <p className="mt-3">
+            <p className="pl-11">
               회사는 개인정보 처리에 관한 업무를 총괄하고, 이용자의 불만
               처리 및 피해 구제를 위해 아래와 같이 개인정보 보호책임자를
               지정하고 있습니다.
             </p>
-            <div className="mt-4 rounded-lg border border-border/50 bg-card/50 p-4 space-y-1">
+            <div className="ml-11 mt-4 space-y-1 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
               <p>
                 <span className="font-medium text-foreground">
                   개인정보 보호책임자:
@@ -275,11 +288,11 @@ export default function PrivacyPage() {
                 02-0000-0000
               </p>
             </div>
-            <p className="mt-4">
+            <p className="mt-4 pl-11">
               기타 개인정보 침해에 대한 신고나 상담이 필요하신 경우 아래
               기관에 문의하시기 바랍니다.
             </p>
-            <ul className="mt-2 list-inside list-disc space-y-1">
+            <ul className="list-inside list-disc space-y-1 pl-11">
               <li>
                 개인정보침해신고센터 (privacy.kisa.or.kr / 국번없이 118)
               </li>

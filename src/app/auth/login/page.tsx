@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { Suspense } from "react"
 import { LoginForm } from "@/components/auth/login-form";
 import Link from "next/link";
-import { Shield, Wallet, Users } from "lucide-react";
+import { Shield, Wallet, Users, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = { title: "로그인" }
 
@@ -26,8 +26,8 @@ export default function LoginPage() {
           <div className="h-[500px] w-[500px] animate-pulse rounded-full bg-gradient-to-br from-blue-500/20 via-indigo-500/10 to-purple-500/20 blur-[120px]" />
         </div>
 
-        {/* Top — Logo */}
-        <div className="relative z-10">
+        {/* Top — Logo + Home link */}
+        <div className="relative z-10 space-y-4">
           <Link href="/" className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25">
               <span className="text-base font-bold text-white">B</span>
@@ -35,6 +35,13 @@ export default function LoginPage() {
             <span className="text-xl font-semibold tracking-tight text-white">
               BlindDeal
             </span>
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-sm text-white/40 transition-colors hover:text-white/70"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            홈으로 돌아가기
           </Link>
         </div>
 
@@ -84,9 +91,21 @@ export default function LoginPage() {
 
       {/* Right Panel — Login Form */}
       <div className="flex w-full items-center justify-center bg-background px-6 lg:w-1/2">
-        <Suspense fallback={null}>
-          <LoginForm />
-        </Suspense>
+        <div className="w-full max-w-[420px]">
+          {/* Mobile back link */}
+          <div className="mb-6 lg:hidden">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              홈으로 돌아가기
+            </Link>
+          </div>
+          <Suspense fallback={null}>
+            <LoginForm />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

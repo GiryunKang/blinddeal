@@ -95,7 +95,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 border-t border-border/30 pt-6">
           <p className="text-center text-xs text-muted-foreground">
-            &copy; 2026 BlindDeal. All rights reserved. | 사업자등록 준비 중 | 대표: 강기륜
+            &copy; 2026 BlindDeal. All rights reserved. | 대표: 강기륜
           </p>
         </div>
       </div>

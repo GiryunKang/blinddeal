@@ -6,19 +6,28 @@ export const metadata: Metadata = { title: "이용약관" }
 export default function TermsPage() {
   return (
     <MainLayout>
-      <div className="mx-auto max-w-3xl py-12">
-        <h1 className="text-3xl font-bold tracking-tight">이용약관</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          최종 수정일: 2026년 3월 1일
-        </p>
+      {/* Hero header */}
+      <section className="relative overflow-hidden border-b border-border/30">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-indigo-500/[0.03] to-purple-500/[0.05]" />
+        <div className="pointer-events-none absolute -top-40 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-blue-500/8 blur-[120px]" />
+        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center md:py-20">
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">이용약관</h1>
+          <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" />
+          <p className="mt-4 text-sm text-muted-foreground">
+            최종 수정일: 2026년 3월 1일
+          </p>
+        </div>
+      </section>
 
-        <div className="mt-10 space-y-10 text-sm leading-relaxed text-muted-foreground">
+      <div className="mx-auto max-w-3xl px-4 py-12 md:py-16">
+        <div className="prose-container space-y-12 text-sm leading-relaxed text-muted-foreground">
           {/* 제1조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제1조 (목적)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">1</span>
+              목적
             </h2>
-            <p className="mt-3">
+            <p className="pl-11">
               이 약관은 주식회사 블라인드딜(이하 &ldquo;회사&rdquo;)이
               운영하는 BlindDeal 플랫폼(이하 &ldquo;플랫폼&rdquo;)에서
               제공하는 부동산 및 M&amp;A 거래 중개 서비스(이하
@@ -29,11 +38,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제2조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제2조 (용어의 정의)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">2</span>
+              용어의 정의
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 &ldquo;플랫폼&rdquo;이란 회사가 운영하는 웹사이트
                 (blinddeal.com) 및 관련 애플리케이션을 의미합니다.
@@ -62,11 +72,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제3조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제3조 (약관의 효력 및 변경)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">3</span>
+              약관의 효력 및 변경
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 본 약관은 플랫폼에 게시하거나 기타의 방법으로 회원에게
                 공지함으로써 효력이 발생합니다.
@@ -84,14 +95,15 @@ export default function TermsPage() {
           </section>
 
           {/* 제4조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제4조 (서비스의 제공)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">4</span>
+              서비스의 제공
             </h2>
-            <p className="mt-3">
+            <p className="pl-11">
               회사는 다음과 같은 서비스를 제공합니다.
             </p>
-            <ol className="mt-2 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>부동산 및 M&amp;A 딜 정보 등록 및 검색 서비스</li>
               <li>비공개 딜 매칭 및 NDA 체결 서비스</li>
               <li>에스크로 결제 서비스</li>
@@ -103,11 +115,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제5조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제5조 (회원가입)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">5</span>
+              회원가입
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 이용자는 회사가 정한 양식에 따라 필요한 정보를 기입하고, 본
                 약관과 개인정보처리방침에 동의한 후 회원가입을 신청합니다.
@@ -133,11 +146,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제6조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제6조 (회원의 의무)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">6</span>
+              회원의 의무
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 회원은 관계법령, 본 약관의 규정, 이용안내 및 서비스와
                 관련하여 공지한 주의사항을 준수하여야 합니다.
@@ -158,11 +172,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제7조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제7조 (딜 등록 및 관리)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">7</span>
+              딜 등록 및 관리
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 회원은 플랫폼을 통해 부동산 또는 M&amp;A 딜을 등록할 수
                 있으며, 등록 시 정확하고 충분한 정보를 제공해야 합니다.
@@ -185,11 +200,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제8조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제8조 (비공개 딜 및 NDA)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">8</span>
+              비공개 딜 및 NDA
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 딜 등록자는 딜의 전부 또는 일부를 비공개로 설정할 수
                 있습니다.
@@ -206,11 +222,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제9조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제9조 (에스크로 결제)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">9</span>
+              에스크로 결제
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 거래 당사자는 안전한 거래를 위해 플랫폼의 에스크로 결제
                 서비스를 이용할 수 있습니다.
@@ -232,11 +249,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제10조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제10조 (수수료)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">10</span>
+              수수료
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 회사는 서비스 이용에 대해 수수료를 부과할 수 있으며,
                 수수료율 및 부과 기준은 플랫폼에 별도로 공지합니다.
@@ -253,11 +271,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제11조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제11조 (면책)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">11</span>
+              면책
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 회사는 회원 간 또는 회원과 제3자 간에 서비스를 매개로 발생한
                 분쟁에 대해 개입할 의무가 없으며, 이로 인한 손해를 배상할
@@ -275,11 +294,12 @@ export default function TermsPage() {
           </section>
 
           {/* 제12조 */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground">
-              제12조 (분쟁해결)
+          <section className="space-y-3">
+            <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">12</span>
+              분쟁해결
             </h2>
-            <ol className="mt-3 list-inside list-decimal space-y-2">
+            <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
                 본 약관과 관련한 분쟁은 대한민국 법령을 적용하며,
                 관할법원은 회사의 본사 소재지를 관할하는 법원으로 합니다.
