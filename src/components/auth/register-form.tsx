@@ -9,6 +9,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Mail, Lock, User, Building2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+
+const regContainerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+};
+const regItemVariants = {
+  hidden: { opacity: 0, x: 30 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const } },
+};
 
 function getPasswordStrength(pw: string): {
   score: number;
@@ -94,7 +104,12 @@ export function RegisterForm() {
   }
 
   return (
-    <div className="w-full max-w-[420px] space-y-8">
+    <motion.div
+      className="w-full max-w-[420px] space-y-8"
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
       {/* Mobile-only logo */}
       <div className="text-center lg:hidden">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25">
@@ -104,47 +119,28 @@ export function RegisterForm() {
       </div>
 
       {/* Header */}
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold tracking-tight">회원가입</h2>
-        <p className="text-sm text-muted-foreground">
+      <motion.div className="space-y-2" variants={regContainerVariants} initial="hidden" animate="visible">
+        <motion.h2 className="text-2xl font-bold tracking-tight" variants={regItemVariants}>회원가입</motion.h2>
+        <motion.p className="text-sm text-muted-foreground" variants={regItemVariants}>
           BlindDeal에 가입하고 거래를 시작하세요
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       {/* Glass card */}
       <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 shadow-xl backdrop-blur-xl">
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* User type tabs */}
-          <div className="flex rounded-xl border border-white/[0.08] bg-white/[0.02] p-1">
-            <button
-              type="button"
-              onClick={() => setUserType("individual")}
-              className={cn(
-                "relative flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-300",
-                userType === "individual"
-                  ? "bg-white/[0.06] text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground/80"
-              )}
-            >
-              <span className="relative z-10">개인</span>
-              {userType === "individual" && (
-                <div className="absolute inset-x-4 bottom-0 h-0.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" />
-              )}
+          {/* User type tabs with animated sliding indicator */}
+          <div className="relative flex rounded-xl border border-white/[0.08] bg-white/[0.02] p-1">
+            <motion.div
+              className="absolute top-1 bottom-1 rounded-lg bg-white/[0.06] shadow-sm"
+              animate={{ left: userType === "individual" ? "4px" : "50%", width: "calc(50% - 6px)" }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            />
+            <button type="button" onClick={() => setUserType("individual")} className={cn("relative z-10 flex-1 rounded-lg py-2 text-sm font-medium transition-colors duration-300", userType === "individual" ? "text-foreground" : "text-muted-foreground hover:text-foreground/80")}>
+              개인
             </button>
-            <button
-              type="button"
-              onClick={() => setUserType("corporation")}
-              className={cn(
-                "relative flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-300",
-                userType === "corporation"
-                  ? "bg-white/[0.06] text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground/80"
-              )}
-            >
-              <span className="relative z-10">기업</span>
-              {userType === "corporation" && (
-                <div className="absolute inset-x-4 bottom-0 h-0.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" />
-              )}
+            <button type="button" onClick={() => setUserType("corporation")} className={cn("relative z-10 flex-1 rounded-lg py-2 text-sm font-medium transition-colors duration-300", userType === "corporation" ? "text-foreground" : "text-muted-foreground hover:text-foreground/80")}>
+              기업
             </button>
           </div>
 
@@ -277,7 +273,13 @@ export function RegisterForm() {
                   : "border-white/[0.15] bg-white/[0.03] hover:border-white/[0.25]"
               )}
             >
-              {agreedToTerms && <Check className="h-3 w-3" />}
+              <AnimatePresence>
+                {agreedToTerms && (
+                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: "spring", stiffness: 500, damping: 25 }}>
+                    <Check className="h-3 w-3" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
             <span className="text-xs leading-relaxed text-muted-foreground">
               <Link href="/terms" className="text-blue-400 hover:text-blue-300">이용약관</Link>
@@ -295,27 +297,27 @@ export function RegisterForm() {
           )}
 
           {/* Submit button */}
-          <Button
+          <motion.button
             type="submit"
             disabled={loading || !isPasswordValid}
-            className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 py-5 font-medium text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:brightness-110 disabled:opacity-50"
+            className="inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 py-3 text-sm font-medium text-white shadow-lg shadow-blue-500/25 transition-all duration-300 disabled:opacity-50"
+            whileHover={{ scale: 1.01, boxShadow: "0 20px 40px -12px rgba(59,130,246,0.35)" }}
+            whileTap={{ scale: 0.98 }}
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             회원가입
-          </Button>
+          </motion.button>
 
           {/* Login link */}
           <p className="text-center text-sm text-muted-foreground">
             이미 계정이 있으신가요?{" "}
-            <Link
-              href="/auth/login"
-              className="font-medium text-blue-400 transition-colors duration-300 hover:text-blue-300"
-            >
+            <Link href="/auth/login" className="group relative font-medium text-blue-400 transition-colors duration-300 hover:text-blue-300">
               로그인
+              <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-blue-400/50 transition-transform duration-300 group-hover:scale-x-100" />
             </Link>
           </p>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 }

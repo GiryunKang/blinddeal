@@ -15,6 +15,14 @@ import {
 import { getMyDeals, getMyInterests, getMyRooms, getMyDealStats } from "@/lib/actions/my-deals"
 import { formatKRW } from "@/lib/utils"
 import { AnimatedStatsGrid } from "@/components/dashboard/animated-stats"
+import {
+  MotionPageHeader,
+  MotionGradientTitle,
+  MotionSection,
+  MotionPipelineColumn,
+  MotionKanbanCard,
+  MotionActivityItem,
+} from "@/components/dashboard/dashboard-motion"
 
 export const metadata: Metadata = { title: "대시보드" }
 
@@ -51,15 +59,16 @@ export default async function DashboardPage() {
         }
       ` }} />
       <div className="space-y-10">
-        {/* Page header */}
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">대시보드</h1>
+        {/* Page header with gradient text */}
+        <MotionPageHeader>
+          <MotionGradientTitle>대시보드</MotionGradientTitle>
           <p className="text-sm text-muted-foreground">
             내 딜과 활동을 한눈에 확인하세요
           </p>
-        </div>
+        </MotionPageHeader>
 
-        {/* Stat cards — animated client component */}
+        {/* Stat cards -- animated client component */}
+        <MotionSection delay={0.1}>
         <AnimatedStatsGrid
           stats={[
             {
@@ -100,6 +109,7 @@ export default async function DashboardPage() {
             },
           ]}
         />
+        </MotionSection>
 
         {/* Pipeline section */}
         <div>
@@ -120,11 +130,11 @@ export default async function DashboardPage() {
             </div>
           ) : (
           <div className="flex gap-3 overflow-x-auto pb-4">
-            {PIPELINE_STAGES.map((stage) => {
+            {PIPELINE_STAGES.map((stage, stageIndex) => {
               const dealsInStage = myDeals.filter((d) => d.status === stage.key)
               return (
+                <MotionPipelineColumn key={stage.key} index={stageIndex}>
                 <div
-                  key={stage.key}
                   className={`flex min-w-[200px] flex-shrink-0 flex-col lg:min-w-[180px] lg:flex-1 transition-shadow duration-500 ${dealsInStage.length > 0 ? 'shadow-[0_0_30px_-10px_rgba(59,130,246,0.12)]' : ''}`}
                 >
                   {/* Column header — glass effect with gradient left border */}
@@ -155,11 +165,14 @@ export default async function DashboardPage() {
                       </div>
                     ) : (
                       dealsInStage.map((deal) => (
-                        <MiniDealCard key={deal.id} deal={deal} />
+                        <MotionKanbanCard key={deal.id}>
+                          <MiniDealCard deal={deal} />
+                        </MotionKanbanCard>
                       ))
                     )}
                   </div>
                 </div>
+                </MotionPipelineColumn>
               )
             })}
           </div>

@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/sheet";
 import { Bell, LogOut, Settings, User as UserIcon, Menu, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const publicNavLinks = [
   { href: "/deals", label: "마켓" },
@@ -80,7 +81,7 @@ export function Header() {
   const navLinks = user ? authNavLinks : publicNavLinks;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-background/70 backdrop-blur-2xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4">
         {/* Logo */}
         <Link href="/" className="group flex items-center gap-2.5">
@@ -131,21 +132,26 @@ export function Header() {
                   className="relative rounded-xl text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 >
                   <Bell className="h-[18px] w-[18px]" />
-                  {/* Notification badge dot */}
-                  <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background" />
+                  {/* Notification pulse dot */}
+                  <motion.span
+                    className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background"
+                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }}
+                    transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+                  />
                 </Button>
               </Link>
 
-              {/* New Deal button */}
+              {/* New Deal button with gradient + motion */}
               <Link href="/deals/new" className="hidden sm:block">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="gap-1.5 rounded-xl border-blue-500/30 bg-transparent text-blue-400 transition-all duration-300 hover:border-blue-500/50 hover:bg-blue-500/5 hover:text-blue-300 hover:shadow-lg hover:shadow-blue-500/10"
-                >
-                  <Plus className="h-4 w-4" />
-                  딜 등록
-                </Button>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Button
+                    size="sm"
+                    className="gap-1.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-blue-500/30"
+                  >
+                    <Plus className="h-4 w-4" />
+                    딜 등록
+                  </Button>
+                </motion.div>
               </Link>
 
               {/* User Menu */}
@@ -164,7 +170,7 @@ export function Header() {
                 <DropdownMenuContent
                   align="end"
                   sideOffset={8}
-                  className="w-56 rounded-xl border-white/[0.08] bg-background/95 backdrop-blur-xl"
+                  className="w-56 rounded-xl border-white/[0.08] bg-background/95 backdrop-blur-2xl"
                 >
                   <DropdownMenuLabel>
                     <div className="flex flex-col gap-0.5">
