@@ -13,6 +13,12 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { formatDate, formatKRW } from "@/lib/utils"
+import {
+  MotionRoomCard,
+  MotionUnreadPulse,
+  MotionRoomPageHeader,
+  MotionEmptyState,
+} from "@/components/rooms/rooms-motion"
 
 export const metadata: Metadata = { title: "거래 채팅" }
 
@@ -42,25 +48,20 @@ export default async function RoomsPage() {
 
   return (
     <MainLayout>
-      <div className="mb-6">
+      <MotionRoomPageHeader>
         <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
-          딜 대화방
+          <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+            딜 대화방
+          </span>
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           총 {rooms.length}개의 대화방이 있습니다
         </p>
-      </div>
+      </MotionRoomPageHeader>
 
       {rooms.length > 0 ? (
         <div className="space-y-3">
-          {/* Pulse dot keyframe */}
-          <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes unread-pulse {
-              0%, 100% { opacity: 1; transform: scale(1); }
-              50% { opacity: 0.6; transform: scale(1.3); }
-            }
-          ` }} />
-          {rooms.map((room) => {
+          {rooms.map((room, index) => {
             const counterparty =
               room.buyer_id === user.id ? room.seller : room.buyer
             const status = statusConfig[room.status] ?? statusConfig.pending
@@ -73,17 +74,11 @@ export default async function RoomsPage() {
               !room.last_message.is_read
 
             return (
-              <Link key={room.id} href={`/rooms/${room.id}`}>
-                <Card className="group relative cursor-pointer border-border/50 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-muted/30 hover:shadow-lg hover:shadow-primary/5 hover:border-border">
-                  {/* Unread indicator — pulsing dot */}
-                  {hasUnread && (
-                    <div className="absolute right-4 top-4 flex items-center justify-center">
-                      <span
-                        className="h-2.5 w-2.5 rounded-full bg-blue-500"
-                        style={{ animation: 'unread-pulse 2s ease-in-out infinite' }}
-                      />
-                    </div>
-                  )}
+              <MotionRoomCard key={room.id} index={index}>
+              <Link href={`/rooms/${room.id}`}>
+                <Card className="group relative cursor-pointer border-white/[0.06] bg-white/[0.02] p-4 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.04] hover:shadow-lg hover:shadow-primary/5 hover:border-white/[0.1]">
+                  {/* Unread indicator -- pulsing dot with motion */}
+                  {hasUnread && <MotionUnreadPulse />}
 
                   <div className="flex items-start gap-4">
                     <Avatar size="lg" className="transition-transform duration-300 group-hover:scale-105">
@@ -132,12 +127,14 @@ export default async function RoomsPage() {
                   </div>
                 </Card>
               </Link>
+              </MotionRoomCard>
             )
           })}
         </div>
       ) : (
+        <MotionEmptyState>
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="rounded-full bg-muted p-4">
+          <div className="rounded-full bg-white/[0.05] p-4">
             <MessageSquare className="size-8 text-muted-foreground" />
           </div>
           <h3 className="mt-4 text-lg font-medium text-foreground">
@@ -153,6 +150,7 @@ export default async function RoomsPage() {
             </Button>
           </Link>
         </div>
+        </MotionEmptyState>
       )}
     </MainLayout>
   )

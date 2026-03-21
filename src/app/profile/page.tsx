@@ -142,26 +142,32 @@ export default async function ProfilePage() {
           <Separator className="my-4" />
 
           <div className="flex flex-wrap gap-3">
-            <Link href="/profile/edit">
-              <Button variant="outline" size="sm">
-                <Pencil className="size-4" />
-                프로필 수정
-              </Button>
-            </Link>
-            <Link href="/profile/verification">
-              <Button variant="outline" size="sm">
-                <ShieldCheck className="size-4" />
-                인증 관리
-              </Button>
-            </Link>
+            <MotionActionButton>
+              <Link href="/profile/edit">
+                <Button variant="outline" size="sm">
+                  <Pencil className="size-4" />
+                  프로필 수정
+                </Button>
+              </Link>
+            </MotionActionButton>
+            <MotionActionButton>
+              <Link href="/profile/verification">
+                <Button variant="outline" size="sm">
+                  <ShieldCheck className="size-4" />
+                  인증 관리
+                </Button>
+              </Link>
+            </MotionActionButton>
           </div>
         </CardContent>
       </Card>
+      </MotionProfileCard>
 
       {/* Quick links */}
       <div className="grid gap-4 sm:grid-cols-2">
+        <MotionQuickLinkCard index={0}>
         <Link href="/profile/matches" className="group block">
-          <Card className="border-border/50 transition-all duration-300 hover:border-border hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5">
+          <Card className="border-white/[0.06] bg-white/[0.02] backdrop-blur-xl transition-all duration-300 hover:border-white/[0.1] hover:shadow-lg hover:shadow-primary/5">
             <CardContent className="flex items-center gap-3 pt-4">
               <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-300 group-hover:scale-110">
                 <Target className="size-5 text-primary" />
@@ -177,9 +183,11 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
         </Link>
+        </MotionQuickLinkCard>
 
+        <MotionQuickLinkCard index={1}>
         <Link href="/profile/notifications" className="group block">
-          <Card className="border-border/50 transition-all duration-300 hover:border-border hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5">
+          <Card className="border-white/[0.06] bg-white/[0.02] backdrop-blur-xl transition-all duration-300 hover:border-white/[0.1] hover:shadow-lg hover:shadow-primary/5">
             <CardContent className="flex items-center gap-3 pt-4">
               <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-300 group-hover:scale-110">
                 <Bell className="size-5 text-primary" />
@@ -195,6 +203,7 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
         </Link>
+        </MotionQuickLinkCard>
       </div>
     </div>
   )
