@@ -19,7 +19,7 @@ import {
   MessageSquareHeart,
   Calculator,
   FileSearch,
-  ChevronDown,
+  Mouse,
 } from "lucide-react";
 import { formatKRW } from "@/lib/utils";
 import { SpotlightHero } from "@/components/effects/spotlight-hero";
@@ -28,6 +28,11 @@ import { InquiryForm } from "@/components/inquiry/inquiry-form";
 import { LandingHeader } from "@/components/layout/landing-header";
 import { Footer } from "@/components/layout/footer";
 import { FloatingCTA } from "@/components/effects/floating-cta";
+import { TextReveal } from "@/components/effects/text-reveal";
+import { ScrollReveal } from "@/components/effects/scroll-reveal";
+import { MagneticButton } from "@/components/effects/magnetic-button";
+import { TiltCard } from "@/components/effects/tilt-card";
+import { AnimatedConnector } from "@/components/effects/animated-connector";
 
 export default function HomePage() {
   return (
@@ -63,12 +68,15 @@ export default function HomePage() {
               <span className="h-1 w-1 rounded-full bg-blue-400 pulse-dot" />
             </div>
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              보이지 않는 곳에서
-              <br />
-              <span className="gradient-text">
-                가장 큰 거래
-              </span>
-              가 이루어집니다
+              <TextReveal delay={0}>
+                보이지 않는 곳에서
+              </TextReveal>
+              <TextReveal delay={200}>
+                <span className="gradient-text">
+                  가장 큰 거래
+                </span>
+                가 이루어집니다
+              </TextReveal>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
               부동산과 M&A(인수합병) 딜을 공개 또는 비공개로 등록하세요.
@@ -76,26 +84,30 @@ export default function HomePage() {
               검증된 상대방과 안전한 프로세스 위에서 거래합니다.
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <Link href="/deals/new">
-                <Button size="lg" className="glow-button relative gap-2 px-10 py-3 text-base font-semibold">
-                  <Plus className="h-4 w-4" />
-                  딜 등록하기
-                </Button>
-              </Link>
-              <Link href="/deals">
-                <Button size="lg" variant="outline" className="gap-2 border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
-                  딜 둘러보기
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+              <MagneticButton>
+                <Link href="/deals/new">
+                  <Button size="lg" className="glow-button relative gap-2 px-10 py-3 text-base font-semibold">
+                    <Plus className="h-4 w-4" />
+                    딜 등록하기
+                  </Button>
+                </Link>
+              </MagneticButton>
+              <MagneticButton>
+                <Link href="/deals">
+                  <Button size="lg" variant="outline" className="gap-2 border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
+                    딜 둘러보기
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </MagneticButton>
             </div>
           </div>
 
           {/* Scroll-down indicator */}
           <div className="mt-12 flex justify-center">
-            <div className="flex flex-col items-center gap-2 text-muted-foreground/40">
-              <span className="text-[10px] font-medium tracking-widest uppercase">Scroll</span>
-              <ChevronDown className="h-5 w-5 animate-bounce" />
+            <div className="flex flex-col items-center gap-1.5 text-muted-foreground/30">
+              <Mouse className="h-5 w-5 animate-bounce" />
+              <span className="text-[9px] font-medium tracking-[0.2em] uppercase">Scroll</span>
             </div>
           </div>
         </div>
@@ -103,11 +115,13 @@ export default function HomePage() {
       </SpotlightHero>
 
       {/* Quick Deal Registration CTA — Premium Cards */}
+      <ScrollReveal>
       <section className="relative border-b border-border/30">
         {/* Subtle gradient background */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-blue-500/[0.03] via-indigo-500/[0.03] to-purple-500/[0.03]" />
         <div className="relative mx-auto max-w-7xl px-4 py-12">
           <div className="grid gap-5 md:grid-cols-2">
+            <ScrollReveal delay={0}>
             <Link href="/deals/new?category=real_estate">
               <div className="hover-lift group relative cursor-pointer overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 backdrop-blur-sm transition-all hover:border-blue-500/20 hover:bg-white/[0.04]">
                 {/* Hover glow */}
@@ -126,6 +140,8 @@ export default function HomePage() {
                 </div>
               </div>
             </Link>
+            </ScrollReveal>
+            <ScrollReveal delay={120}>
             <Link href="/deals/new?category=ma">
               <div className="hover-lift group relative cursor-pointer overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 backdrop-blur-sm transition-all hover:border-purple-500/20 hover:bg-white/[0.04]">
                 {/* Hover glow */}
@@ -144,11 +160,14 @@ export default function HomePage() {
                 </div>
               </div>
             </Link>
+            </ScrollReveal>
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Blind Deal Showcase — 공개 vs 비공개 */}
+      <ScrollReveal>
       <section className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
         <div className="mb-10 flex items-center justify-between">
           <div>
@@ -163,6 +182,8 @@ export default function HomePage() {
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {/* Public Deal */}
+          <ScrollReveal delay={0}>
+          <TiltCard maxTilt={3}>
           <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="판교 프라임 물류센터"
@@ -171,11 +192,15 @@ export default function HomePage() {
               dealType="물류센터"
               location="경기 성남"
               amount={45000000000}
-  
+
               tags={["수도권", "물류", "임대수익"]}
             />
           </Link>
+          </TiltCard>
+          </ScrollReveal>
           {/* Public Deal */}
+          <ScrollReveal delay={80}>
+          <TiltCard maxTilt={3}>
           <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="제주 리조트 개발 프로젝트"
@@ -184,11 +209,15 @@ export default function HomePage() {
               dealType="개발"
               location="제주"
               amount={78000000000}
-  
+
               tags={["관광", "레저", "개발"]}
             />
           </Link>
+          </TiltCard>
+          </ScrollReveal>
           {/* Public Deal */}
+          <ScrollReveal delay={160}>
+          <TiltCard maxTilt={3}>
           <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="SaaS 기업 지분 매각"
@@ -197,11 +226,15 @@ export default function HomePage() {
               dealType="지분 매각"
               location="서울"
               amount={null}
-  
+
               tags={["IT", "SaaS", "ARR 50억"]}
             />
           </Link>
+          </TiltCard>
+          </ScrollReveal>
           {/* Public Deal */}
+          <ScrollReveal delay={240}>
+          <TiltCard maxTilt={3}>
           <Link href="/auth/register" className="block">
             <DealPreviewCard
               title="강남 프라임 오피스 빌딩"
@@ -210,11 +243,14 @@ export default function HomePage() {
               dealType="오피스"
               location="서울 강남"
               amount={120000000000}
-  
+
               tags={["강남", "오피스", "프라임"]}
             />
           </Link>
+          </TiltCard>
+          </ScrollReveal>
           {/* Private Deal — Blurred/Hidden */}
+          <ScrollReveal delay={320}>
           <BlindDealCard
             category="M&A"
             categoryColor="purple"
@@ -222,7 +258,9 @@ export default function HomePage() {
             industry="헬스케어"
             requiredLevel={3}
           />
+          </ScrollReveal>
           {/* Private Deal */}
+          <ScrollReveal delay={400}>
           <BlindDealCard
             category="M&A"
             categoryColor="purple"
@@ -230,10 +268,13 @@ export default function HomePage() {
             industry="제조/화학"
             requiredLevel={4}
           />
+          </ScrollReveal>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* How It Works — Gradient Orbs + Connector */}
+      <ScrollReveal>
       <section className="relative border-t border-border/30">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
@@ -243,10 +284,11 @@ export default function HomePage() {
           {/* Step connector line — hidden on mobile */}
           <div className="relative">
             <div className="pointer-events-none absolute left-0 right-0 top-[52px] hidden h-[2px] md:block">
-              <div className="step-connector mx-auto h-full w-[calc(100%-120px)] rounded-full opacity-30" />
+              <AnimatedConnector key="process-connector" />
             </div>
 
             <div className="grid gap-8 md:grid-cols-4">
+              <ScrollReveal delay={0}>
               <ProcessStep
                 step="01"
                 icon={<Plus className="h-5 w-5" />}
@@ -254,6 +296,8 @@ export default function HomePage() {
                 description="부동산 또는 M&A 딜을 등록하세요. 공개/비공개를 직접 선택합니다."
                 color="blue"
               />
+              </ScrollReveal>
+              <ScrollReveal delay={200}>
               <ProcessStep
                 step="02"
                 icon={<Shield className="h-5 w-5" />}
@@ -261,6 +305,8 @@ export default function HomePage() {
                 description="비공개 딜은 자격이 검증된 상대방에게만 노출됩니다. 조건에 맞는 딜을 자동 매칭합니다."
                 color="indigo"
               />
+              </ScrollReveal>
+              <ScrollReveal delay={400}>
               <ProcessStep
                 step="03"
                 icon={<MessageSquare className="h-5 w-5" />}
@@ -268,6 +314,8 @@ export default function HomePage() {
                 description="플랫폼 내에서 안전하게 소통하고, 비밀유지계약(NDA) 서명 후 상세 자료를 공유합니다."
                 color="purple"
               />
+              </ScrollReveal>
+              <ScrollReveal delay={600}>
               <ProcessStep
                 step="04"
                 icon={<TrendingUp className="h-5 w-5" />}
@@ -275,12 +323,15 @@ export default function HomePage() {
                 description="전문가 검토, 계약 체결, 에스크로(안심결제)까지 한 곳에서 완료합니다."
                 color="cyan"
               />
+              </ScrollReveal>
             </div>
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Trust & Security Section — Glass Cards */}
+      <ScrollReveal>
       <section className="relative border-t border-border/30">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
@@ -288,6 +339,7 @@ export default function HomePage() {
           <p className="mb-14 text-center text-sm text-muted-foreground">모든 거래 단계에서 보호받으세요</p>
 
           <div className="grid gap-6 md:grid-cols-3">
+            <ScrollReveal delay={0}>
             <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-blue-500/15">
               <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/15 to-blue-600/5 text-blue-400 ring-1 ring-blue-500/20">
                 <Shield className="h-7 w-7" />
@@ -297,6 +349,8 @@ export default function HomePage() {
                 거래 대금은 제3자(플랫폼)가 안전하게 보관하다가, 소유권 이전이 확인된 후에만 매도자에게 전달됩니다.
               </p>
             </div>
+            </ScrollReveal>
+            <ScrollReveal delay={120}>
             <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-indigo-500/15">
               <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-indigo-600/5 text-indigo-400 ring-1 ring-indigo-500/20">
                 <FileCheck className="h-7 w-7" />
@@ -306,6 +360,8 @@ export default function HomePage() {
                 비공개 딜 열람 시 전자 서명하는 비밀유지계약(NDA)은 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.
               </p>
             </div>
+            </ScrollReveal>
+            <ScrollReveal delay={240}>
             <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-purple-500/15">
               <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/15 to-purple-600/5 text-purple-400 ring-1 ring-purple-500/20">
                 <Scale className="h-7 w-7" />
@@ -315,11 +371,14 @@ export default function HomePage() {
                 거래 과정에서 분쟁 발생 시 플랫폼의 중재 프로세스와 전문가 자문을 통해 공정하게 해결합니다.
               </p>
             </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Inquiry / Meeting Request Form */}
+      <ScrollReveal>
       <section id="inquiry-section" className="relative border-t border-border/30">
         {/* Gradient background */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-indigo-500/[0.03] to-purple-500/[0.05]" />
@@ -328,6 +387,7 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
           <div className="mx-auto max-w-2xl">
             {/* Section Header */}
+            <ScrollReveal delay={0}>
             <div className="mb-10 text-center">
               <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-xs font-medium text-muted-foreground backdrop-blur-xl">
                 <MessageSquareHeart className="h-3.5 w-3.5 text-indigo-400" />
@@ -340,45 +400,58 @@ export default function HomePage() {
                 회원가입 없이 간편하게 문의하세요. 전문 담당자가 직접 연락드립니다.
               </p>
             </div>
+            </ScrollReveal>
 
             {/* Glass Card Form Container */}
+            <ScrollReveal delay={150}>
             <div className="animated-border glass-card inner-glow rounded-2xl p-6 md:p-10">
               <InquiryForm />
             </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Trust Indicators — Why BlindDeal */}
+      <ScrollReveal>
       <section className="relative border-t border-border/30">
         <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
           <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">왜 <span className="gradient-text">BlindDeal</span>인가?</h2>
           <p className="mb-14 text-center text-sm text-muted-foreground">차별화된 거래 환경</p>
           <div className="grid gap-8 md:grid-cols-3">
+            <ScrollReveal delay={0}>
             <TrustCard
               icon={<EyeOff className="h-6 w-6" />}
               title="원하는 만큼만 공개"
               description="등록된 딜을 비공개로 운영할 수 있습니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. 비밀유지계약(NDA) 서명 후에만 상세 정보에 접근 가능합니다."
               color="blue"
             />
+            </ScrollReveal>
+            <ScrollReveal delay={120}>
             <TrustCard
               icon={<Shield className="h-6 w-6" />}
               title="단계적 인증 체계"
               description="4단계 인증 시스템을 통해 매수자의 자격을 검증합니다. 인증 등급이 높을수록 더 큰 규모의 비공개 딜에 접근할 수 있으며, 검증된 사용자만 접근할 수 있습니다."
               color="indigo"
             />
+            </ScrollReveal>
+            <ScrollReveal delay={240}>
             <TrustCard
               icon={<Users className="h-6 w-6" />}
               title="전문가 네트워크"
               description="법무, 회계, 세무, 감정 전문가가 실사(기업·자산 정밀조사)부터 계약까지 지원합니다. 체계적인 프로세스로 거래를 지원합니다."
               color="purple"
             />
+            </ScrollReveal>
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Partner Recruitment */}
+      <ScrollReveal>
       <section className="relative border-t border-border/30">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent" />
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
@@ -386,6 +459,7 @@ export default function HomePage() {
           <p className="mb-10 text-center text-sm text-muted-foreground">법무법인, 회계법인, 감정평가법인, 신탁회사 파트너를 찾고 있습니다</p>
 
           {/* Partner type badges */}
+          <ScrollReveal delay={100}>
           <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
             <div className="flex items-center gap-2.5 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-2.5">
               <Scale className="h-5 w-5 text-blue-400" />
@@ -404,19 +478,26 @@ export default function HomePage() {
               <span className="text-sm font-medium text-cyan-400">신탁</span>
             </div>
           </div>
+          </ScrollReveal>
 
+          <ScrollReveal delay={200}>
           <div className="flex justify-center">
+            <MagneticButton>
             <a href="mailto:83482@daum.net">
               <Button size="lg" variant="outline" className="gap-2 border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
                 파트너 제휴 문의
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </a>
+            </MagneticButton>
           </div>
+          </ScrollReveal>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Bottom CTA — Full gradient section */}
+      <ScrollReveal>
       <section className="relative overflow-hidden border-t border-border/30">
         {/* Dramatic gradient background */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.07] via-indigo-500/[0.05] to-purple-500/[0.07]" />
@@ -431,20 +512,25 @@ export default function HomePage() {
             지금 바로 딜을 등록하거나, 조건에 맞는 딜을 찾아보세요.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <MagneticButton>
             <Link href="/deals/new">
               <span className="animated-border glow-button relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-10 py-3.5 text-base font-semibold text-white transition-all hover:from-blue-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-blue-500/25">
                 <Plus className="h-4 w-4" />
                 딜 등록하기
               </span>
             </Link>
+            </MagneticButton>
+            <MagneticButton>
             <Link href="/auth/register">
               <Button size="lg" variant="outline" className="border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
                 무료 가입하기
               </Button>
             </Link>
+            </MagneticButton>
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Floating CTA */}
       <FloatingCTA />
@@ -649,3 +735,4 @@ function TrustCard({
     </div>
   );
 }
+
