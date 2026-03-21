@@ -45,6 +45,26 @@
   --font-sans: var(--font-sans);
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,0.3); }
+/* Firefox */
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -376,4 +396,15 @@
 }
 .stamp-animate {
   animation: stamp-appear 0.5s ease-out forwards;
+}
+
+/* Branded skeleton shimmer */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, rgba(59,130,246,0.05) 25%, rgba(99,102,241,0.1) 50%, rgba(59,130,246,0.05) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.5s ease-in-out infinite;
+}
+@keyframes skeleton-sweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }

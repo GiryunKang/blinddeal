@@ -1,6 +1,6 @@
 function SkeletonCard() {
   return (
-    <div className="rounded-xl border border-border bg-card p-5 space-y-4 animate-pulse">
+    <div className="rounded-xl border border-border bg-card p-5 space-y-4 skeleton-shimmer">
       <div className="flex items-center gap-2">
         <div className="h-5 w-16 rounded bg-muted" />
         <div className="h-5 w-12 rounded bg-muted" />
@@ -23,12 +23,12 @@ export default function DealsLoading() {
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8">
         {/* Header skeleton */}
-        <div className="mb-8 space-y-2 animate-pulse">
+        <div className="mb-8 space-y-2 skeleton-shimmer">
           <div className="h-8 w-48 rounded bg-muted" />
           <div className="h-4 w-72 rounded bg-muted" />
         </div>
         {/* Filter bar skeleton */}
-        <div className="mb-6 flex gap-2 animate-pulse">
+        <div className="mb-6 flex gap-2 skeleton-shimmer">
           <div className="h-9 w-24 rounded-lg bg-muted" />
           <div className="h-9 w-24 rounded-lg bg-muted" />
           <div className="h-9 w-24 rounded-lg bg-muted" />
