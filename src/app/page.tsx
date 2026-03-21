@@ -24,7 +24,6 @@ import {
 import { formatKRW } from "@/lib/utils";
 import { SpotlightHero } from "@/components/effects/spotlight-hero";
 import { ClassifiedStamp } from "@/components/effects/classified-stamp";
-import { InquiryForm } from "@/components/inquiry/inquiry-form";
 import { LandingHeader } from "@/components/layout/landing-header";
 import { Footer } from "@/components/layout/footer";
 import { FloatingCTA } from "@/components/effects/floating-cta";
@@ -32,7 +31,14 @@ import { TextReveal } from "@/components/effects/text-reveal";
 import { ScrollReveal } from "@/components/effects/scroll-reveal";
 import { MagneticButton } from "@/components/effects/magnetic-button";
 import { TiltCard } from "@/components/effects/tilt-card";
-import { AnimatedConnector } from "@/components/effects/animated-connector";
+import {
+  PremiumHowItWorks,
+  PremiumTrustSecurity,
+  PremiumWhyBlindDeal,
+  PremiumPartners,
+  PremiumInquiryWrapper,
+  PremiumBottomCTA,
+} from "@/components/landing/premium-sections";
 
 export default function HomePage() {
   return (
@@ -192,7 +198,6 @@ export default function HomePage() {
               dealType="물류센터"
               location="경기 성남"
               amount={45000000000}
-
               tags={["수도권", "물류", "임대수익"]}
             />
           </Link>
@@ -209,7 +214,6 @@ export default function HomePage() {
               dealType="개발"
               location="제주"
               amount={78000000000}
-
               tags={["관광", "레저", "개발"]}
             />
           </Link>
@@ -226,7 +230,6 @@ export default function HomePage() {
               dealType="지분 매각"
               location="서울"
               amount={null}
-
               tags={["IT", "SaaS", "ARR 50억"]}
             />
           </Link>
@@ -243,7 +246,6 @@ export default function HomePage() {
               dealType="오피스"
               location="서울 강남"
               amount={120000000000}
-
               tags={["강남", "오피스", "프라임"]}
             />
           </Link>
@@ -273,264 +275,23 @@ export default function HomePage() {
       </section>
       </ScrollReveal>
 
-      {/* How It Works — Gradient Orbs + Connector */}
-      <ScrollReveal>
-      <section className="relative border-t border-border/30">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
-          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">어떻게 작동하나요?</h2>
-          <p className="mb-14 text-center text-sm text-muted-foreground">파는 사람도, 사는 사람도 안전하게</p>
+      {/* How It Works — Premium Framer Motion */}
+      <PremiumHowItWorks />
 
-          {/* Step connector line — hidden on mobile */}
-          <div className="relative">
-            <div className="pointer-events-none absolute left-0 right-0 top-[52px] hidden h-[2px] md:block">
-              <AnimatedConnector key="process-connector" />
-            </div>
+      {/* Trust & Security — Premium Glass Cards */}
+      <PremiumTrustSecurity />
 
-            <div className="grid gap-8 md:grid-cols-4">
-              <ScrollReveal delay={0}>
-              <ProcessStep
-                step="01"
-                icon={<Plus className="h-5 w-5" />}
-                title="딜 등록"
-                description="부동산 또는 M&A 딜을 등록하세요. 공개/비공개를 직접 선택합니다."
-                color="blue"
-              />
-              </ScrollReveal>
-              <ScrollReveal delay={200}>
-              <ProcessStep
-                step="02"
-                icon={<Shield className="h-5 w-5" />}
-                title="검증 & 매칭"
-                description="비공개 딜은 자격이 검증된 상대방에게만 노출됩니다. 조건에 맞는 딜을 자동 매칭합니다."
-                color="indigo"
-              />
-              </ScrollReveal>
-              <ScrollReveal delay={400}>
-              <ProcessStep
-                step="03"
-                icon={<MessageSquare className="h-5 w-5" />}
-                title="협상 & 실사(정밀조사)"
-                description="플랫폼 내에서 안전하게 소통하고, 비밀유지계약(NDA) 서명 후 상세 자료를 공유합니다."
-                color="purple"
-              />
-              </ScrollReveal>
-              <ScrollReveal delay={600}>
-              <ProcessStep
-                step="04"
-                icon={<TrendingUp className="h-5 w-5" />}
-                title="계약 & 에스크로(안심결제)"
-                description="전문가 검토, 계약 체결, 에스크로(안심결제)까지 한 곳에서 완료합니다."
-                color="cyan"
-              />
-              </ScrollReveal>
-            </div>
-          </div>
-        </div>
-      </section>
-      </ScrollReveal>
-
-      {/* Trust & Security Section — Glass Cards */}
-      <ScrollReveal>
-      <section className="relative border-t border-border/30">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
-          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">안전한 거래를 위한 보호 장치</h2>
-          <p className="mb-14 text-center text-sm text-muted-foreground">모든 거래 단계에서 보호받으세요</p>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            <ScrollReveal delay={0}>
-            <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-blue-500/15">
-              <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/15 to-blue-600/5 text-blue-400 ring-1 ring-blue-500/20">
-                <Shield className="h-7 w-7" />
-              </div>
-              <h3 className="text-lg font-semibold">에스크로(안심결제)</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                거래 대금은 제3자(플랫폼)가 안전하게 보관하다가, 소유권 이전이 확인된 후에만 매도자에게 전달됩니다.
-              </p>
-            </div>
-            </ScrollReveal>
-            <ScrollReveal delay={120}>
-            <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-indigo-500/15">
-              <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/15 to-indigo-600/5 text-indigo-400 ring-1 ring-indigo-500/20">
-                <FileCheck className="h-7 w-7" />
-              </div>
-              <h3 className="text-lg font-semibold">법적 구속력 있는 비밀유지계약(NDA)</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                비공개 딜 열람 시 전자 서명하는 비밀유지계약(NDA)은 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.
-              </p>
-            </div>
-            </ScrollReveal>
-            <ScrollReveal delay={240}>
-            <div className="hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all hover:border-purple-500/15">
-              <div className="icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/15 to-purple-600/5 text-purple-400 ring-1 ring-purple-500/20">
-                <Scale className="h-7 w-7" />
-              </div>
-              <h3 className="text-lg font-semibold">분쟁 해결 프로세스</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                거래 과정에서 분쟁 발생 시 플랫폼의 중재 프로세스와 전문가 자문을 통해 공정하게 해결합니다.
-              </p>
-            </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-      </ScrollReveal>
-
-      {/* Inquiry / Meeting Request Form */}
-      <ScrollReveal>
-      <section id="inquiry-section" className="relative border-t border-border/30">
-        {/* Gradient background */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.05] via-indigo-500/[0.03] to-purple-500/[0.05]" />
-        <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-indigo-500/8 blur-[140px]" />
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
-          <div className="mx-auto max-w-2xl">
-            {/* Section Header */}
-            <ScrollReveal delay={0}>
-            <div className="mb-10 text-center">
-              <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-xs font-medium text-muted-foreground backdrop-blur-xl">
-                <MessageSquareHeart className="h-3.5 w-3.5 text-indigo-400" />
-                <span>회원가입 없이 간편하게</span>
-              </div>
-              <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
-                딜을 찾거나 등록하고 <span className="gradient-text">싶으신가요?</span>
-              </h2>
-              <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
-                회원가입 없이 간편하게 문의하세요. 전문 담당자가 직접 연락드립니다.
-              </p>
-            </div>
-            </ScrollReveal>
-
-            {/* Glass Card Form Container */}
-            <ScrollReveal delay={150}>
-            <div className="animated-border glass-card inner-glow rounded-2xl p-6 md:p-10">
-              <InquiryForm />
-            </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-      </ScrollReveal>
+      {/* Inquiry / Meeting Request Form — Premium Wrapper */}
+      <PremiumInquiryWrapper />
 
       {/* Trust Indicators — Why BlindDeal */}
-      <ScrollReveal>
-      <section className="relative border-t border-border/30">
-        <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
-          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">왜 <span className="gradient-text">BlindDeal</span>인가?</h2>
-          <p className="mb-14 text-center text-sm text-muted-foreground">차별화된 거래 환경</p>
-          <div className="grid gap-8 md:grid-cols-3">
-            <ScrollReveal delay={0}>
-            <TrustCard
-              icon={<EyeOff className="h-6 w-6" />}
-              title="원하는 만큼만 공개"
-              description="등록된 딜을 비공개로 운영할 수 있습니다. 딜을 전부 공개할지, 검증된 사람에게만 보여줄지 등록자가 직접 결정합니다. 비밀유지계약(NDA) 서명 후에만 상세 정보에 접근 가능합니다."
-              color="blue"
-            />
-            </ScrollReveal>
-            <ScrollReveal delay={120}>
-            <TrustCard
-              icon={<Shield className="h-6 w-6" />}
-              title="단계적 인증 체계"
-              description="4단계 인증 시스템을 통해 매수자의 자격을 검증합니다. 인증 등급이 높을수록 더 큰 규모의 비공개 딜에 접근할 수 있으며, 검증된 사용자만 접근할 수 있습니다."
-              color="indigo"
-            />
-            </ScrollReveal>
-            <ScrollReveal delay={240}>
-            <TrustCard
-              icon={<Users className="h-6 w-6" />}
-              title="전문가 네트워크"
-              description="법무, 회계, 세무, 감정 전문가가 실사(기업·자산 정밀조사)부터 계약까지 지원합니다. 체계적인 프로세스로 거래를 지원합니다."
-              color="purple"
-            />
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-      </ScrollReveal>
+      <PremiumWhyBlindDeal />
 
-      {/* Partner Recruitment */}
-      <ScrollReveal>
-      <section className="relative border-t border-border/30">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
-          <h2 className="mb-3 text-center text-2xl font-bold md:text-3xl">함께할 <span className="gradient-text">전문 기관</span>을 모집합니다</h2>
-          <p className="mb-10 text-center text-sm text-muted-foreground">법무법인, 회계법인, 감정평가법인, 신탁회사 파트너를 찾고 있습니다</p>
+      {/* Partner Recruitment — Premium */}
+      <PremiumPartners />
 
-          {/* Partner type badges */}
-          <ScrollReveal delay={100}>
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
-            <div className="flex items-center gap-2.5 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-2.5">
-              <Scale className="h-5 w-5 text-blue-400" />
-              <span className="text-sm font-medium text-blue-400">법무</span>
-            </div>
-            <div className="flex items-center gap-2.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 px-4 py-2.5">
-              <Calculator className="h-5 w-5 text-indigo-400" />
-              <span className="text-sm font-medium text-indigo-400">회계</span>
-            </div>
-            <div className="flex items-center gap-2.5 rounded-xl border border-purple-500/20 bg-purple-500/5 px-4 py-2.5">
-              <FileSearch className="h-5 w-5 text-purple-400" />
-              <span className="text-sm font-medium text-purple-400">감정평가</span>
-            </div>
-            <div className="flex items-center gap-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-2.5">
-              <Building2 className="h-5 w-5 text-cyan-400" />
-              <span className="text-sm font-medium text-cyan-400">신탁</span>
-            </div>
-          </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={200}>
-          <div className="flex justify-center">
-            <MagneticButton>
-            <a href="mailto:83482@daum.net">
-              <Button size="lg" variant="outline" className="gap-2 border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
-                파트너 제휴 문의
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </a>
-            </MagneticButton>
-          </div>
-          </ScrollReveal>
-        </div>
-      </section>
-      </ScrollReveal>
-
-      {/* Bottom CTA — Full gradient section */}
-      <ScrollReveal>
-      <section className="relative overflow-hidden border-t border-border/30">
-        {/* Dramatic gradient background */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.07] via-indigo-500/[0.05] to-purple-500/[0.07]" />
-        <div className="pointer-events-none absolute -bottom-40 left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[120px]" />
-        <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
-
-        <div className="relative mx-auto max-w-7xl px-4 py-20 text-center md:py-28">
-          <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-            보이지 않는 딜을 <span className="gradient-text">시작하세요</span>
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-muted-foreground md:text-lg">
-            지금 바로 딜을 등록하거나, 조건에 맞는 딜을 찾아보세요.
-          </p>
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <MagneticButton>
-            <Link href="/deals/new">
-              <span className="animated-border glow-button relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-10 py-3.5 text-base font-semibold text-white transition-all hover:from-blue-500 hover:to-indigo-500 hover:shadow-lg hover:shadow-blue-500/25">
-                <Plus className="h-4 w-4" />
-                딜 등록하기
-              </span>
-            </Link>
-            </MagneticButton>
-            <MagneticButton>
-            <Link href="/auth/register">
-              <Button size="lg" variant="outline" className="border-white/10 px-10 py-3 text-base backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/5">
-                무료 가입하기
-              </Button>
-            </Link>
-            </MagneticButton>
-          </div>
-        </div>
-      </section>
-      </ScrollReveal>
+      {/* Bottom CTA — Premium Full Gradient */}
+      <PremiumBottomCTA />
 
       {/* Floating CTA */}
       <FloatingCTA />
@@ -656,83 +417,3 @@ function BlindDealCard({
     </Card>
   );
 }
-
-function ProcessStep({
-  step, icon, title, description, color,
-}: {
-  step: string; icon: React.ReactNode; title: string; description: string;
-  color: "blue" | "indigo" | "purple" | "cyan";
-}) {
-  const gradientMap = {
-    blue: "from-blue-500/30 to-blue-600/10",
-    indigo: "from-indigo-500/30 to-indigo-600/10",
-    purple: "from-purple-500/30 to-purple-600/10",
-    cyan: "from-cyan-500/30 to-cyan-600/10",
-  };
-  const textColorMap = {
-    blue: "text-blue-400",
-    indigo: "text-indigo-400",
-    purple: "text-purple-400",
-    cyan: "text-cyan-400",
-  };
-  const ringMap = {
-    blue: "ring-blue-500/30",
-    indigo: "ring-indigo-500/30",
-    purple: "ring-purple-500/30",
-    cyan: "ring-cyan-500/30",
-  };
-
-  return (
-    <div className="hover-lift group text-center">
-      {/* Gradient orb */}
-      <div className="relative mx-auto mb-5">
-        <div className="gradient-orb pointer-events-none absolute -inset-4 opacity-50 blur-xl" />
-        <div className={`relative mx-auto flex h-[72px] w-[72px] items-center justify-center rounded-2xl bg-gradient-to-br ${gradientMap[color]} ${textColorMap[color]} ring-1 ${ringMap[color]} transition-all group-hover:scale-105`}>
-          {icon}
-        </div>
-      </div>
-      <div className="gradient-text mb-2 text-xs font-bold tracking-widest">{step}</div>
-      <h3 className="text-base font-semibold">{title}</h3>
-      <p className="mx-auto mt-2.5 max-w-[240px] text-sm leading-relaxed text-muted-foreground">{description}</p>
-    </div>
-  );
-}
-
-function TrustCard({
-  icon, title, description, color,
-}: {
-  icon: React.ReactNode; title: string; description: string;
-  color: "blue" | "indigo" | "purple";
-}) {
-  const gradientMap = {
-    blue: "from-blue-500/15 to-blue-600/5",
-    indigo: "from-indigo-500/15 to-indigo-600/5",
-    purple: "from-purple-500/15 to-purple-600/5",
-  };
-  const textColorMap = {
-    blue: "text-blue-400",
-    indigo: "text-indigo-400",
-    purple: "text-purple-400",
-  };
-  const ringMap = {
-    blue: "ring-blue-500/20",
-    indigo: "ring-indigo-500/20",
-    purple: "ring-purple-500/20",
-  };
-  const hoverBorderMap = {
-    blue: "hover:border-blue-500/15",
-    indigo: "hover:border-indigo-500/15",
-    purple: "hover:border-purple-500/15",
-  };
-
-  return (
-    <div className={`animated-border hover-lift glass-card inner-glow group rounded-2xl p-7 transition-all ${hoverBorderMap[color]}`}>
-      <div className={`icon-glow relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${gradientMap[color]} ${textColorMap[color]} ring-1 ${ringMap[color]}`}>
-        {icon}
-      </div>
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{description}</p>
-    </div>
-  );
-}
-
