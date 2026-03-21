@@ -58,16 +58,32 @@ export default async function ProfilePage() {
       </h1>
 
       {/* Profile card */}
-      <Card className="mb-6 border-border/50">
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes verified-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+          50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        }
+        @keyframes avatar-ring-spin {
+          0% { --ring-angle: 0deg; }
+          100% { --ring-angle: 360deg; }
+        }
+      ` }} />
+      <Card className="mb-6 border-border/50 overflow-hidden">
         <CardContent className="pt-6">
           <div className="flex items-start gap-4">
-            <Avatar size="lg">
-              <AvatarImage
-                src={profile.avatar_url ?? undefined}
-                alt={displayName}
-              />
-              <AvatarFallback>{initials}</AvatarFallback>
-            </Avatar>
+            {/* Avatar with gradient ring on hover */}
+            <div className="group/avatar-wrap relative shrink-0">
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 opacity-0 blur-[2px] transition-opacity duration-300 group-hover/avatar-wrap:opacity-70" />
+              <div className="relative rounded-full bg-background p-[2px] transition-transform duration-300 group-hover/avatar-wrap:scale-105">
+                <Avatar size="lg">
+                  <AvatarImage
+                    src={profile.avatar_url ?? undefined}
+                    alt={displayName}
+                  />
+                  <AvatarFallback>{initials}</AvatarFallback>
+                </Avatar>
+              </div>
+            </div>
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
@@ -83,7 +99,11 @@ export default async function ProfilePage() {
                   {tierLabels[profile.membership_tier] ?? "무료"}
                 </Badge>
                 {profile.is_verified && (
-                  <Badge className="bg-emerald-500/20 text-emerald-400">
+                  <Badge
+                    className="bg-emerald-500/20 text-emerald-400"
+                    style={{ animation: 'verified-pulse 2s ease-in-out infinite' }}
+                  >
+                    <CheckCircle className="mr-1 size-3" />
                     인증됨
                   </Badge>
                 )}
@@ -95,28 +115,28 @@ export default async function ProfilePage() {
                 </p>
               )}
 
-              <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
+              <div className="mt-4 space-y-1 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors duration-200 hover:bg-white/[0.04]">
                   <Mail className="size-4" />
                   <span>{profile.email}</span>
                 </div>
                 {profile.phone && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors duration-200 hover:bg-white/[0.04]">
                     <Phone className="size-4" />
                     <span>{profile.phone}</span>
                   </div>
                 )}
                 {profile.company_name && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors duration-200 hover:bg-white/[0.04]">
                     <Building className="size-4" />
                     <span>{profile.company_name}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors duration-200 hover:bg-white/[0.04]">
                   <Calendar className="size-4" />
                   <span>가입일: {formatDate(profile.created_at)}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors duration-200 hover:bg-white/[0.04]">
                   <Shield className="size-4" />
                   <span>
                     인증 레벨: {profile.verification_level ?? 0}
@@ -148,13 +168,13 @@ export default async function ProfilePage() {
       {/* Quick links */}
       <div className="grid gap-4 sm:grid-cols-2">
         <Link href="/profile/matches" className="group block">
-          <Card className="border-border/50 transition-all hover:border-border">
+          <Card className="border-border/50 transition-all duration-300 hover:border-border hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5">
             <CardContent className="flex items-center gap-3 pt-4">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
+              <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-300 group-hover:scale-110">
                 <Target className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground group-hover:text-primary">
+                <h3 className="text-sm font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
                   매칭 설정
                 </h3>
                 <p className="text-xs text-muted-foreground">
@@ -166,13 +186,13 @@ export default async function ProfilePage() {
         </Link>
 
         <Link href="/profile/notifications" className="group block">
-          <Card className="border-border/50 transition-all hover:border-border">
+          <Card className="border-border/50 transition-all duration-300 hover:border-border hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5">
             <CardContent className="flex items-center gap-3 pt-4">
-              <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
+              <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-300 group-hover:scale-110">
                 <Bell className="size-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground group-hover:text-primary">
+                <h3 className="text-sm font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
                   알림
                 </h3>
                 <p className="text-xs text-muted-foreground">

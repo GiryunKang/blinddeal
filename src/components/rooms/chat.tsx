@@ -94,6 +94,22 @@ export function Chat({ roomId, initialMessages, currentUserId }: ChatProps) {
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10">
+      {/* Chat message animation keyframes */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes msg-enter-right {
+          from { opacity: 0; transform: translateX(20px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes msg-enter-left {
+          from { opacity: 0; transform: translateX(-20px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes msg-enter-fade {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      ` }} />
+
       {/* Connection error banner */}
       {connectionError && (
         <div className="flex items-center gap-2 border-b border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-400">
@@ -118,7 +134,11 @@ export function Chat({ roomId, initialMessages, currentUserId }: ChatProps) {
         {messages.map((message) => {
           if (message.message_type === "system") {
             return (
-              <div key={message.id} className="flex justify-center">
+              <div
+                key={message.id}
+                className="flex justify-center"
+                style={{ animation: 'msg-enter-fade 0.2s ease-out' }}
+              >
                 <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
                   {message.content}
                 </span>
@@ -135,6 +155,9 @@ export function Chat({ roomId, initialMessages, currentUserId }: ChatProps) {
             <div
               key={message.id}
               className={`flex items-end gap-2 ${isOwn ? "flex-row-reverse" : "flex-row"}`}
+              style={{
+                animation: `${isOwn ? 'msg-enter-right' : 'msg-enter-left'} 0.2s ease-out`,
+              }}
             >
               {!isOwn && (
                 <Avatar size="sm">

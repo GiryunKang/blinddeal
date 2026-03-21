@@ -53,6 +53,13 @@ export default async function RoomsPage() {
 
       {rooms.length > 0 ? (
         <div className="space-y-3">
+          {/* Pulse dot keyframe */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes unread-pulse {
+              0%, 100% { opacity: 1; transform: scale(1); }
+              50% { opacity: 0.6; transform: scale(1.3); }
+            }
+          ` }} />
           {rooms.map((room) => {
             const counterparty =
               room.buyer_id === user.id ? room.seller : room.buyer
@@ -60,12 +67,26 @@ export default async function RoomsPage() {
             const displayName =
               counterparty?.company_name || counterparty?.display_name || "알 수 없음"
             const initials = displayName.slice(0, 2).toUpperCase()
+            const hasUnread =
+              room.last_message &&
+              room.last_message.sender_id !== user.id &&
+              !room.last_message.is_read
 
             return (
               <Link key={room.id} href={`/rooms/${room.id}`}>
-                <Card className="cursor-pointer border-border/50 p-4 transition-colors hover:bg-muted/30">
+                <Card className="group relative cursor-pointer border-border/50 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-muted/30 hover:shadow-lg hover:shadow-primary/5 hover:border-border">
+                  {/* Unread indicator — pulsing dot */}
+                  {hasUnread && (
+                    <div className="absolute right-4 top-4 flex items-center justify-center">
+                      <span
+                        className="h-2.5 w-2.5 rounded-full bg-blue-500"
+                        style={{ animation: 'unread-pulse 2s ease-in-out infinite' }}
+                      />
+                    </div>
+                  )}
+
                   <div className="flex items-start gap-4">
-                    <Avatar size="lg">
+                    <Avatar size="lg" className="transition-transform duration-300 group-hover:scale-105">
                       <AvatarImage
                         src={counterparty?.avatar_url ?? undefined}
                         alt={displayName}
@@ -100,7 +121,7 @@ export default async function RoomsPage() {
                       </p>
 
                       {room.last_message && (
-                        <p className="mt-1 truncate text-sm text-muted-foreground">
+                        <p className="mt-1 max-w-[85%] truncate text-sm text-muted-foreground/80 transition-colors duration-200 group-hover:text-muted-foreground">
                           {room.last_message.sender_id === user.id
                             ? "나: "
                             : ""}

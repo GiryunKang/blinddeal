@@ -10,13 +10,11 @@ import {
   MessageSquare,
   CheckCircle,
   ArrowRight,
-  TrendingUp,
-  TrendingDown,
-  Minus,
   Plus,
 } from "lucide-react"
 import { getMyDeals, getMyInterests, getMyRooms, getMyDealStats } from "@/lib/actions/my-deals"
 import { formatKRW } from "@/lib/utils"
+import { AnimatedStatsGrid } from "@/components/dashboard/animated-stats"
 
 export const metadata: Metadata = { title: "대시보드" }
 
@@ -45,6 +43,13 @@ export default async function DashboardPage() {
 
   return (
     <MainLayout>
+      {/* Breathe keyframe for pipeline accent bars */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes breathe {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
+        }
+      ` }} />
       <div className="space-y-10">
         {/* Page header */}
         <div className="space-y-1">
@@ -54,45 +59,47 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        {/* Stat cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            label="내 등록 딜"
-            value={myDeals.length}
-            icon={<FileText className="h-5 w-5" />}
-            gradientFrom="from-blue-500"
-            gradientTo="to-blue-600"
-            trend="up"
-            trendLabel="활성"
-          />
-          <StatCard
-            label="관심 표시한 딜"
-            value={myInterests.length}
-            icon={<Heart className="h-5 w-5" />}
-            gradientFrom="from-pink-500"
-            gradientTo="to-rose-600"
-            trend="neutral"
-            trendLabel=""
-          />
-          <StatCard
-            label="진행 중 협상"
-            value={activeNegotiations}
-            icon={<MessageSquare className="h-5 w-5" />}
-            gradientFrom="from-amber-500"
-            gradientTo="to-orange-600"
-            trend={activeNegotiations > 0 ? "up" : "neutral"}
-            trendLabel={activeNegotiations > 0 ? "진행중" : ""}
-          />
-          <StatCard
-            label="완료된 거래"
-            value={completedDeals}
-            icon={<CheckCircle className="h-5 w-5" />}
-            gradientFrom="from-emerald-500"
-            gradientTo="to-green-600"
-            trend={completedDeals > 0 ? "up" : "neutral"}
-            trendLabel={completedDeals > 0 ? "성사" : ""}
-          />
-        </div>
+        {/* Stat cards — animated client component */}
+        <AnimatedStatsGrid
+          stats={[
+            {
+              label: "내 등록 딜",
+              value: myDeals.length,
+              icon: <FileText className="h-5 w-5" />,
+              gradientFrom: "from-blue-500",
+              gradientTo: "to-blue-600",
+              trend: "up" as const,
+              trendLabel: "활성",
+            },
+            {
+              label: "관심 표시한 딜",
+              value: myInterests.length,
+              icon: <Heart className="h-5 w-5" />,
+              gradientFrom: "from-pink-500",
+              gradientTo: "to-rose-600",
+              trend: "neutral" as const,
+              trendLabel: "",
+            },
+            {
+              label: "진행 중 협상",
+              value: activeNegotiations,
+              icon: <MessageSquare className="h-5 w-5" />,
+              gradientFrom: "from-amber-500",
+              gradientTo: "to-orange-600",
+              trend: activeNegotiations > 0 ? ("up" as const) : ("neutral" as const),
+              trendLabel: activeNegotiations > 0 ? "진행중" : "",
+            },
+            {
+              label: "완료된 거래",
+              value: completedDeals,
+              icon: <CheckCircle className="h-5 w-5" />,
+              gradientFrom: "from-emerald-500",
+              gradientTo: "to-green-600",
+              trend: completedDeals > 0 ? ("up" as const) : ("neutral" as const),
+              trendLabel: completedDeals > 0 ? "성사" : "",
+            },
+          ]}
+        />
 
         {/* Pipeline section */}
         <div>
@@ -118,12 +125,15 @@ export default async function DashboardPage() {
               return (
                 <div
                   key={stage.key}
-                  className="flex min-w-[200px] flex-shrink-0 flex-col lg:min-w-[180px] lg:flex-1"
+                  className={`flex min-w-[200px] flex-shrink-0 flex-col lg:min-w-[180px] lg:flex-1 transition-shadow duration-500 ${dealsInStage.length > 0 ? 'shadow-[0_0_30px_-10px_rgba(59,130,246,0.12)]' : ''}`}
                 >
                   {/* Column header — glass effect with gradient left border */}
                   <div className="relative mb-3 overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 backdrop-blur-xl">
-                    {/* Gradient left accent */}
-                    <div className={`absolute inset-y-0 left-0 w-1 bg-gradient-to-b ${stage.accentColor}`} />
+                    {/* Gradient left accent — pulsing */}
+                    <div
+                      className={`absolute inset-y-0 left-0 w-1 bg-gradient-to-b ${stage.accentColor}`}
+                      style={{ animation: 'breathe 3s ease-in-out infinite' }}
+                    />
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className={`h-2 w-2 rounded-full ${stage.dotColor}`} />
@@ -251,55 +261,6 @@ export default async function DashboardPage() {
 }
 
 /* ─── Sub-components ─── */
-
-function StatCard({
-  label,
-  value,
-  icon,
-  gradientFrom,
-  gradientTo,
-  trend,
-  trendLabel,
-}: {
-  label: string
-  value: number
-  icon: React.ReactNode
-  gradientFrom: string
-  gradientTo: string
-  trend: "up" | "down" | "neutral"
-  trendLabel: string
-}) {
-  return (
-    <Card className="group relative overflow-hidden rounded-2xl border-white/[0.06] bg-white/[0.03] p-5 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.05] hover:shadow-xl">
-      {/* Gradient left accent */}
-      <div className={`absolute inset-y-0 left-0 w-1 bg-gradient-to-b ${gradientFrom} ${gradientTo}`} />
-      <div className="flex items-start justify-between">
-        <div className="space-y-3">
-          <p className="text-xs font-medium text-muted-foreground">{label}</p>
-          <p className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
-            {value}
-          </p>
-          {/* Trend indicator */}
-          {trendLabel && (
-            <div className="flex items-center gap-1">
-              {trend === "up" && <TrendingUp className="h-3 w-3 text-emerald-400" />}
-              {trend === "down" && <TrendingDown className="h-3 w-3 text-red-400" />}
-              {trend === "neutral" && <Minus className="h-3 w-3 text-muted-foreground" />}
-              <span className={`text-[10px] font-medium ${
-                trend === "up" ? "text-emerald-400" : trend === "down" ? "text-red-400" : "text-muted-foreground"
-              }`}>
-                {trendLabel}
-              </span>
-            </div>
-          )}
-        </div>
-        <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}>
-          {icon}
-        </div>
-      </div>
-    </Card>
-  )
-}
 
 function MiniDealCard({
   deal,
