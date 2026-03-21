@@ -11,7 +11,6 @@ import {
   Upload,
   Calendar,
   Handshake,
-  CheckCircle,
   Loader2,
 } from "lucide-react"
 
@@ -121,11 +120,49 @@ export function InquiryForm() {
     }
   }
 
+  // Progress tracking for required fields: inquiryType (always selected), name, email, description
+  const [trackedFields, setTrackedFields] = useState({
+    name: false,
+    email: false,
+    description: false,
+  })
+
+  const inquiryProgress =
+    (25 + // inquiryType is always selected
+      (trackedFields.name ? 25 : 0) +
+      (trackedFields.email ? 25 : 0) +
+      (trackedFields.description ? 25 : 0))
+
+  function handleFormChange() {
+    requestAnimationFrame(() => {
+      const name = (document.querySelector<HTMLInputElement>('[name="name"]')?.value ?? "").trim()
+      const email = (document.querySelector<HTMLInputElement>('[name="email"]')?.value ?? "").trim()
+      const description = (document.querySelector<HTMLTextAreaElement>('[name="description"]')?.value ?? "").trim()
+      setTrackedFields({
+        name: name.length > 0,
+        email: email.length > 0,
+        description: description.length > 0,
+      })
+    })
+  }
+
   if (isSuccess) {
     return (
       <div className="flex flex-col items-center gap-4 py-12 text-center">
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes circle-draw { from { stroke-dashoffset: 126; } to { stroke-dashoffset: 0; } }
+          @keyframes check-draw { from { stroke-dashoffset: 40; } to { stroke-dashoffset: 0; } }
+        ` }} />
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 ring-1 ring-emerald-500/20">
-          <CheckCircle className="h-8 w-8 text-emerald-400" />
+          <svg width="48" height="48" viewBox="0 0 48 48" className="mx-auto">
+            <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(16,185,129,0.2)" strokeWidth="3" />
+            <circle cx="24" cy="24" r="20" fill="none" stroke="#10b981" strokeWidth="3"
+              strokeDasharray="126" strokeDashoffset="0"
+              style={{ animation: "circle-draw 0.5s ease-out forwards" }} />
+            <path d="M14 24l7 7 13-13" fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+              strokeDasharray="40" strokeDashoffset="40"
+              style={{ animation: "check-draw 0.4s ease-out 0.3s forwards" }} />
+          </svg>
         </div>
         <h3 className="text-xl font-semibold">문의가 접수되었습니다</h3>
         <p className="max-w-sm text-sm text-muted-foreground">
@@ -143,7 +180,15 @@ export function InquiryForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-8" onChange={handleFormChange} onInput={handleFormChange}>
+      {/* Progress bar */}
+      <div className="h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 ease-out"
+          style={{ width: `${inquiryProgress}%` }}
+        />
+      </div>
+
       {/* Required fields note */}
       <p className="text-xs text-muted-foreground">
         <span className="text-red-400">*</span> 표시된 항목은 필수 입력입니다

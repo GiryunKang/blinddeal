@@ -1,3 +1,6 @@
+"use client"
+
+import { useState, useCallback, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Eye, Heart, Lock, Building2 } from "lucide-react"
@@ -22,9 +25,10 @@ interface DealCardProps {
     } | null
   }
   isBlind?: boolean
+  index?: number
 }
 
-export function DealCard({ deal, isBlind = false }: DealCardProps) {
+export function DealCard({ deal, isBlind = false, index = 0 }: DealCardProps) {
   const categoryLabel = deal.deal_category === "real_estate" ? "부동산" : "M&A"
   const categoryBadgeClass =
     deal.deal_category === "real_estate"
@@ -37,13 +41,40 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
       ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300"
       : "bg-amber-500/20 border-amber-500/30 text-amber-300"
 
+  // Parallax state for image
+  const [parallax, setParallax] = useState({ x: 0, y: 0 })
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    // Move image opposite to mouse direction, max 5px
+    const offsetX = -((e.clientX - centerX) / (rect.width / 2)) * 5
+    const offsetY = -((e.clientY - centerY) / (rect.height / 2)) * 5
+    setParallax({ x: offsetX, y: offsetY })
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setParallax({ x: 0, y: 0 })
+  }, [])
+
   return (
     <Link href={isBlind ? "#" : `/deals/${deal.slug}`} className="group block">
-      <div className={`relative rounded-2xl overflow-hidden bg-card border transition-all duration-300 hover:translate-y-[-4px] ${
-        isBlind
-          ? "watermark-confidential border-red-500/15 hover:border-amber-500/25 hover:shadow-[0_20px_60px_-15px_rgba(239,68,68,0.1)]"
-          : "border-border/50 hover:border-blue-500/30 hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.15)]"
-      }`}>
+      <div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className={`relative rounded-2xl overflow-hidden bg-card border transition-all duration-300 hover:translate-y-[-4px] ${
+          isBlind
+            ? "watermark-confidential border-red-500/15 hover:border-red-500/40 hover:shadow-[0_20px_60px_-15px_rgba(239,68,68,0.1)]"
+            : "border-border/50 hover:border-blue-500/30 hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.15)]"
+        }`}
+        style={{
+          animationDelay: `${index * 60}ms`,
+        }}
+      >
         {/* Image Area */}
         <div className="relative aspect-[16/10] overflow-hidden">
           {/* Gradient overlay */}
@@ -77,44 +108,70 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
             )}
           </div>
 
-          {/* Thumbnail or placeholder */}
+          {/* Thumbnail or placeholder with parallax */}
           {deal.thumbnail_url ? (
-            <Image
-              src={deal.thumbnail_url}
-              alt={isBlind ? "비공개 딜" : deal.title}
-              fill
-              className={`object-cover transition-transform duration-500 group-hover:scale-105 ${
-                isBlind ? "blur-xl scale-110" : ""
-              }`}
-            />
+            <div
+              className="absolute inset-0 transition-transform duration-300 ease-out"
+              style={{
+                transform: `translate(${parallax.x}px, ${parallax.y}px) scale(1.05)`,
+              }}
+            >
+              <Image
+                src={deal.thumbnail_url}
+                alt={isBlind ? "비공개 딜" : deal.title}
+                fill
+                className={`object-cover transition-transform duration-500 group-hover:scale-105 ${
+                  isBlind ? "blur-xl scale-110" : ""
+                }`}
+              />
+            </div>
           ) : (
             <div
-              className={`w-full h-full bg-gradient-to-br from-card via-muted to-muted/80 flex items-center justify-center transition-transform duration-500 group-hover:scale-105 ${
+              className={`w-full h-full bg-gradient-to-br from-card via-muted to-muted/80 flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-105 ${
                 isBlind ? "blur-md" : ""
               }`}
+              style={{
+                transform: `translate(${parallax.x}px, ${parallax.y}px)`,
+              }}
             >
               <Building2 className="w-12 h-12 text-muted-foreground/20" />
             </div>
           )}
         </div>
 
-        {/* Blind overlay with classified stamp */}
+        {/* Blind overlay with scanline + classified stamp */}
         {isBlind && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm">
-            {/* Classified stamp */}
-            <ClassifiedStamp level={3} />
+          <>
+            {/* Scanline effect */}
+            <div
+              className="absolute inset-0 pointer-events-none z-[25]"
+              style={{
+                background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)',
+                animation: 'scanline-scroll 8s linear infinite',
+              }}
+            />
+            <style>{`
+              @keyframes scanline-scroll {
+                0% { background-position-y: 0; }
+                100% { background-position-y: 100px; }
+              }
+            `}</style>
+            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm">
+              {/* Classified stamp */}
+              <ClassifiedStamp level={3} />
 
-            <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
-              {/* Pulsing glow */}
-              <div className="absolute inset-0 rounded-full bg-red-500/15 animate-pulse" />
-              <Lock className="relative h-6 w-6 text-white/80" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
+                {/* Pulsing glow */}
+                <div className="absolute inset-0 rounded-full bg-red-500/15 animate-pulse" />
+                <Lock className="relative h-6 w-6 text-white/80" />
+              </div>
+              <p className="mt-3 text-sm font-medium text-white/70">인증 후 열람 가능</p>
+              <div className="mt-2 flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 backdrop-blur-md">
+                <Lock className="h-3 w-3 text-amber-400" />
+                <span className="text-[11px] text-amber-400">열람 권한 필요</span>
+              </div>
             </div>
-            <p className="mt-3 text-sm font-medium text-white/70">인증 후 열람 가능</p>
-            <div className="mt-2 flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 backdrop-blur-md">
-              <Lock className="h-3 w-3 text-amber-400" />
-              <span className="text-[11px] text-amber-400">열람 권한 필요</span>
-            </div>
-          </div>
+          </>
         )}
 
         {/* Content */}
@@ -182,6 +239,13 @@ export function DealCard({ deal, isBlind = false }: DealCardProps) {
             </div>
           )}
         </div>
+
+        {/* Action hint on hover */}
+        {!isBlind && (
+          <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 text-xs text-blue-400 font-medium">
+            자세히 보기 →
+          </div>
+        )}
       </div>
     </Link>
   )

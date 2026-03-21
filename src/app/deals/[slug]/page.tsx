@@ -29,6 +29,7 @@ import { InterestButton } from "@/components/deals/interest-button"
 import { InquiryButton } from "@/components/deals/inquiry-button"
 import { NDAOverlay } from "@/components/deals/nda-overlay"
 import { VisibilityControl } from "@/components/deals/visibility-control"
+import { PriceCardEffects } from "@/components/effects/price-card-effects"
 
 interface DealDetailPageProps {
   params: Promise<{ slug: string }>
@@ -425,10 +426,11 @@ export default async function DealDetailPage({
           {/* Right Column — Sticky Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-8 space-y-6">
-              {/* Price Card — premium glass */}
-              <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-md overflow-hidden relative">
-                {/* Subtle gradient accent at top */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+              {/* Price Card — premium glass with shine */}
+              <div className="price-card-shine rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-md overflow-hidden relative">
+                <PriceCardEffects />
+                {/* Breathing gradient accent at top */}
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-500" style={{ animation: "breathe 3s ease-in-out infinite" }} />
 
                 <p className="text-sm text-muted-foreground font-medium">매각 희망가</p>
                 <p className="mt-2 text-3xl font-bold bg-gradient-to-r from-blue-400 via-blue-300 to-indigo-400 bg-clip-text text-transparent">

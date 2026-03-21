@@ -10,19 +10,51 @@ export default function RegisterPage() {
     <div className="flex min-h-screen">
       {/* Left Panel — hidden on mobile */}
       <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 p-12 lg:flex">
-        {/* Subtle grid pattern */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
+        {/* Keyframes for ambient animations */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes blob-morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            25% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; }
+            50% { border-radius: 30% 60% 40% 70% / 50% 30% 70% 40%; }
+            75% { border-radius: 50% 40% 60% 30% / 60% 50% 30% 60%; }
+          }
+          @keyframes grid-drift {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+          }
+        ` }} />
 
-        {/* Animated gradient orb */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-[500px] w-[500px] animate-pulse rounded-full bg-gradient-to-br from-blue-500/20 via-indigo-500/10 to-purple-500/20 blur-[120px]" />
+        {/* Morphing ambient blobs */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Morphing blob 1 */}
+          <div
+            className="absolute -top-20 -left-20 w-[400px] h-[400px] opacity-20"
+            style={{
+              background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+              filter: 'blur(80px)',
+              borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%',
+              animation: 'blob-morph 8s ease-in-out infinite',
+            }}
+          />
+          {/* Morphing blob 2 */}
+          <div
+            className="absolute -bottom-20 -right-20 w-[350px] h-[350px] opacity-15"
+            style={{
+              background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+              filter: 'blur(80px)',
+              borderRadius: '60% 40% 30% 70% / 50% 60% 40% 50%',
+              animation: 'blob-morph 10s ease-in-out infinite reverse',
+            }}
+          />
+          {/* Grid drift */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)',
+              backgroundSize: '30px 30px',
+              animation: 'grid-drift 20s linear infinite',
+            }}
+          />
         </div>
 
         {/* Top — Logo + Home link */}

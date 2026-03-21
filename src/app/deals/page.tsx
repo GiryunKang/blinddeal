@@ -10,6 +10,7 @@ export const metadata: Metadata = { title: "딜 마켓플레이스" }
 import { DealCard } from "@/components/deals/deal-card"
 import { DealFilters as DealFiltersComponent } from "@/components/deals/deal-filters"
 import { Button } from "@/components/ui/button"
+import { StaggerStyles } from "@/components/effects/stagger-styles"
 
 interface DealsPageProps {
   searchParams: Promise<{
@@ -94,9 +95,16 @@ export default async function DealsPage({ searchParams }: DealsPageProps) {
       {/* Deal Grid */}
       {deals.length > 0 ? (
         <>
+          <StaggerStyles />
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {deals.map((deal) => (
-              <DealCard key={deal.id} deal={deal} />
+            {deals.map((deal, index) => (
+              <div
+                key={deal.id}
+                className="deal-card-stagger"
+                style={{ animationDelay: `${index * 60}ms` }}
+              >
+                <DealCard deal={deal} index={index} />
+              </div>
             ))}
           </div>
 

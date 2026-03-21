@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition, useRef } from "react"
+import { useState, useTransition, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Loader2, ChevronDown } from "lucide-react"
@@ -43,6 +43,39 @@ export function DealForm() {
   const optionalRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
+  // Progress tracking
+  const [filledFields, setFilledFields] = useState({
+    title: false,
+    description: false,
+    dealType: false,
+    askingPrice: false,
+  })
+
+  const progressPercent =
+    (Number(filledFields.title) +
+      Number(filledFields.description) +
+      Number(filledFields.dealType) +
+      Number(filledFields.askingPrice)) *
+    25
+
+  const handleFieldChange = useCallback(() => {
+    // Defer read to let React flush updates
+    requestAnimationFrame(() => {
+      const form = document.querySelector<HTMLFormElement>("form")
+      if (!form) return
+      const title = (form.querySelector<HTMLInputElement>('[name="title"]')?.value ?? "").trim()
+      const description = (form.querySelector<HTMLTextAreaElement>('[name="description"]')?.value ?? "").trim()
+      const dealType = (form.querySelector<HTMLInputElement>('[name="deal_type"]')?.value ?? "").trim()
+      const askingPrice = (form.querySelector<HTMLInputElement>('[name="asking_price"]')?.value ?? "").trim()
+      setFilledFields({
+        title: title.length > 0,
+        description: description.length > 0,
+        dealType: dealType.length > 0,
+        askingPrice: askingPrice.length > 0,
+      })
+    })
+  }, [])
+
   function handleSubmit(formData: FormData) {
     setError(null)
 
@@ -61,7 +94,15 @@ export function DealForm() {
   }
 
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form action={handleSubmit} className="space-y-6" onChange={handleFieldChange} onClick={handleFieldChange}>
+      {/* Progress bar */}
+      <div className="h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 ease-out"
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
+
       {/* Error display */}
       {error && (
         <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3">
@@ -198,10 +239,11 @@ export function DealForm() {
           </button>
           <div
             ref={optionalRef}
-            className="overflow-hidden transition-all duration-300 ease-in-out"
+            className="overflow-hidden"
             style={{
               maxHeight: optionalOpen ? (optionalRef.current?.scrollHeight ?? 2000) + "px" : "0px",
               opacity: optionalOpen ? 1 : 0,
+              transition: "max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease",
             }}
           >
             <div className="pt-4 space-y-6">
