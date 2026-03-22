@@ -11,12 +11,12 @@ import { PostCard } from "@/components/community/post-card"
 import { Button } from "@/components/ui/button"
 
 const boards = [
-  "전체",
-  "부동산",
-  "M&A",
-  "Q&A",
-  "딜 후기",
-  "전문가 AMA",
+  { value: "all", label: "전체" },
+  { value: "real_estate", label: "부동산" },
+  { value: "ma", label: "M&A" },
+  { value: "qna", label: "Q&A" },
+  { value: "deal_review", label: "딜 후기" },
+  { value: "expert_ama", label: "전문가 AMA" },
 ]
 
 interface CommunityPageProps {
@@ -30,12 +30,12 @@ export default async function CommunityPage({
   searchParams,
 }: CommunityPageProps) {
   const params = await searchParams
-  const activeBoard = params.board || "전체"
+  const activeBoard = params.board || "all"
   const currentPage = params.page ? parseInt(params.page, 10) : 1
   const user = await getUser()
 
   const { posts, count } = await getPosts(
-    activeBoard === "전체" ? undefined : activeBoard,
+    activeBoard === "all" ? undefined : activeBoard,
     currentPage
   )
   const totalPages = Math.ceil(count / 20)
@@ -65,14 +65,14 @@ export default async function CommunityPage({
       {/* Board Tabs */}
       <div className="mb-6 flex flex-wrap gap-2">
         {boards.map((board) => {
-          const isActive = board === activeBoard
+          const isActive = board.value === activeBoard
           return (
             <Link
-              key={board}
+              key={board.value}
               href={
-                board === "전체"
+                board.value === "all"
                   ? "/community"
-                  : `/community?board=${encodeURIComponent(board)}`
+                  : `/community?board=${encodeURIComponent(board.value)}`
               }
               className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
                 isActive
@@ -80,7 +80,7 @@ export default async function CommunityPage({
                   : "bg-muted text-muted-foreground hover:text-foreground"
               }`}
             >
-              {board}
+              {board.label}
             </Link>
           )
         })}
@@ -121,7 +121,7 @@ export default async function CommunityPage({
           {currentPage > 1 && (
             <Link
               href={`/community?${new URLSearchParams({
-                ...(activeBoard !== "전체" ? { board: activeBoard } : {}),
+                ...(activeBoard !== "all" ? { board: activeBoard } : {}),
                 page: String(currentPage - 1),
               }).toString()}`}
               className="rounded-lg bg-muted px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
@@ -135,7 +135,7 @@ export default async function CommunityPage({
           {currentPage < totalPages && (
             <Link
               href={`/community?${new URLSearchParams({
-                ...(activeBoard !== "전체" ? { board: activeBoard } : {}),
+                ...(activeBoard !== "all" ? { board: activeBoard } : {}),
                 page: String(currentPage + 1),
               }).toString()}`}
               className="rounded-lg bg-muted px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"

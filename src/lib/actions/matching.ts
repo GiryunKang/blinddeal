@@ -27,9 +27,8 @@ export interface MatchPreferencesData {
   regions: string[]
   industries: string[]
   keywords: string[]
-  notify_new_deals: boolean
-  notify_price_changes: boolean
-  notify_matching: boolean
+  notify_email: boolean
+  notify_push: boolean
 }
 
 export async function saveMatchPreferences(data: MatchPreferencesData) {

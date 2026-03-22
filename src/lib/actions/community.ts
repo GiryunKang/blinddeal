@@ -25,7 +25,7 @@ export async function getPosts(board?: string, page: number = 1) {
     .order("created_at", { ascending: false })
 
   if (board && board !== "전체") {
-    query = query.eq("category", board)
+    query = query.eq("board", board)
   }
 
   const from = (page - 1) * limit
@@ -130,7 +130,7 @@ export async function createPost(formData: FormData) {
       author_id: user.id,
       title,
       content,
-      category,
+      board: category,
       tags,
     })
     .select("id")

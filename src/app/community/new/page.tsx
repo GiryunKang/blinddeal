@@ -10,7 +10,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { createPost } from "@/lib/actions/community"
 
-const boards = ["부동산", "M&A", "Q&A", "딜 후기", "전문가 AMA"]
+const boardMap: Record<string, string> = {
+  "부동산": "real_estate",
+  "M&A": "ma",
+  "Q&A": "qna",
+  "딜 후기": "deal_review",
+  "전문가 AMA": "expert_ama",
+}
+const boards = Object.keys(boardMap)
 
 export default function NewPostPage() {
   const router = useRouter()
@@ -21,7 +28,7 @@ export default function NewPostPage() {
     e.preventDefault()
     const form = e.currentTarget
     const formData = new FormData(form)
-    formData.set("category", selectedBoard)
+    formData.set("category", boardMap[selectedBoard] || "general")
 
     startTransition(async () => {
       const result = await createPost(formData)

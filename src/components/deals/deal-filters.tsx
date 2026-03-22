@@ -12,6 +12,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+const categoryLabels: Record<string, string> = {
+  all: "전체",
+  real_estate: "부동산",
+  ma: "M&A(인수합병)",
+}
+
 export function DealFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -36,6 +42,8 @@ export function DealFilters() {
     [router, searchParams]
   )
 
+  const categoryValue = currentCategory || "all"
+
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
       {/* Search */}
@@ -55,16 +63,18 @@ export function DealFilters() {
 
       {/* Category */}
       <Select
-        value={currentCategory || "all"}
+        value={categoryValue}
         onValueChange={(v) => updateParams("category", v ?? "all")}
       >
-        <SelectTrigger className="w-full sm:w-[130px]">
-          <SelectValue placeholder="카테고리" />
+        <SelectTrigger className="w-full sm:w-[150px]">
+          <SelectValue placeholder="카테고리">
+            {categoryLabels[categoryValue] ?? "카테고리"}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">전체</SelectItem>
           <SelectItem value="real_estate">부동산</SelectItem>
-          <SelectItem value="ma">M&A</SelectItem>
+          <SelectItem value="ma">M&A(인수합병)</SelectItem>
         </SelectContent>
       </Select>
 

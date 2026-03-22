@@ -65,9 +65,8 @@ export default function MatchPreferencesPage() {
     regions: [],
     industries: [],
     keywords: [],
-    notify_new_deals: true,
-    notify_price_changes: true,
-    notify_matching: true,
+    notify_email: true,
+    notify_push: true,
   })
   const [keywordsText, setKeywordsText] = useState("")
 
@@ -83,9 +82,8 @@ export default function MatchPreferencesPage() {
             regions: prefs.regions ?? [],
             industries: prefs.industries ?? [],
             keywords: prefs.keywords ?? [],
-            notify_new_deals: prefs.notify_new_deals ?? true,
-            notify_price_changes: prefs.notify_price_changes ?? true,
-            notify_matching: prefs.notify_matching ?? true,
+            notify_email: prefs.notify_email ?? true,
+            notify_push: prefs.notify_push ?? true,
           })
           setKeywordsText((prefs.keywords ?? []).join(", "))
         }
@@ -290,22 +288,22 @@ export default function MatchPreferencesPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <label className="flex items-center justify-between">
-              <span className="text-sm text-foreground">새 딜 알림</span>
+              <span className="text-sm text-foreground">이메일 알림</span>
               <button
                 type="button"
                 onClick={() =>
                   setForm((prev) => ({
                     ...prev,
-                    notify_new_deals: !prev.notify_new_deals,
+                    notify_email: !prev.notify_email,
                   }))
                 }
                 className={`relative h-6 w-11 rounded-full transition-colors ${
-                  form.notify_new_deals ? "bg-primary" : "bg-muted"
+                  form.notify_email ? "bg-primary" : "bg-muted"
                 }`}
               >
                 <span
                   className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform ${
-                    form.notify_new_deals
+                    form.notify_email
                       ? "translate-x-5"
                       : "translate-x-0"
                   }`}
@@ -314,46 +312,22 @@ export default function MatchPreferencesPage() {
             </label>
 
             <label className="flex items-center justify-between">
-              <span className="text-sm text-foreground">가격 변동 알림</span>
+              <span className="text-sm text-foreground">푸시 알림</span>
               <button
                 type="button"
                 onClick={() =>
                   setForm((prev) => ({
                     ...prev,
-                    notify_price_changes: !prev.notify_price_changes,
+                    notify_push: !prev.notify_push,
                   }))
                 }
                 className={`relative h-6 w-11 rounded-full transition-colors ${
-                  form.notify_price_changes ? "bg-primary" : "bg-muted"
+                  form.notify_push ? "bg-primary" : "bg-muted"
                 }`}
               >
                 <span
                   className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform ${
-                    form.notify_price_changes
-                      ? "translate-x-5"
-                      : "translate-x-0"
-                  }`}
-                />
-              </button>
-            </label>
-
-            <label className="flex items-center justify-between">
-              <span className="text-sm text-foreground">매칭 딜 알림</span>
-              <button
-                type="button"
-                onClick={() =>
-                  setForm((prev) => ({
-                    ...prev,
-                    notify_matching: !prev.notify_matching,
-                  }))
-                }
-                className={`relative h-6 w-11 rounded-full transition-colors ${
-                  form.notify_matching ? "bg-primary" : "bg-muted"
-                }`}
-              >
-                <span
-                  className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform ${
-                    form.notify_matching
+                    form.notify_push
                       ? "translate-x-5"
                       : "translate-x-0"
                   }`}

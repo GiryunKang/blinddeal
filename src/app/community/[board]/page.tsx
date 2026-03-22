@@ -7,6 +7,15 @@ import { getUser } from "@/lib/supabase/auth"
 import { PostCard } from "@/components/community/post-card"
 import { Button } from "@/components/ui/button"
 
+const boardLabels: Record<string, string> = {
+  general: "일반",
+  real_estate: "부동산",
+  ma: "M&A",
+  qna: "Q&A",
+  deal_review: "딜 후기",
+  expert_ama: "전문가 AMA",
+}
+
 interface BoardPageProps {
   params: Promise<{ board: string }>
   searchParams: Promise<{ page?: string }>
@@ -19,6 +28,7 @@ export default async function BoardPage({
   const { board } = await params
   const sp = await searchParams
   const decodedBoard = decodeURIComponent(board)
+  const boardLabel = boardLabels[decodedBoard] ?? decodedBoard
   const currentPage = sp.page ? parseInt(sp.page, 10) : 1
   const user = await getUser()
 
@@ -40,7 +50,7 @@ export default async function BoardPage({
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
-            {decodedBoard}
+            {boardLabel}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             총 {count}개의 게시글

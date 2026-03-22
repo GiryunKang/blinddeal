@@ -8,12 +8,22 @@ import {
 } from "@/components/ui/avatar"
 import { formatDate } from "@/lib/utils"
 
+const boardLabels: Record<string, string> = {
+  general: "일반",
+  real_estate: "부동산",
+  ma: "M&A",
+  qna: "Q&A",
+  deal_review: "딜 후기",
+  expert_ama: "전문가 AMA",
+}
+
 const boardColors: Record<string, string> = {
-  "부동산": "bg-blue-500/20 text-blue-400",
-  "M&A": "bg-purple-500/20 text-purple-400",
-  "Q&A": "bg-emerald-500/20 text-emerald-400",
-  "딜 후기": "bg-amber-500/20 text-amber-400",
-  "전문가 AMA": "bg-rose-500/20 text-rose-400",
+  real_estate: "bg-blue-500/20 text-blue-400",
+  ma: "bg-purple-500/20 text-purple-400",
+  qna: "bg-emerald-500/20 text-emerald-400",
+  deal_review: "bg-amber-500/20 text-amber-400",
+  expert_ama: "bg-rose-500/20 text-rose-400",
+  general: "bg-zinc-500/20 text-zinc-400",
 }
 
 interface PostCardProps {
@@ -21,7 +31,7 @@ interface PostCardProps {
     id: string
     title: string
     content: string
-    category: string
+    board: string
     tags: string[]
     view_count: number
     like_count: number
@@ -38,15 +48,17 @@ interface PostCardProps {
 }
 
 export function PostCard({ post }: PostCardProps) {
+  const board = post.board ?? "general"
+  const boardLabel = boardLabels[board] ?? board
   const colorClass =
-    boardColors[post.category] ?? "bg-zinc-500/20 text-zinc-400"
+    boardColors[board] ?? "bg-zinc-500/20 text-zinc-400"
   const authorName =
     post.author?.company_name || post.author?.display_name || "익명"
   const initials = authorName.slice(0, 2).toUpperCase()
 
   return (
     <Link
-      href={`/community/${encodeURIComponent(post.category)}/${post.id}`}
+      href={`/community/${encodeURIComponent(board)}/${post.id}`}
       className="group block"
     >
       <div className="flex gap-4 rounded-lg border border-border/50 bg-card p-4 transition-all hover:border-border">
@@ -75,7 +87,7 @@ export function PostCard({ post }: PostCardProps) {
           {/* Bottom row: meta */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             <Badge className={`${colorClass} text-[10px]`}>
-              {post.category}
+              {boardLabel}
             </Badge>
             <span>{authorName}</span>
             <span>{formatDate(post.created_at)}</span>
