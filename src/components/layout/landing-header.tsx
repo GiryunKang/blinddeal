@@ -141,10 +141,54 @@ export function LandingHeader() {
           ))}
         </nav>
 
-        {/* Right Side — use opacity transition to prevent hydration flicker */}
-        <div className="ml-auto flex items-center gap-3">
+        {/* Mobile hamburger — always visible on small screens */}
+        <div className="ml-auto md:hidden">
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger className="inline-flex items-center justify-center rounded-xl p-2 text-muted-foreground hover:text-foreground hover:bg-white/[0.06] transition-colors">
+              <Menu className="h-5 w-5" />
+            </SheetTrigger>
+            <SheetContent side="right" className="border-white/[0.06] bg-background/95 backdrop-blur-xl">
+              <SheetHeader>
+                <SheetTitle>메뉴</SheetTitle>
+              </SheetHeader>
+              <nav className="mt-6 flex flex-col gap-1 px-2">
+                {navLinks.map((link) => (
+                  <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
+                    className={cn("rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",
+                      pathname === link.href ? "bg-white/[0.06] text-foreground" : "text-muted-foreground hover:bg-white/[0.03] hover:text-foreground"
+                    )}>
+                    {link.label}
+                  </Link>
+                ))}
+                <a href="#inquiry-section" onClick={() => setMobileOpen(false)}
+                  className="rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-white/[0.03] hover:text-foreground">
+                  문의
+                </a>
+                {mounted && user ? (
+                  <Link href="/deals/new" onClick={() => setMobileOpen(false)}
+                    className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-blue-500/25">
+                    <Plus className="h-4 w-4" />딜 등록
+                  </Link>
+                ) : (
+                  <>
+                    <Link href="/auth/login" onClick={() => setMobileOpen(false)}
+                      className="mt-4 flex items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm font-medium text-foreground backdrop-blur-sm">
+                      로그인
+                    </Link>
+                    <Link href="/auth/register" onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-blue-500/25">
+                      회원가입
+                    </Link>
+                  </>
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        {/* Desktop Right Side — use opacity transition to prevent hydration flicker */}
+        <div className="ml-auto hidden items-center gap-3 md:flex">
           {!mounted ? (
-            /* SSR / pre-mount: empty placeholder to avoid hydration mismatch */
             <div className="flex items-center gap-2 opacity-0 transition-opacity duration-300">
               <div className="h-8 w-20 rounded-xl" />
               <div className="h-8 w-20 rounded-xl" />
@@ -229,113 +273,11 @@ export function LandingHeader() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Mobile menu */}
-              <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-                <SheetTrigger className="md:hidden">
-                  <Button variant="ghost" size="icon" className="rounded-xl">
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="border-white/[0.06] bg-background/95 backdrop-blur-xl"
-                >
-                  <SheetHeader>
-                    <SheetTitle>메뉴</SheetTitle>
-                  </SheetHeader>
-                  <nav className="mt-6 flex flex-col gap-1 px-2">
-                    {navLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setMobileOpen(false)}
-                        className={cn(
-                          "rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",
-                          pathname === link.href
-                            ? "bg-white/[0.06] text-foreground"
-                            : "text-muted-foreground hover:bg-white/[0.03] hover:text-foreground"
-                        )}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                    <Link
-                      href="/deals/new"
-                      onClick={() => setMobileOpen(false)}
-                      className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-blue-500/25"
-                    >
-                      <Plus className="h-4 w-4" />
-                      딜 등록
-                    </Link>
-                  </nav>
-                </SheetContent>
-              </Sheet>
+              {/* Mobile menu moved to top-level */}
             </>
           ) : (
             <>
-              {/* Mobile menu for non-auth */}
-              <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-                <SheetTrigger className="md:hidden">
-                  <Button variant="ghost" size="icon" className="rounded-xl">
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="border-white/[0.06] bg-background/95 backdrop-blur-xl"
-                >
-                  <SheetHeader>
-                    <SheetTitle>메뉴</SheetTitle>
-                  </SheetHeader>
-                  <nav className="mt-6 flex flex-col gap-1 px-2">
-                    {navLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setMobileOpen(false)}
-                        className={cn(
-                          "rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",
-                          pathname === link.href
-                            ? "bg-white/[0.06] text-foreground"
-                            : "text-muted-foreground hover:bg-white/[0.03] hover:text-foreground"
-                        )}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                    <a
-                      href="#inquiry-section"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setMobileOpen(false);
-                        setTimeout(() => {
-                          const el = document.getElementById("inquiry-section");
-                          if (el) el.scrollIntoView({ behavior: "smooth" });
-                        }, 300);
-                      }}
-                      className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:border-white/[0.2] hover:bg-white/[0.06]"
-                    >
-                      <MessageSquareHeart className="h-4 w-4" />
-                      문의하기
-                    </a>
-                    <Link
-                      href="/auth/login"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm font-medium text-foreground backdrop-blur-sm transition-all hover:border-white/[0.2] hover:bg-white/[0.06]"
-                    >
-                      로그인
-                    </Link>
-                    <Link
-                      href="/auth/register"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-blue-500/25"
-                    >
-                      회원가입
-                    </Link>
-                  </nav>
-                </SheetContent>
-              </Sheet>
-
+              {/* Mobile menu moved to top-level */}
               <div className="hidden items-center gap-2 md:flex">
                 <a
                   href="#inquiry-section"

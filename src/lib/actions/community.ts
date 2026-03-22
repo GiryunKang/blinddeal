@@ -138,10 +138,10 @@ export async function createPost(formData: FormData) {
 
   if (error) {
     console.error("Error creating post:", error)
-    throw new Error("게시글 작성에 실패했습니다.")
+    return { success: false, error: "게시글 작성에 실패했습니다: " + error.message }
   }
 
-  return { id: data.id }
+  return { success: true, id: data.id }
 }
 
 export async function createComment(

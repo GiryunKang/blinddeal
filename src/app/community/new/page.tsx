@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { createPost } from "@/lib/actions/community"
 
 const boardMap: Record<string, string> = {
+  "일반": "general",
   "부동산": "real_estate",
   "M&A": "ma",
   "Q&A": "qna",
@@ -31,10 +32,17 @@ export default function NewPostPage() {
     formData.set("category", boardMap[selectedBoard] || "general")
 
     startTransition(async () => {
-      const result = await createPost(formData)
-      router.push(
-        `/community/${encodeURIComponent(selectedBoard)}/${result.id}`
-      )
+      try {
+        const result = await createPost(formData)
+        if ('error' in result) {
+          alert(result.error)
+          return
+        }
+        const boardCode = boardMap[selectedBoard] || "general"
+        router.push(`/community/${boardCode}/${result.id}`)
+      } catch {
+        alert("게시글 작성에 실패했습니다.")
+      }
     })
   }
 
