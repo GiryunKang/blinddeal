@@ -49,8 +49,13 @@ const authNavLinks = [
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();
@@ -78,7 +83,8 @@ export function Header() {
   const displayName =
     user?.user_metadata?.display_name ?? user?.email?.split("@")[0] ?? "";
   const initials = displayName.slice(0, 2).toUpperCase();
-  const navLinks = user ? authNavLinks : publicNavLinks;
+  // Before mount, always render the public nav to match SSR
+  const navLinks = mounted && user ? authNavLinks : publicNavLinks;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-background/70 backdrop-blur-2xl">
@@ -122,10 +128,16 @@ export function Header() {
 
         {/* Right Side */}
         <div className="ml-auto flex items-center gap-3">
-          {user ? (
+          {!mounted ? (
+            /* SSR / pre-mount: empty placeholder to avoid hydration mismatch */
+            <div className="flex items-center gap-2 opacity-0 transition-opacity duration-300">
+              <div className="h-8 w-20 rounded-xl" />
+              <div className="h-8 w-20 rounded-xl" />
+            </div>
+          ) : user ? (
             <>
               {/* Notifications */}
-              <Link href="/notifications">
+              <Link href="/profile/notifications">
                 <Button
                   variant="ghost"
                   size="icon"

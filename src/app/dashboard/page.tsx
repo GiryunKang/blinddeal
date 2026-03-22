@@ -32,7 +32,8 @@ const PIPELINE_STAGES = [
   { key: "active", label: "활성", accentColor: "from-emerald-500 to-emerald-600", headerText: "text-emerald-400", dotColor: "bg-emerald-500" },
   { key: "under_negotiation", label: "협상중", accentColor: "from-amber-500 to-amber-600", headerText: "text-amber-400", dotColor: "bg-amber-500" },
   { key: "due_diligence", label: "실사(정밀조사)", accentColor: "from-purple-500 to-purple-600", headerText: "text-purple-400", dotColor: "bg-purple-500" },
-  { key: "closing", label: "계약중", accentColor: "from-indigo-500 to-indigo-600", headerText: "text-indigo-400", dotColor: "bg-indigo-500" },
+  { key: "contract", label: "계약 진행", accentColor: "from-indigo-500 to-indigo-600", headerText: "text-indigo-400", dotColor: "bg-indigo-500" },
+  { key: "escrow", label: "에스크로", accentColor: "from-cyan-500 to-cyan-600", headerText: "text-cyan-400", dotColor: "bg-cyan-500" },
   { key: "closed", label: "완료", accentColor: "from-green-500 to-green-600", headerText: "text-green-400", dotColor: "bg-green-500" },
 ] as const
 
@@ -45,7 +46,7 @@ export default async function DashboardPage() {
   ])
 
   const activeNegotiations = myDeals.filter(
-    (d) => d.status === "under_negotiation" || d.status === "due_diligence" || d.status === "closing"
+    (d) => d.status === "under_negotiation" || d.status === "due_diligence" || d.status === "contract" || d.status === "escrow"
   ).length
   const completedDeals = myDeals.filter((d) => d.status === "closed").length
 

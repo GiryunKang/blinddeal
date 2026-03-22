@@ -152,7 +152,7 @@ export function LandingHeader() {
           ) : user ? (
             <>
               {/* Notifications */}
-              <Link href="/notifications">
+              <Link href="/profile/notifications">
                 <Button
                   variant="ghost"
                   size="icon"

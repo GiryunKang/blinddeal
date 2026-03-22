@@ -4,15 +4,18 @@ import { createClient } from "@/lib/supabase/server"
 import { requireAuth } from "@/lib/supabase/auth"
 
 function generateSlug(title: string): string {
+  // Remove everything except alphanumeric and spaces
   const base = title
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9가-힣\s-]/g, "")
+    .replace(/[^a-zA-Z0-9\s]/g, "") // Remove non-ASCII (including Korean)
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
 
   const suffix = Math.random().toString(36).substring(2, 10)
-  return `${base}-${suffix}`
+
+  // If title was all Korean (base is empty), use just the suffix
+  return base ? `${base}-${suffix}` : `deal-${suffix}`
 }
 
 export async function createDeal(formData: FormData) {

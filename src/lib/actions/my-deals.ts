@@ -135,8 +135,11 @@ export async function getMyDealStats() {
     "active",
     "under_negotiation",
     "due_diligence",
+    "contract",
+    "escrow",
     "closing",
     "closed",
+    "cancelled",
   ] as const
 
   const counts: Record<string, number> = {}
@@ -154,7 +157,9 @@ export async function getMyDealStats() {
   }
 
   for (const s of statuses) counts[s] = 0
+  counts.total = 0
   for (const deal of data ?? []) {
+    counts.total++
     if (deal.status in counts) {
       counts[deal.status]++
     }

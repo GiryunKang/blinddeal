@@ -90,7 +90,8 @@ export default async function DealDetailPage({
   params,
 }: DealDetailPageProps) {
   const { slug } = await params
-  const deal = await getDealBySlug(slug)
+  const decodedSlug = decodeURIComponent(slug)
+  const deal = await getDealBySlug(decodedSlug)
 
   if (!deal) {
     notFound()

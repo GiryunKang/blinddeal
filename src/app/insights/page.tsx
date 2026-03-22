@@ -36,7 +36,15 @@ export default async function InsightsPage({
     page: currentPage,
   }
 
-  const { articles, count } = await getArticles(filters)
+  let articles: Awaited<ReturnType<typeof getArticles>>["articles"] = []
+  let count = 0
+  try {
+    const result = await getArticles(filters)
+    articles = result.articles
+    count = result.count
+  } catch (err) {
+    console.error("Error loading articles:", err)
+  }
   const totalPages = Math.ceil(count / 12)
 
   return (
