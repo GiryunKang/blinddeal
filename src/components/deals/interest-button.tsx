@@ -1,12 +1,13 @@
 "use client"
 
 import { Heart } from "lucide-react"
-import { useState, useTransition } from "react"
+import { useState, useTransition, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { toggleDealInterest } from "@/lib/actions/deal-mutations"
 import { cn } from "@/lib/utils"
 import { HeartBurst } from "@/components/effects/heart-burst"
+import { createClient } from "@/lib/supabase/client"
 
 interface InterestButtonProps {
   dealId: string
@@ -19,17 +20,23 @@ export function InterestButton({
   dealId,
   initialInterested = false,
   initialCount = 0,
-  isLoggedIn = false,
 }: InterestButtonProps) {
   const [isPending, startTransition] = useTransition()
   const [interested, setInterested] = useState(initialInterested)
   const [count, setCount] = useState(initialCount)
   const [animate, setAnimate] = useState(false)
   const [burstKey, setBurstKey] = useState(0)
+  const [loggedIn, setLoggedIn] = useState(false)
   const router = useRouter()
 
+  useEffect(() => {
+    createClient().auth.getUser().then(({ data: { user } }) => {
+      setLoggedIn(!!user)
+    })
+  }, [])
+
   function handleClick() {
-    if (!isLoggedIn) {
+    if (!loggedIn) {
       router.push("/auth/login")
       return
     }

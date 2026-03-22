@@ -1,32 +1,39 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState, useTransition, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { MessageSquare, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { startInquiry } from "@/lib/actions/inquiry"
 import { NDADialog } from "./nda-dialog"
+import { createClient } from "@/lib/supabase/client"
 
 interface InquiryButtonProps {
   dealId: string
   dealTitle: string
   dealCategory: string
-  isLoggedIn: boolean
+  isLoggedIn?: boolean
 }
 
 export function InquiryButton({
   dealId,
   dealTitle,
   dealCategory,
-  isLoggedIn,
 }: InquiryButtonProps) {
   const [isPending, startTransition] = useTransition()
   const [showNDA, setShowNDA] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
   const router = useRouter()
 
+  useEffect(() => {
+    createClient().auth.getUser().then(({ data: { user } }) => {
+      setLoggedIn(!!user)
+    })
+  }, [])
+
   function handleClick() {
-    if (!isLoggedIn) {
+    if (!loggedIn) {
       router.push("/auth/login")
       return
     }
