@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
-import { requireAuth, getUser } from "@/lib/supabase/auth"
+import { getUser } from "@/lib/supabase/auth"
 
 /**
  * Check if current user has signed NDA for a given deal.
@@ -40,7 +40,10 @@ export async function checkNDA(dealId: string) {
  */
 export async function signNDA(dealId: string) {
   try {
-    const user = await requireAuth()
+    const user = await getUser()
+    if (!user) {
+      return { success: false, error: "로그인이 필요합니다" }
+    }
     const supabase = await createClient()
 
     // Get IP address from headers

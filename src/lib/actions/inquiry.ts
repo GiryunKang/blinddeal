@@ -1,7 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
-import { requireAuth } from "@/lib/supabase/auth"
+import { getUser } from "@/lib/supabase/auth"
 import { checkNDA } from "./nda"
 
 /**
@@ -12,7 +12,10 @@ import { checkNDA } from "./nda"
  */
 export async function startInquiry(dealId: string) {
   try {
-    const user = await requireAuth()
+    const user = await getUser()
+    if (!user) {
+      return { success: false, error: "로그인이 필요합니다" }
+    }
     const supabase = await createClient()
 
     // Get deal info
@@ -58,7 +61,7 @@ export async function startInquiry(dealId: string) {
         deal_id: dealId,
         buyer_id: user.id,
         seller_id: deal.owner_id,
-        status: "pending",
+        status: "inquiry",
       })
       .select("id")
       .single()

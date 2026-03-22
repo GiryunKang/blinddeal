@@ -170,7 +170,7 @@ export async function createRoom(dealId: string) {
         deal_id: dealId,
         buyer_id: user.id,
         seller_id: deal.owner_id,
-        status: "pending",
+        status: "inquiry",
       })
       .select("id")
       .single()
@@ -295,7 +295,7 @@ export async function sendMessage(
  */
 export async function updateRoomStatus(
   roomId: string,
-  status: "pending" | "active" | "completed" | "cancelled"
+  status: "inquiry" | "negotiating" | "loi_exchanged" | "due_diligence" | "contract_review" | "escrow" | "completed" | "cancelled"
 ) {
   try {
     const user = await requireAuth()
@@ -324,8 +324,12 @@ export async function updateRoomStatus(
 
     // Insert a system message
     const statusLabels: Record<string, string> = {
-      pending: "대기 중",
-      active: "활성",
+      inquiry: "문의",
+      negotiating: "협상 중",
+      loi_exchanged: "LOI 교환",
+      due_diligence: "실사 중",
+      contract_review: "계약 검토",
+      escrow: "에스크로",
       completed: "완료",
       cancelled: "취소",
     }

@@ -23,13 +23,29 @@ import {
 export const metadata: Metadata = { title: "거래 채팅" }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  pending: {
-    label: "대기 중",
+  inquiry: {
+    label: "문의",
     className: "bg-amber-500/20 text-amber-400",
   },
-  active: {
-    label: "진행 중",
+  negotiating: {
+    label: "협상 중",
     className: "bg-emerald-500/20 text-emerald-400",
+  },
+  loi_exchanged: {
+    label: "LOI 교환",
+    className: "bg-cyan-500/20 text-cyan-400",
+  },
+  due_diligence: {
+    label: "실사 중",
+    className: "bg-indigo-500/20 text-indigo-400",
+  },
+  contract_review: {
+    label: "계약 검토",
+    className: "bg-violet-500/20 text-violet-400",
+  },
+  escrow: {
+    label: "에스크로",
+    className: "bg-yellow-500/20 text-yellow-400",
   },
   completed: {
     label: "완료",
@@ -64,7 +80,7 @@ export default async function RoomsPage() {
           {rooms.map((room, index) => {
             const counterparty =
               room.buyer_id === user.id ? room.seller : room.buyer
-            const status = statusConfig[room.status] ?? statusConfig.pending
+            const status = statusConfig[room.status] ?? statusConfig.inquiry
             const displayName =
               counterparty?.company_name || counterparty?.display_name || "알 수 없음"
             const initials = displayName.slice(0, 2).toUpperCase()

@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { MessageSquare, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { startInquiry } from "@/lib/actions/inquiry"
 import { NDADialog } from "./nda-dialog"
@@ -34,6 +35,7 @@ export function InquiryButton({
       const result = await startInquiry(dealId)
 
       if (!result.success) {
+        toast.error(result.error || "문의를 시작하려면 다시 로그인해주세요")
         return
       }
 

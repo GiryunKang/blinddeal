@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { Shield, FileText, CheckCircle2 } from "lucide-react"
+import { toast } from "sonner"
 import {
   Dialog,
   DialogContent,
@@ -59,6 +60,8 @@ export function NDADialog({
           // Reset for next time
           setTimeout(() => setSuccess(false), 300)
         }, 1600)
+      } else {
+        toast.error(result.error || "NDA 서명에 실패했습니다. 다시 로그인해주세요.")
       }
     })
   }

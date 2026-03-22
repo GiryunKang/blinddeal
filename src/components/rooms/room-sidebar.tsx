@@ -80,8 +80,12 @@ interface RoomSidebarProps {
 }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  pending: { label: "대기 중", className: "bg-amber-500/20 text-amber-400" },
-  active: { label: "진행 중", className: "bg-emerald-500/20 text-emerald-400" },
+  inquiry: { label: "문의", className: "bg-amber-500/20 text-amber-400" },
+  negotiating: { label: "협상 중", className: "bg-emerald-500/20 text-emerald-400" },
+  loi_exchanged: { label: "LOI 교환", className: "bg-cyan-500/20 text-cyan-400" },
+  due_diligence: { label: "실사 중", className: "bg-indigo-500/20 text-indigo-400" },
+  contract_review: { label: "계약 검토", className: "bg-violet-500/20 text-violet-400" },
+  escrow: { label: "에스크로", className: "bg-yellow-500/20 text-yellow-400" },
   completed: { label: "완료", className: "bg-blue-500/20 text-blue-400" },
   cancelled: { label: "취소", className: "bg-red-500/20 text-red-400" },
 }
@@ -104,9 +108,9 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
     counterparty?.company_name || counterparty?.display_name || "알 수 없음"
   const counterpartyInitials = counterpartyName.slice(0, 2).toUpperCase()
 
-  const status = statusConfig[room.status] ?? statusConfig.pending
+  const status = statusConfig[room.status] ?? statusConfig.inquiry
 
-  function handleStatusChange(newStatus: "active" | "completed" | "cancelled") {
+  function handleStatusChange(newStatus: "inquiry" | "negotiating" | "loi_exchanged" | "due_diligence" | "contract_review" | "escrow" | "completed" | "cancelled") {
     startTransition(async () => {
       const result = await updateRoomStatus(room.id, newStatus)
       if (!result.success) {
@@ -169,18 +173,18 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
 
           {/* Action buttons based on status */}
           <div className="space-y-2">
-            {room.status === "pending" && (
+            {room.status === "inquiry" && (
               <Button
                 size="sm"
                 className="w-full"
-                onClick={() => handleStatusChange("active")}
+                onClick={() => handleStatusChange("negotiating")}
                 disabled={isPending}
               >
-                대화 수락
+                협상 시작
               </Button>
             )}
 
-            {room.status === "active" && (
+            {room.status === "negotiating" && (
               <>
                 <Dialog open={loiDialogOpen} onOpenChange={setLoiDialogOpen}>
                   <DialogTrigger
@@ -215,7 +219,7 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
               </>
             )}
 
-            {(room.status === "pending" || room.status === "active") && (
+            {(room.status === "inquiry" || room.status === "negotiating") && (
               <Button
                 size="sm"
                 variant="destructive"
