@@ -167,21 +167,17 @@ export function Header() {
 
               {/* User Menu */}
               <DropdownMenu>
-                <DropdownMenuTrigger
-                  render={
-                    <button className="cursor-pointer outline-none rounded-full">
-                      <Avatar className="h-8 w-8 ring-2 ring-white/[0.06] transition-all duration-300 hover:ring-white/[0.15]">
-                        <AvatarImage
-                          src={user.user_metadata?.avatar_url}
-                          alt={displayName}
-                        />
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 text-xs font-medium">
-                          {initials}
-                        </AvatarFallback>
-                      </Avatar>
-                    </button>
-                  }
-                />
+                <DropdownMenuTrigger className="cursor-pointer outline-none rounded-full">
+                  <Avatar className="h-8 w-8 ring-2 ring-white/[0.06] transition-all duration-300 hover:ring-white/[0.15]">
+                    <AvatarImage
+                      src={user.user_metadata?.avatar_url}
+                      alt={displayName}
+                    />
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 text-xs font-medium">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
                   sideOffset={8}
