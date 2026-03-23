@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 
 const publicNavLinks = [
   { href: "/deals", label: "마켓" },
+  { href: "/service", label: "서비스 소개" },
   { href: "/insights", label: "인사이트" },
   { href: "/community", label: "커뮤니티" },
   { href: "/experts", label: "전문가" },

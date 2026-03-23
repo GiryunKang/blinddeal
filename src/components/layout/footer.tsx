@@ -12,6 +12,7 @@ const serviceLinks = [
 
 const companyLinks = [
   { href: "/about", label: "회사 소개" },
+  { href: "/service", label: "서비스 소개" },
   { href: "/terms", label: "이용약관" },
   { href: "/privacy", label: "개인정보처리방침" },
   { href: "/escrow-guide", label: "에스크로 안내" },
