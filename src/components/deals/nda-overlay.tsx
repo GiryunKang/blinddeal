@@ -1,17 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Shield, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { NDADialog } from "./nda-dialog"
-import { createClient } from "@/lib/supabase/client"
 
 interface NDAOverlayProps {
   dealId: string
   dealTitle: string
   dealCategory: string
-  isLoggedIn?: boolean
 }
 
 export function NDAOverlay({
@@ -20,13 +18,6 @@ export function NDAOverlay({
   dealCategory,
 }: NDAOverlayProps) {
   const [showNDA, setShowNDA] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(false)
-
-  useEffect(() => {
-    createClient().auth.getUser().then(({ data: { user } }) => {
-      setLoggedIn(!!user)
-    })
-  }, [])
 
   return (
     <div className="relative z-10 mb-8">
@@ -46,21 +37,13 @@ export function NDAOverlay({
               비밀유지계약이란 딜 정보를 외부에 공개하지 않겠다는 약속입니다.
             </p>
           </div>
-          {loggedIn ? (
-            <Button
-              onClick={() => setShowNDA(true)}
-              className="bg-amber-600 hover:bg-amber-700 text-white"
-            >
-              <Shield className="mr-2 size-4" />
-              비밀유지계약(NDA) 서명하기
-            </Button>
-          ) : (
-            <a href="/auth/login">
-              <Button className="bg-amber-600 hover:bg-amber-700 text-white">
-                로그인 후 비밀유지계약(NDA) 서명
-              </Button>
-            </a>
-          )}
+          <Button
+            onClick={() => setShowNDA(true)}
+            className="bg-amber-600 hover:bg-amber-700 text-white"
+          >
+            <Shield className="mr-2 size-4" />
+            비밀유지계약(NDA) 서명하기
+          </Button>
         </CardContent>
       </Card>
 

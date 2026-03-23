@@ -173,7 +173,6 @@ export default async function DealDetailPage({
           dealId={deal.id}
           dealTitle={deal.title}
           dealCategory={deal.deal_category}
-          isLoggedIn={isLoggedIn}
         />
       )}
 
@@ -455,14 +454,12 @@ export default async function DealDetailPage({
                       dealId={deal.id}
                       dealTitle={deal.title}
                       dealCategory={deal.deal_category}
-                      isLoggedIn={isLoggedIn}
                     />
                   )}
                   <InterestButton
                     dealId={deal.id}
                     initialInterested={userInterested}
                     initialCount={deal.interest_count ?? 0}
-                    isLoggedIn={isLoggedIn}
                   />
                 </div>
               </div>

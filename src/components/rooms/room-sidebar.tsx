@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState, useTransition, useEffect } from "react"
 import Link from "next/link"
 import { Building, FileText, ExternalLink } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -99,8 +99,11 @@ const categoryLabels: Record<string, string> = {
 }
 
 export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
+  const [mounted, setMounted] = useState(false)
   const [loiDialogOpen, setLoiDialogOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
+
+  useEffect(() => setMounted(true), [])
 
   const counterparty =
     room.buyer_id === currentUserId ? room.seller : room.buyer
@@ -109,6 +112,16 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
   const counterpartyInitials = counterpartyName.slice(0, 2).toUpperCase()
 
   const status = statusConfig[room.status] ?? statusConfig.inquiry
+
+  if (!mounted) {
+    return (
+      <div className="space-y-4">
+        <div className="h-48 animate-pulse rounded-lg bg-muted" />
+        <div className="h-36 animate-pulse rounded-lg bg-muted" />
+        <div className="h-24 animate-pulse rounded-lg bg-muted" />
+      </div>
+    )
+  }
 
   function handleStatusChange(newStatus: "inquiry" | "negotiating" | "loi_exchanged" | "due_diligence" | "contract_review" | "escrow" | "completed" | "cancelled") {
     startTransition(async () => {
