@@ -96,11 +96,20 @@ export default async function InsightsPage({
             <BookOpen className="size-8 text-muted-foreground" />
           </div>
           <h3 className="mt-4 text-lg font-medium text-foreground">
-            아직 인사이트 글이 없습니다
+            이런 콘텐츠가 곧 업데이트됩니다
           </h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            업계 동향과 분석 글이 곧 업데이트됩니다
+          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li>• 부동산 시세 트렌드 분석</li>
+            <li>• M&A 시장 동향 리포트</li>
+            <li>• 업종별 거래 사례</li>
+            <li>• 전문가 칼럼</li>
+          </ul>
+          <p className="mt-6 text-sm text-muted-foreground">
+            새 콘텐츠가 올라오면 알림을 받으시겠습니까?
           </p>
+          <Link href="/profile/matches" className="mt-3 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+            알림 신청하기
+          </Link>
         </div>
       )}
 

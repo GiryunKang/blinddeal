@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Shield, Lock } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { NDADialog } from "./nda-dialog"
 
@@ -37,13 +36,13 @@ export function NDAOverlay({
               비밀유지계약이란 딜 정보를 외부에 공개하지 않겠다는 약속입니다.
             </p>
           </div>
-          <Button
+          <button
             onClick={() => setShowNDA(true)}
-            className="bg-amber-600 hover:bg-amber-700 text-white"
+            className="flex items-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-amber-700"
           >
-            <Shield className="mr-2 size-4" />
+            <Shield className="size-4" />
             비밀유지계약(NDA) 서명하기
-          </Button>
+          </button>
         </CardContent>
       </Card>
 

@@ -100,10 +100,19 @@ export default async function ExpertsPage({ searchParams }: ExpertsPageProps) {
           <h3 className="mt-4 text-lg font-medium text-foreground">
             전문가 네트워크를 구축 중입니다
           </h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            법무, 회계, 세무, 감정 전문가를 모집하고 있습니다
+          <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">
+            곧 다음 분야의 전문가들이 합류합니다
           </p>
-          <a href="mailto:83482@daum.net" className="mt-4">
+          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li>• <strong className="text-foreground/80">법무법인</strong> — 거래 계약, 법적 자문</li>
+            <li>• <strong className="text-foreground/80">회계법인</strong> — 재무 실사, 가치 평가</li>
+            <li>• <strong className="text-foreground/80">세무법인</strong> — 세무 자문, 절세 전략</li>
+            <li>• <strong className="text-foreground/80">감정평가법인</strong> — 부동산 감정, 자산 가치 평가</li>
+          </ul>
+          <p className="mt-6 text-sm text-muted-foreground">
+            전문가로 참여하고 싶으시다면:
+          </p>
+          <a href="mailto:83482@daum.net" className="mt-3">
             <Button size="sm" variant="outline" className="gap-1.5">
               <Mail className="size-3.5" />
               전문가 등록 문의
