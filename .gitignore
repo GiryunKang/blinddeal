@@ -40,3 +40,12 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Test artifacts
+e2e-*.mjs
+evidence/
+e2e-screenshots/
+test-screenshots/
+audit-screenshots/
+viewport-*.mjs
+*.output
