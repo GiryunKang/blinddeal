@@ -490,6 +490,54 @@ export default function ServicePage() {
         </div>
       </section>
 
+      {/* ────────────── Section 4.5: 빠른 시작 가이드 ────────────── */}
+      <section className="relative border-b border-border/30">
+        <div className="relative mx-auto max-w-4xl px-4 py-20 md:py-28">
+          <ScrollReveal>
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-sm font-semibold uppercase tracking-wider text-emerald-400">
+                Quick Start
+              </p>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+                빠른 시작 가이드
+              </h2>
+              <p className="mt-4 text-muted-foreground">
+                처음 이용하시는 분도 쉽게 따라할 수 있도록 단계별로 안내합니다
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="mt-14 space-y-4">
+            {[
+              { step: "1", title: "회원가입", desc: "이메일로 가입하고 인증을 완료하세요.", link: "/auth/register", linkText: "회원가입 하기" },
+              { step: "2", title: "프로필 설정", desc: "관심 분야, 투자 규모, 선호 지역을 설정하면 맞춤 딜을 추천받을 수 있습니다.", link: "/profile/matches", linkText: "매칭 설정" },
+              { step: "3", title: "딜 등록 또는 탐색", desc: "매도자라면 딜을 등록하고, 매수자라면 마켓에서 딜을 탐색하세요.", link: "/deals", linkText: "딜 둘러보기" },
+              { step: "4", title: "관심 딜 발견 → NDA 서명", desc: "비공개 딜의 상세 정보를 보려면 비밀유지계약(NDA)에 서명합니다.", link: null, linkText: null },
+              { step: "5", title: "문의하기 → 협상방 개설", desc: "딜에 관심이 있으면 '문의하기'를 눌러 매도자와 직접 소통을 시작합니다.", link: null, linkText: null },
+              { step: "6", title: "전문가 배정 → 실사 진행", desc: "법무, 회계, 세무 전문가를 배정하고 실사 체크리스트를 진행합니다.", link: null, linkText: null },
+              { step: "7", title: "계약 체결 → 에스크로 결제", desc: "계약이 완료되면 에스크로(안심결제)로 안전하게 거래를 마무리합니다.", link: null, linkText: null },
+            ].map((item, i) => (
+              <ScrollReveal key={item.step} delay={i * 60}>
+                <div className="group flex items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all hover:border-white/[0.12] hover:bg-white/[0.04]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 text-sm font-bold text-emerald-400 ring-1 ring-emerald-500/20">
+                    {item.step}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold">{item.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
+                  </div>
+                  {item.link && (
+                    <Link href={item.link} className="mt-1 shrink-0 text-xs font-medium text-emerald-400 transition-colors hover:text-emerald-300">
+                      {item.linkText} →
+                    </Link>
+                  )}
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ────────────── Section 5: 우리의 약속 ────────────── */}
       <section className="relative border-b border-border/30">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-blue-500/[0.02] via-transparent to-purple-500/[0.02]" />
