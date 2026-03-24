@@ -83,6 +83,20 @@ export async function signNDA(dealId: string) {
       return { success: false, error: "NDA 서명에 실패했습니다." }
     }
 
+    // Notify deal owner about NDA signing
+    const { data: deal } = await supabase.from("deals").select("owner_id, title").eq("id", dealId).single()
+    if (deal && deal.owner_id !== user.id) {
+      try {
+        await supabase.from("notifications").insert({
+          user_id: deal.owner_id,
+          type: "deal_status_change",
+          title: "새로운 NDA 서명",
+          body: `"${deal.title}" 딜에 새로운 NDA 서명이 있습니다.`,
+          data: { dealId }
+        })
+      } catch { /* ignore */ }
+    }
+
     return { success: true, data: agreement }
   } catch (err) {
     console.error("Unexpected error signing NDA:", err)

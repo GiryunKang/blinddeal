@@ -120,12 +120,23 @@ export async function createDeal(formData: FormData) {
         .filter(Boolean)
     }
 
-    const { error } = await supabase.from("deals").insert(dealData)
+    const { data: newDeal, error } = await supabase.from("deals").insert(dealData).select("id").single()
 
     if (error) {
       console.error("Error creating deal:", error)
       return { success: false, error: "딜 등록에 실패했습니다. 잠시 후 다시 시도해주세요." }
     }
+
+    // Auto-notification for deal owner
+    try {
+      await supabase.from("notifications").insert({
+        user_id: user.id,
+        type: "system",
+        title: "딜이 등록되었습니다",
+        body: `"${title}" 딜이 성공적으로 등록되었습니다. 대시보드에서 관리하세요.`,
+        data: { dealId: newDeal?.id, slug }
+      })
+    } catch { /* ignore */ }
 
     return { success: true, slug }
   } catch (err) {

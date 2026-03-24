@@ -167,7 +167,8 @@ export function Header() {
 
               {/* User Menu */}
               <DropdownMenu>
-                <DropdownMenuTrigger className="cursor-pointer outline-none rounded-full">
+                <DropdownMenuTrigger>
+                  <button className="cursor-pointer rounded-full outline-none focus:outline-none">
                   <Avatar className="h-8 w-8 ring-2 ring-white/[0.06] transition-all duration-300 hover:ring-white/[0.15]">
                     <AvatarImage
                       src={user.user_metadata?.avatar_url}
@@ -177,6 +178,7 @@ export function Header() {
                       {initials}
                     </AvatarFallback>
                   </Avatar>
+                  </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"

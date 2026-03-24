@@ -2,6 +2,8 @@ import { notFound } from "next/navigation"
 import { requireAuth } from "@/lib/supabase/auth"
 import { getRoom, getMessages } from "@/lib/actions/rooms"
 import { getLOIs } from "@/lib/actions/loi"
+import { getDDByRoom } from "@/lib/actions/due-diligence"
+import { getEscrow } from "@/lib/actions/escrow"
 import { MainLayout } from "@/components/layout/main-layout"
 import { Chat } from "@/components/rooms/chat"
 import { RoomSidebar } from "@/components/rooms/room-sidebar"
@@ -21,10 +23,15 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
 
   const room = roomResult.data
 
-  const [messages, lois] = await Promise.all([
+  const [messages, lois, ddResult, escrowResult] = await Promise.all([
     getMessages(id),
     getLOIs(id),
+    getDDByRoom(id).catch(() => null),
+    getEscrow(id).catch(() => null),
   ])
+
+  const ddData = ddResult && "success" in ddResult && ddResult.success ? ddResult.data : null
+  const escrowData = escrowResult && "success" in escrowResult && escrowResult.success ? escrowResult.data : null
 
   const currentUserId = user.id
 
@@ -46,6 +53,8 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
             room={room}
             currentUserId={currentUserId}
             lois={lois}
+            ddData={ddData}
+            escrowData={escrowData}
           />
         </div>
       </div>

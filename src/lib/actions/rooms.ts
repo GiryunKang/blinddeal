@@ -283,6 +283,28 @@ export async function sendMessage(
       .update({ updated_at: new Date().toISOString() })
       .eq("id", roomId)
 
+    // Notify the other participant
+    if (type === "text") {
+      const recipientId = room.buyer_id === user.id ? room.seller_id : room.buyer_id
+      const { data: roomWithDeal } = await supabase
+        .from("deal_rooms")
+        .select("deal_id, deals:deals!deal_id(title)")
+        .eq("id", roomId)
+        .single()
+      const dealTitle = (roomWithDeal as Record<string, unknown>)?.deals
+        ? ((roomWithDeal as Record<string, unknown>).deals as Record<string, string>)?.title
+        : "딜"
+      try {
+        await supabase.from("notifications").insert({
+          user_id: recipientId,
+          type: "new_message",
+          title: "새 메시지",
+          body: `"${dealTitle || '딜'}" 협상방에 새 메시지가 도착했습니다.`,
+          data: { roomId }
+        })
+      } catch { /* ignore notification errors */ }
+    }
+
     return { success: true }
   } catch (err) {
     console.error("Unexpected error sending message:", err)

@@ -77,6 +77,23 @@ interface RoomSidebarProps {
       avatar_url: string | null
     } | null
   }>
+  ddData?: {
+    id: string
+    status: string
+    checklist: Array<{
+      id: string
+      category: string
+      item_name: string
+      status: string
+    }>
+  } | null
+  escrowData?: {
+    id: string
+    total_amount: number
+    status: string
+    funded_at: string | null
+    released_at: string | null
+  } | null
 }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
@@ -98,7 +115,7 @@ const categoryLabels: Record<string, string> = {
   other: "기타",
 }
 
-export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
+export function RoomSidebar({ room, currentUserId, lois, ddData, escrowData }: RoomSidebarProps) {
   const [mounted, setMounted] = useState(false)
   const [loiDialogOpen, setLoiDialogOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -286,6 +303,73 @@ export function RoomSidebar({ room, currentUserId, lois }: RoomSidebarProps) {
                 <Separator className="mt-3 last:hidden" />
               </div>
             ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* DD (Due Diligence) Panel */}
+      {ddData && (
+        <Card className="border-border/50">
+          <CardHeader>
+            <CardTitle className="text-sm">실사(정밀조사) 진행 현황</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {(() => {
+              const total = ddData.checklist.length
+              const completed = ddData.checklist.filter(i => i.status === "completed").length
+              const pct = total > 0 ? Math.round((completed / total) * 100) : 0
+              return (
+                <>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{completed}/{total} 항목 완료</span>
+                    <span>{pct}%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-muted">
+                    <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${pct}%` }} />
+                  </div>
+                  <div className="space-y-1.5 pt-1">
+                    {ddData.checklist.map(item => {
+                      const dotColor = item.status === "completed" ? "bg-emerald-500" : item.status === "in_progress" ? "bg-blue-500" : item.status === "issue_found" ? "bg-red-500" : "bg-muted-foreground/30"
+                      return (
+                        <div key={item.id} className="flex items-center gap-2 text-xs">
+                          <span className={`h-2 w-2 rounded-full ${dotColor} shrink-0`} />
+                          <span className="text-muted-foreground">{item.item_name}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
+              )
+            })()}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Escrow Panel */}
+      {escrowData && (
+        <Card className="border-border/50">
+          <CardHeader>
+            <CardTitle className="text-sm">에스크로(안심결제)</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="text-lg font-bold">{formatKRW(escrowData.total_amount)}</div>
+            <Badge variant="secondary" className={
+              escrowData.status === "funded" ? "bg-blue-500/20 text-blue-400" :
+              escrowData.status === "released" ? "bg-emerald-500/20 text-emerald-400" :
+              escrowData.status === "disputed" || escrowData.status === "refunded" ? "bg-red-500/20 text-red-400" :
+              "bg-muted text-muted-foreground"
+            }>
+              {escrowData.status === "created" ? "생성됨" :
+               escrowData.status === "funded" ? "입금 완료" :
+               escrowData.status === "releasing" ? "방출 중" :
+               escrowData.status === "released" ? "방출 완료" :
+               escrowData.status === "refunded" ? "환불됨" :
+               escrowData.status === "disputed" ? "분쟁 중" :
+               escrowData.status}
+            </Badge>
+            <p className="text-xs text-muted-foreground">
+              거래 대금이 안전하게 보관됩니다.
+            </p>
           </CardContent>
         </Card>
       )}

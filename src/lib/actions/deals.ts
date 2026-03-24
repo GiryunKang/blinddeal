@@ -92,7 +92,7 @@ export async function getDeals(filters: DealFilters = {}) {
 
     if (search) {
       query = query.or(
-        `title.ilike.%${search}%,description.ilike.%${search}%`
+        `title.ilike.%${search}%,description.ilike.%${search}%,city.ilike.%${search}%,industry.ilike.%${search}%`
       )
     }
 

@@ -7,15 +7,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatKRW(amount: number | null): string {
-  if (amount === null || amount === undefined) return "협의 후 공개";
-  if (amount >= 1_000_000_000_000) return `₩${(amount / 1_000_000_000_000).toFixed(1)}T`;
-  if (amount >= 100_000_000) return `${Math.round(amount / 100_000_000).toLocaleString()}억원`;
-  return new Intl.NumberFormat("ko-KR", {
-    style: "currency",
-    currency: "KRW",
-    maximumFractionDigits: 0,
-  }).format(amount);
+export function formatKRW(amount: number | null | undefined): string {
+  if (amount == null) return "협의 후 공개";
+  if (amount >= 1_000_000_000_000) {
+    const jo = amount / 1_000_000_000_000;
+    return `${jo % 1 === 0 ? jo.toFixed(0) : jo.toFixed(1)}조원`;
+  }
+  if (amount >= 100_000_000) {
+    const eok = amount / 100_000_000;
+    return `${eok % 1 === 0 ? eok.toFixed(0) : eok.toFixed(1)}억원`;
+  }
+  if (amount >= 10_000) {
+    const man = amount / 10_000;
+    return `${man % 1 === 0 ? man.toFixed(0) : man.toFixed(1)}만원`;
+  }
+  return `${amount.toLocaleString()}원`;
 }
 
 export function formatDate(

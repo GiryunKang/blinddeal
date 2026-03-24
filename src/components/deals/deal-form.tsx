@@ -88,7 +88,12 @@ export function DealForm() {
         return
       }
 
-      toast.success("딜이 성공적으로 등록되었습니다.")
+      toast.success("딜이 성공적으로 등록되었습니다.", {
+        action: {
+          label: "대시보드 보기",
+          onClick: () => router.push("/dashboard")
+        }
+      })
       router.push(`/deals/${result.slug}`)
     })
   }

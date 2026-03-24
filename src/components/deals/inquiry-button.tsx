@@ -4,7 +4,6 @@ import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { MessageSquare, Loader2 } from "lucide-react"
 import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
 import { startInquiry } from "@/lib/actions/inquiry"
 import { NDADialog } from "./nda-dialog"
 
@@ -49,19 +48,18 @@ export function InquiryButton({
 
   return (
     <>
-      <Button
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-        size="lg"
+      <button
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
         onClick={handleClick}
         disabled={isPending}
       >
         {isPending ? (
-          <Loader2 className="mr-2 size-4 animate-spin" />
+          <Loader2 className="size-4 animate-spin" />
         ) : (
-          <MessageSquare className="mr-2 size-4" />
+          <MessageSquare className="size-4" />
         )}
         {isPending ? "처리 중..." : "문의하기"}
-      </Button>
+      </button>
 
       <NDADialog
         dealId={dealId}
