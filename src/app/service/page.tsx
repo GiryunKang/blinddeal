@@ -392,6 +392,50 @@ export default function ServicePage() {
         </div>
       </section>
 
+      {/* ────────────── 빠른 시작 가이드 ────────────── */}
+      <section className="relative border-b border-border/30">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-blue-500/[0.02] to-transparent" />
+        <div className="relative mx-auto max-w-7xl px-4 py-20 md:py-28">
+          <ScrollReveal>
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+                Quick Start Guide
+              </p>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
+                빠른 시작 가이드
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                이 가이드를 따라하면 처음 이용하시는 분도 쉽게 BlindDeal을 시작할 수 있습니다.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="mx-auto mt-14 max-w-3xl">
+            {[
+              { step: "1", title: "회원가입 → 이메일 인증", desc: "이메일과 비밀번호로 간단히 가입하고, 이메일 인증을 완료하세요." },
+              { step: "2", title: "프로필 설정 → 관심 분야 선택", desc: "프로필을 작성하고, 관심 있는 딜 분야와 투자 규모를 설정하세요." },
+              { step: "3", title: "딜 등록 또는 딜 탐색", desc: "매도자라면 딜을 등록하고, 매수자라면 마켓플레이스에서 딜을 탐색하세요." },
+              { step: "4", title: "관심 딜 발견 → NDA 서명 → 상세 열람", desc: "비공개 딜은 비밀유지계약(NDA)에 서명한 후 상세 정보를 열람할 수 있습니다." },
+              { step: "5", title: "문의하기 → 협상방 개설", desc: "딜에 관심이 있다면 '문의하기'를 눌러 매도자와 직접 소통하세요." },
+              { step: "6", title: "전문가 배정 → 실사 진행", desc: "법무, 회계, 세무 전문가를 배정받고 체계적인 실사를 진행합니다." },
+              { step: "7", title: "계약 체결 → 에스크로 결제", desc: "계약이 완료되면 에스크로(안심결제)로 안전하게 거래를 마무리합니다." },
+            ].map((item, i) => (
+              <ScrollReveal key={i} delay={i * 80}>
+                <div className="group flex gap-5 py-5 border-b border-border/20 last:border-0">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 text-sm font-bold text-primary ring-1 ring-blue-500/20">
+                    {item.step}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold">{item.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ────────────── Section 4: 거래 프로세스 시각화 ────────────── */}
       <section className="relative border-b border-border/30">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/[0.02] to-transparent" />
