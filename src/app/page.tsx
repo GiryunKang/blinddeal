@@ -113,7 +113,7 @@ export default function HomePage() {
           <div className="mt-12 flex justify-center">
             <div className="flex flex-col items-center gap-1.5 text-muted-foreground/30">
               <Mouse className="h-5 w-5 animate-bounce" />
-              <span className="text-[9px] font-medium tracking-[0.2em] uppercase">Scroll</span>
+              <span className="text-xs font-medium tracking-[0.2em] uppercase">Scroll</span>
             </div>
           </div>
         </div>
@@ -363,7 +363,7 @@ function BlindDealCard({
         <Badge variant="secondary" className="bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20">
           <EyeOff className="mr-1 h-3 w-3" />비공개
         </Badge>
-        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
+        <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-400">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot" />
           관리자 검증
         </span>
@@ -405,10 +405,10 @@ function BlindDealCard({
             <Lock className="h-4.5 w-4.5 text-white/80" />
           </div>
           <span className="text-xs font-medium text-white/80">비공개 딜</span>
-          <span className="text-[10px] text-white/40">인증 등급 {requiredLevel} 이상 열람 가능</span>
+          <span className="text-xs text-white/40">인증 등급 {requiredLevel} 이상 열람 가능</span>
           <Link
             href="/profile/verification"
-            className="mt-1 rounded-full border border-white/10 bg-white/5 px-5 py-1.5 text-[10px] font-medium text-white/60 transition-all hover:border-blue-400/30 hover:bg-blue-500/10 hover:text-white"
+            className="mt-1 rounded-full border border-white/10 bg-white/5 px-5 py-1.5 text-xs font-medium text-white/60 transition-all hover:border-blue-400/30 hover:bg-blue-500/10 hover:text-white"
           >
             인증하기
           </Link>

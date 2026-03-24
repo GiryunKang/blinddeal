@@ -136,7 +136,7 @@ export default async function DashboardPage() {
               return (
                 <MotionPipelineColumn key={stage.key} index={stageIndex}>
                 <div
-                  className={`flex min-w-[200px] flex-shrink-0 flex-col lg:min-w-[180px] lg:flex-1 transition-shadow duration-500 ${dealsInStage.length > 0 ? 'shadow-[0_0_30px_-10px_rgba(59,130,246,0.12)]' : ''}`}
+                  className={`flex min-w-[160px] sm:min-w-[200px] flex-shrink-0 flex-col lg:min-w-[180px] lg:flex-1 transition-shadow duration-500 ${dealsInStage.length > 0 ? 'shadow-[0_0_30px_-10px_rgba(59,130,246,0.12)]' : ''}`}
                 >
                   {/* Column header — glass effect with gradient left border */}
                   <div className="relative mb-3 overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 backdrop-blur-xl">
@@ -298,7 +298,7 @@ function MiniDealCard({
           </h4>
           <Badge
             variant="secondary"
-            className={`shrink-0 rounded-md border-0 px-1.5 py-0 text-[9px] backdrop-blur-sm ${
+            className={`shrink-0 rounded-md border-0 px-1.5 py-0 text-[10px] backdrop-blur-sm ${
               deal.deal_category === "real_estate"
                 ? "bg-blue-500/10 text-blue-400"
                 : "bg-purple-500/10 text-purple-400"
