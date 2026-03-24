@@ -144,7 +144,7 @@ export default async function ProfilePage() {
           <div className="flex flex-wrap gap-3">
             <MotionActionButton>
               <Link href="/profile/edit">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="min-h-[44px]">
                   <Pencil className="size-4" />
                   프로필 수정
                 </Button>
@@ -152,7 +152,7 @@ export default async function ProfilePage() {
             </MotionActionButton>
             <MotionActionButton>
               <Link href="/profile/verification">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="min-h-[44px]">
                   <ShieldCheck className="size-4" />
                   인증 관리
                 </Button>

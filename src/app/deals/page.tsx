@@ -70,7 +70,7 @@ export default async function DealsPage({ searchParams }: DealsPageProps) {
           </div>
           <Link
             href="/deals/map"
-            className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-white/5 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:text-foreground hover:border-blue-500/30 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.15)]"
+            className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-border/50 bg-white/5 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:text-foreground hover:border-blue-500/30 hover:shadow-[0_0_20px_-5px_rgba(59,130,246,0.15)]"
           >
             <MapPin className="h-3.5 w-3.5" />
             지도로 보기

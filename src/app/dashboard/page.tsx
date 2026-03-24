@@ -113,7 +113,7 @@ export default async function DashboardPage() {
         </MotionSection>
 
         {/* Pipeline section */}
-        <div>
+        <div className="min-w-0 overflow-hidden">
           <h2 className="mb-5 text-lg font-bold tracking-tight">거래 진행 현황</h2>
           {myDeals.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.02] py-16 backdrop-blur-xl">
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
               </Link>
             </div>
           ) : (
-          <div className="flex gap-3 overflow-x-auto pb-4">
+          <div className="flex max-w-full gap-3 overflow-x-auto pb-4" style={{ WebkitOverflowScrolling: "touch" }}>
             {PIPELINE_STAGES.map((stage, stageIndex) => {
               const dealsInStage = myDeals.filter((d) => d.status === stage.key)
               return (

@@ -174,7 +174,7 @@ export default function HomePage() {
 
       {/* Blind Deal Showcase — 공개 vs 비공개 */}
       <ScrollReveal>
-      <section className="relative mx-auto max-w-7xl px-4 py-16 md:py-20">
+      <section className="relative mx-auto max-w-7xl overflow-hidden px-4 py-16 md:py-20">
         <div className="mb-10 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold md:text-3xl">실시간 딜</h2>

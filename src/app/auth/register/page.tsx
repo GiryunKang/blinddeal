@@ -19,7 +19,7 @@ export default function RegisterPage() {
           <div className="mb-6 lg:hidden">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-1.5 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               홈으로 돌아가기

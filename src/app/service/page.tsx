@@ -521,7 +521,7 @@ export default function ServicePage() {
                   <Link href="/deals/new" className="mt-6 inline-block">
                     <Button
                       size="sm"
-                      className="gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all hover:from-blue-400 hover:to-indigo-400 hover:shadow-blue-500/30"
+                      className="min-h-[44px] gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all hover:from-blue-400 hover:to-indigo-400 hover:shadow-blue-500/30"
                     >
                       딜 등록하기
                       <ArrowRight className="h-4 w-4" />
@@ -547,7 +547,7 @@ export default function ServicePage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="gap-2 rounded-xl border-indigo-500/30 text-indigo-400 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5"
+                      className="min-h-[44px] gap-2 rounded-xl border-indigo-500/30 text-indigo-400 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5"
                     >
                       회원가입
                       <ArrowRight className="h-4 w-4" />

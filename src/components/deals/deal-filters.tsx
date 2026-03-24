@@ -66,7 +66,7 @@ export function DealFilters() {
         value={categoryValue}
         onValueChange={(v) => updateParams("category", v ?? "all")}
       >
-        <SelectTrigger className="w-full sm:w-[150px]">
+        <SelectTrigger className="min-h-[44px] sm:min-h-0 w-full sm:w-[150px]">
           <SelectValue placeholder="카테고리">
             {categoryLabels[categoryValue] ?? "카테고리"}
           </SelectValue>
@@ -83,7 +83,7 @@ export function DealFilters() {
         value={currentVisibility || "all"}
         onValueChange={(v) => updateParams("visibility", v ?? "all")}
       >
-        <SelectTrigger className="w-full sm:w-[120px]">
+        <SelectTrigger className="min-h-[44px] sm:min-h-0 w-full sm:w-[120px]">
           <SelectValue placeholder="공개 여부" />
         </SelectTrigger>
         <SelectContent>
@@ -98,7 +98,7 @@ export function DealFilters() {
         value={currentSort}
         onValueChange={(v) => updateParams("sortBy", v ?? "latest")}
       >
-        <SelectTrigger className="w-full sm:w-[140px]">
+        <SelectTrigger className="min-h-[44px] sm:min-h-0 w-full sm:w-[140px]">
           <SelectValue placeholder="정렬" />
         </SelectTrigger>
         <SelectContent>

@@ -107,7 +107,7 @@ export function LandingHeader() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 sm:gap-8 px-4 overflow-x-hidden">
         {/* Logo */}
-        <Link href="/" className="group flex items-center gap-2.5">
+        <Link href="/" className="group flex min-h-[44px] items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 transition-shadow duration-300 group-hover:shadow-blue-500/40">
             <span className="text-sm font-bold text-white">B</span>
           </div>
