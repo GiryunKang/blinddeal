@@ -133,7 +133,7 @@ export function LoginForm() {
 
             {/* Forgot password */}
             <motion.div className="-mt-2 flex justify-end" variants={itemVariants}>
-              <Link href="/auth/forgot-password" className="group relative inline-flex items-center py-3 text-xs text-muted-foreground transition-colors duration-300 hover:text-blue-400">
+              <Link href="/auth/forgot-password" className="group relative inline-flex min-h-[44px] items-center py-3 text-xs text-muted-foreground transition-colors duration-300 hover:text-blue-400">
                 비밀번호를 잊으셨나요?
                 <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-blue-400/50 transition-transform duration-300 group-hover:scale-x-100" />
               </Link>
@@ -157,7 +157,7 @@ export function LoginForm() {
             {/* Register link */}
             <motion.p className="text-center text-sm text-muted-foreground" variants={itemVariants}>
               계정이 없으신가요?{" "}
-              <Link href="/auth/register" className="group relative inline-flex items-center py-2 font-medium text-blue-400 transition-colors duration-300 hover:text-blue-300">
+              <Link href="/auth/register" className="group relative inline-flex min-h-[44px] items-center py-3 font-medium text-blue-400 transition-colors duration-300 hover:text-blue-300">
                 회원가입
                 <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-blue-400/50 transition-transform duration-300 group-hover:scale-x-100" />
               </Link>
