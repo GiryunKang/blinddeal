@@ -129,8 +129,41 @@ export async function createDeal(formData: FormData) {
     const { data: newDeal, error } = await supabase.from("deals").insert(dealData).select("id").single()
 
     if (error) {
-      console.error("Error creating deal:", error)
       return { success: false, error: "딜 등록에 실패했습니다. 잠시 후 다시 시도해주세요." }
+    }
+
+    const imageCount = parseInt((formData.get("image_count") as string) || "0", 10)
+    if (imageCount > 0 && newDeal?.id) {
+      const imageUrls: string[] = []
+      for (let i = 0; i < Math.min(imageCount, 5); i++) {
+        const file = formData.get(`image_${i}`) as File | null
+        if (!file || file.size === 0) continue
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
+        if (!allowedTypes.includes(file.type) || file.size > 5 * 1024 * 1024) continue
+
+        const ext = file.name.split(".").pop() || "jpg"
+        const path = `deals/${newDeal.id}/${i}.${ext}`
+
+        const { error: uploadError } = await supabase.storage
+          .from("deal-images")
+          .upload(path, file, { contentType: file.type, upsert: true })
+
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage.from("deal-images").getPublicUrl(path)
+          if (urlData?.publicUrl) imageUrls.push(urlData.publicUrl)
+        }
+      }
+
+      if (imageUrls.length > 0) {
+        await supabase
+          .from("deals")
+          .update({
+            thumbnail_url: imageUrls[0],
+            image_urls: imageUrls,
+          })
+          .eq("id", newDeal.id)
+      }
     }
 
     try {

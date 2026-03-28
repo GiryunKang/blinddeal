@@ -3,7 +3,8 @@
 import { useState, useTransition, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Loader2, ChevronDown } from "lucide-react"
+import Image from "next/image"
+import { Loader2, ChevronDown, ImagePlus, X } from "lucide-react"
 import { createDeal } from "@/lib/actions/deal-mutations"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -39,6 +40,8 @@ export function DealForm() {
   const [category, setCategory] = useState<"real_estate" | "ma">("real_estate")
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [images, setImages] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
   const [optionalOpen, setOptionalOpen] = useState(false)
   const optionalRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
@@ -76,8 +79,49 @@ export function DealForm() {
     })
   }, [])
 
+  function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    const validFiles = files.filter((f) => {
+      if (!f.type.startsWith("image/")) {
+        toast.error("이미지 파일만 업로드 가능합니다.")
+        return false
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        toast.error("파일 크기는 5MB 이하여야 합니다.")
+        return false
+      }
+      return true
+    })
+
+    const total = images.length + validFiles.length
+    if (total > 5) {
+      toast.error("이미지는 최대 5장까지 업로드 가능합니다.")
+      return
+    }
+
+    setImages((prev) => [...prev, ...validFiles])
+    validFiles.forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        setImagePreviews((prev) => [...prev, ev.target?.result as string])
+      }
+      reader.readAsDataURL(file)
+    })
+    e.target.value = ""
+  }
+
+  function removeImage(index: number) {
+    setImages((prev) => prev.filter((_, i) => i !== index))
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index))
+  }
+
   function handleSubmit(formData: FormData) {
     setError(null)
+
+    images.forEach((file, i) => {
+      formData.append(`image_${i}`, file)
+    })
+    formData.set("image_count", String(images.length))
 
     startTransition(async () => {
       const result = await createDeal(formData)
@@ -448,6 +492,45 @@ export function DealForm() {
           </div>
         </div>
       </Tabs>
+
+      {/* Images */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">딜 이미지 (선택)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-3">
+            {imagePreviews.map((src, i) => (
+              <div key={i} className="group relative size-24 overflow-hidden rounded-lg border border-border">
+                <Image src={src} alt={`이미지 ${i + 1}`} fill className="object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removeImage(i)}
+                  className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                >
+                  <X className="size-3" />
+                </button>
+              </div>
+            ))}
+            {images.length < 5 && (
+              <label className="flex size-24 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border/50 text-muted-foreground transition-colors hover:border-blue-500/50 hover:text-blue-400">
+                <ImagePlus className="size-6" />
+                <span className="mt-1 text-[10px]">추가</span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  className="hidden"
+                  onChange={handleImageSelect}
+                />
+              </label>
+            )}
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            최대 5장, 각 5MB 이하 (JPG, PNG, WebP)
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Submit */}
       <div className="flex justify-end">
