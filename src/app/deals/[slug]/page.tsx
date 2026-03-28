@@ -139,6 +139,24 @@ export default async function DealDetailPage({
   const isLoggedIn = !!currentUser
   const isOwner = currentUser?.id === deal.owner_id
 
+  // Check user's verification level
+  let userVerificationLevel = 0
+  if (currentUser) {
+    const { createClient } = await import("@/lib/supabase/server")
+    const supabase = await createClient()
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("verification_level")
+      .eq("id", currentUser.id)
+      .single()
+    userVerificationLevel = profile?.verification_level ?? 0
+  }
+
+  // Verification gate: block access if user doesn't meet required level
+  const requiredLevel = deal.required_verification_level ?? 0
+  const meetsVerification = isOwner || userVerificationLevel >= requiredLevel
+  const showVerificationGate = requiredLevel > 0 && !meetsVerification && isLoggedIn
+
   // Check NDA status for private deals
   let ndaSigned = false
   let userInterested = false
@@ -146,11 +164,11 @@ export default async function DealDetailPage({
     const ndaResult = await checkNDA(deal.id)
     ndaSigned = ndaResult.signed
   } else if (deal.visibility === "public" || isOwner) {
-    ndaSigned = true // no NDA needed for public deals or owner
+    ndaSigned = true
   }
 
   // Check if user has shown interest
-  if (currentUser) {
+  if (currentUser && !showVerificationGate) {
     const { createClient } = await import("@/lib/supabase/server")
     const supabase = await createClient()
     const { data: interest } = await supabase
@@ -164,7 +182,7 @@ export default async function DealDetailPage({
 
   // For private deals without NDA signed, show NDA overlay
   const showNDAOverlay =
-    deal.visibility === "private" && !ndaSigned && !isOwner
+    deal.visibility === "private" && !ndaSigned && !isOwner && !showVerificationGate
 
   let matchedBuyerCount = 0
   if (isOwner) {
@@ -227,6 +245,35 @@ export default async function DealDetailPage({
       />
       {/* Background gradient decoration */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-blue-500/[0.04] via-indigo-500/[0.02] to-transparent" />
+
+      {showVerificationGate && (
+        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-background/95 backdrop-blur-md">
+          <div className="mx-auto max-w-md px-6 text-center">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-500/20">
+              <Shield className="h-10 w-10 text-amber-400" />
+            </div>
+            <h2 className="mt-6 text-xl font-bold text-foreground">인증 등급이 부족합니다</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              이 딜은 <span className="font-semibold text-amber-400">인증 등급 {requiredLevel} 이상</span>이 필요합니다.
+              현재 회원님의 등급은 <span className="font-semibold text-foreground">{userVerificationLevel}</span>입니다.
+            </p>
+            <div className="mt-6 flex flex-col gap-3">
+              <a
+                href="/profile/verification"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-amber-500/20 transition-all hover:shadow-amber-500/30"
+              >
+                인증 등급 올리기
+              </a>
+              <a
+                href="/deals"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                다른 딜 둘러보기
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showNDAOverlay && (
         <NDAOverlay

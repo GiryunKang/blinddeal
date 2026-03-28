@@ -131,7 +131,8 @@ export default function OnboardingPage() {
       } catch {
         // profile columns may not exist yet — continue regardless
       }
-      router.push("/")
+      const destination = interests.includes("sell") ? "/deals/new" : "/deals"
+      router.push(destination)
       router.refresh()
     })
   }
