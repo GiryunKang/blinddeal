@@ -36,11 +36,22 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [failCount, setFailCount] = useState(0);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (failCount >= 5) {
+      setError("로그인 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
     setLoading(true);
+
+    if (failCount > 0) {
+      await new Promise((r) => setTimeout(r, Math.min(failCount * 2000, 10000)));
+    }
 
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -49,6 +60,7 @@ export function LoginForm() {
     });
 
     if (authError) {
+      setFailCount((c) => c + 1);
       setError(
         authError.message === "Invalid login credentials"
           ? "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -57,6 +69,8 @@ export function LoginForm() {
       setLoading(false);
       return;
     }
+
+    setFailCount(0);
 
     // Check if onboarding is completed
     const { data: profile } = await supabase

@@ -4,6 +4,7 @@ interface RateLimitEntry {
 }
 
 const store = new Map<string, RateLimitEntry>()
+const MAX_STORE_SIZE = 10_000
 
 const CLEANUP_INTERVAL = 60_000
 let lastCleanup = Date.now()
@@ -14,6 +15,12 @@ function cleanup() {
   lastCleanup = now
   for (const [key, entry] of store) {
     if (entry.resetAt < now) store.delete(key)
+  }
+  if (store.size > MAX_STORE_SIZE) {
+    const entries = [...store.entries()]
+      .sort((a, b) => a[1].resetAt - b[1].resetAt)
+    const toRemove = entries.slice(0, store.size - MAX_STORE_SIZE)
+    for (const [key] of toRemove) store.delete(key)
   }
 }
 
