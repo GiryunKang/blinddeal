@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition, useRef, useCallback } from "react"
+import { useState, useTransition, useRef, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import Image from "next/image"
@@ -43,8 +43,52 @@ export function DealForm() {
   const [images, setImages] = useState<File[]>([])
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
   const [optionalOpen, setOptionalOpen] = useState(false)
+  const [draftSaved, setDraftSaved] = useState(false)
   const optionalRef = useRef<HTMLDivElement>(null)
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const router = useRouter()
+
+  const DRAFT_KEY = "blinddeal_deal_draft"
+
+  function saveDraft() {
+    const form = document.querySelector<HTMLFormElement>("form")
+    if (!form) return
+    const data: Record<string, string> = {}
+    const formData = new FormData(form)
+    formData.forEach((value, key) => {
+      if (typeof value === "string") data[key] = value
+    })
+    data._category = category
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data))
+    setDraftSaved(true)
+    setTimeout(() => setDraftSaved(false), 2000)
+  }
+
+  function loadDraft() {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY)
+      if (!raw) return
+      const data = JSON.parse(raw) as Record<string, string>
+      if (data._category) setCategory(data._category as "real_estate" | "ma")
+      requestAnimationFrame(() => {
+        const form = document.querySelector<HTMLFormElement>("form")
+        if (!form) return
+        for (const [key, value] of Object.entries(data)) {
+          if (key.startsWith("_")) continue
+          const el = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${key}"]`)
+          if (el) el.value = value
+        }
+      })
+    } catch { /* ignore corrupt draft */ }
+  }
+
+  function clearDraft() {
+    localStorage.removeItem(DRAFT_KEY)
+  }
+
+  useEffect(() => {
+    loadDraft()
+  }, [])
 
   // Progress tracking
   const [filledFields, setFilledFields] = useState({
@@ -62,7 +106,6 @@ export function DealForm() {
     25
 
   const handleFieldChange = useCallback(() => {
-    // Defer read to let React flush updates
     requestAnimationFrame(() => {
       const form = document.querySelector<HTMLFormElement>("form")
       if (!form) return
@@ -77,7 +120,10 @@ export function DealForm() {
         askingPrice: askingPrice.length > 0,
       })
     })
-  }, [])
+
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
+    saveTimerRef.current = setTimeout(saveDraft, 5000)
+  }, [category])
 
   function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])
@@ -132,6 +178,7 @@ export function DealForm() {
         return
       }
 
+      clearDraft()
       toast.success("딜이 성공적으로 등록되었습니다.", {
         action: {
           label: "대시보드 보기",
@@ -533,7 +580,19 @@ export function DealForm() {
       </Card>
 
       {/* Submit */}
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          {draftSaved && (
+            <span className="text-xs text-emerald-400 animate-pulse">임시 저장됨</span>
+          )}
+          <button
+            type="button"
+            onClick={saveDraft}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            수동 저장
+          </button>
+        </div>
         <Button type="submit" size="lg" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
           {isPending ? "등록 중..." : "딜 등록하기"}

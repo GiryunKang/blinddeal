@@ -130,35 +130,29 @@ export default async function DashboardPage() {
               </Link>
             </div>
           ) : (
-          <div className="flex max-w-full gap-3 overflow-x-auto pb-4" style={{ WebkitOverflowScrolling: "touch" }}>
+          <>
+          <div className="hidden md:flex max-w-full gap-3 overflow-x-auto pb-4" style={{ WebkitOverflowScrolling: "touch" }}>
             {PIPELINE_STAGES.map((stage, stageIndex) => {
               const dealsInStage = myDeals.filter((d) => d.status === stage.key)
+              const alwaysShow = stage.key === "active" || stage.key === "draft"
+              if (dealsInStage.length === 0 && !alwaysShow) return null
               return (
                 <MotionPipelineColumn key={stage.key} index={stageIndex}>
                 <div
-                  className={`flex min-w-[160px] sm:min-w-[200px] flex-shrink-0 flex-col lg:min-w-[180px] lg:flex-1 transition-shadow duration-500 ${dealsInStage.length > 0 ? 'shadow-[0_0_30px_-10px_rgba(59,130,246,0.12)]' : ''}`}
+                  className={`flex min-w-[180px] flex-shrink-0 flex-col lg:flex-1 transition-shadow duration-500 ${dealsInStage.length > 0 ? 'shadow-[0_0_30px_-10px_rgba(59,130,246,0.12)]' : ''}`}
                 >
-                  {/* Column header — glass effect with gradient left border */}
                   <div className="relative mb-3 overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 backdrop-blur-xl">
-                    {/* Gradient left accent — pulsing */}
-                    <div
-                      className={`absolute inset-y-0 left-0 w-1 bg-gradient-to-b ${stage.accentColor}`}
-                      style={{ animation: 'breathe 3s ease-in-out infinite' }}
-                    />
+                    <div className={`absolute inset-y-0 left-0 w-1 bg-gradient-to-b ${stage.accentColor}`} />
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className={`h-2 w-2 rounded-full ${stage.dotColor}`} />
-                        <span className={`text-xs font-semibold ${stage.headerText}`}>
-                          {stage.label}
-                        </span>
+                        <span className={`text-xs font-semibold ${stage.headerText}`}>{stage.label}</span>
                       </div>
                       <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
                         {dealsInStage.length}
                       </span>
                     </div>
                   </div>
-
-                  {/* Deal cards in column */}
                   <div className="flex flex-col gap-2">
                     {dealsInStage.length === 0 ? (
                       <div className="flex min-h-[80px] items-center justify-center rounded-xl border border-dashed border-white/[0.06] text-xs text-muted-foreground/30">
@@ -177,12 +171,45 @@ export default async function DashboardPage() {
               )
             })}
           </div>
+
+          {/* Mobile: vertical list grouped by stage */}
+          <div className="md:hidden space-y-4">
+            {PIPELINE_STAGES.map((stage) => {
+              const dealsInStage = myDeals.filter((d) => d.status === stage.key)
+              if (dealsInStage.length === 0) return null
+              return (
+                <div key={stage.key}>
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className={`h-2 w-2 rounded-full ${stage.dotColor}`} />
+                    <span className={`text-xs font-semibold ${stage.headerText}`}>{stage.label}</span>
+                    <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
+                      {dealsInStage.length}
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {dealsInStage.map((deal) => (
+                      <MiniDealCard key={deal.id} deal={deal} />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+            {myDeals.length > 0 && myDeals.every((d) => !PIPELINE_STAGES.some((s) => s.key === d.status)) && (
+              <p className="text-center text-sm text-muted-foreground">표시할 딜이 없습니다</p>
+            )}
+          </div>
+          </>
           )}
         </div>
 
         {/* Activity Feed */}
         <div>
-          <h2 className="mb-5 text-lg font-bold tracking-tight">최근 활동</h2>
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-lg font-bold tracking-tight">최근 활동</h2>
+            <Link href="/rooms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              전체 보기 →
+            </Link>
+          </div>
           <div className="space-y-2">
             {myRooms.length === 0 && myInterests.length === 0 ? (
               <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.02] py-16 backdrop-blur-xl">
