@@ -66,7 +66,18 @@ export async function createDD(roomId: string, dealId: string) {
 }
 
 export async function getDDByRoom(roomId: string) {
+  const user = await requireAuth()
   const supabase = await createClient()
+
+  const { data: room } = await supabase
+    .from("deal_rooms")
+    .select("buyer_id, seller_id")
+    .eq("id", roomId)
+    .single()
+
+  if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
+    return null
+  }
 
   const { data, error } = await supabase
     .from("due_diligence")

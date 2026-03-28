@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { requireAuth } from "@/lib/supabase/auth"
 import { sanitizeText, truncate } from "@/lib/sanitize"
+import { rateLimit, LIMITS } from "@/lib/rate-limit"
 
 /**
  * Get all deal rooms for the current user (as buyer or seller).
@@ -253,6 +254,10 @@ export async function sendMessage(
 ) {
   try {
     const user = await requireAuth()
+    const rl = rateLimit(`msg:${user.id}`, LIMITS.sendMessage)
+    if (!rl.success) {
+      return { success: false, error: "메시지 전송이 너무 빈번합니다." }
+    }
     const supabase = await createClient()
 
     // Verify user is a participant

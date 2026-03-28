@@ -33,7 +33,18 @@ export async function createEscrow(
 }
 
 export async function getEscrow(roomId: string) {
+  const user = await requireAuth()
   const supabase = await createClient()
+
+  const { data: room } = await supabase
+    .from("deal_rooms")
+    .select("buyer_id, seller_id")
+    .eq("id", roomId)
+    .single()
+
+  if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
+    return null
+  }
 
   const { data, error } = await supabase
     .from("escrows")
@@ -44,7 +55,6 @@ export async function getEscrow(roomId: string) {
     .single()
 
   if (error) {
-    console.error("Error fetching escrow:", error)
     return null
   }
 

@@ -3,6 +3,8 @@
 import { createClient } from "@supabase/supabase-js"
 
 import { sanitizeText, truncate, validateEmail, validatePhone } from "@/lib/sanitize"
+import { rateLimit, LIMITS } from "@/lib/rate-limit"
+import { headers } from "next/headers"
 
 type InquiryInput = {
   name: string
@@ -21,6 +23,13 @@ const VALID_DEAL_CATEGORIES = ["real_estate", "ma", "both"] as const
 
 export async function submitInquiry(data: InquiryInput) {
   try {
+    const headerStore = await headers()
+    const ip = headerStore.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"
+    const rl = rateLimit(`inquiry:${ip}`, LIMITS.inquiry)
+    if (!rl.success) {
+      return { success: false, error: "너무 많은 요청입니다. 잠시 후 다시 시도해주세요." }
+    }
+
     const name = truncate(sanitizeText(data.name), 100)
     const email = data.email.trim().toLowerCase()
     const description = truncate(sanitizeText(data.description), 5000)

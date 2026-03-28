@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { getUser, requireAuth } from "@/lib/supabase/auth"
 import { sanitizeText, sanitizeHtml, truncate } from "@/lib/sanitize"
+import { rateLimit, LIMITS } from "@/lib/rate-limit"
 
 export async function getPosts(board?: string, page: number = 1) {
   const supabase = await createClient()
@@ -111,6 +112,10 @@ export async function getPost(id: string) {
 
 export async function createPost(formData: FormData) {
   const user = await requireAuth()
+  const rl = rateLimit(`post:${user.id}`, LIMITS.createPost)
+  if (!rl.success) {
+    return { success: false, error: "게시글 작성이 너무 빈번합니다. 잠시 후 다시 시도해주세요." }
+  }
   const supabase = await createClient()
 
   const title = truncate(sanitizeText(formData.get("title") as string ?? ""), 200)
@@ -156,6 +161,10 @@ export async function createComment(
   parentId?: string
 ) {
   const user = await requireAuth()
+  const rl = rateLimit(`comment:${user.id}`, LIMITS.createComment)
+  if (!rl.success) {
+    throw new Error("댓글 작성이 너무 빈번합니다. 잠시 후 다시 시도해주세요.")
+  }
   const supabase = await createClient()
 
   const sanitizedContent = truncate(sanitizeText(content), 5000)

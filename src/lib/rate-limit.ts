@@ -1,0 +1,60 @@
+interface RateLimitEntry {
+  count: number
+  resetAt: number
+}
+
+const store = new Map<string, RateLimitEntry>()
+
+const CLEANUP_INTERVAL = 60_000
+let lastCleanup = Date.now()
+
+function cleanup() {
+  const now = Date.now()
+  if (now - lastCleanup < CLEANUP_INTERVAL) return
+  lastCleanup = now
+  for (const [key, entry] of store) {
+    if (entry.resetAt < now) store.delete(key)
+  }
+}
+
+interface RateLimitOptions {
+  maxRequests: number
+  windowMs: number
+}
+
+interface RateLimitResult {
+  success: boolean
+  remaining: number
+  resetAt: number
+}
+
+export function rateLimit(
+  key: string,
+  options: RateLimitOptions
+): RateLimitResult {
+  cleanup()
+
+  const now = Date.now()
+  const entry = store.get(key)
+
+  if (!entry || entry.resetAt < now) {
+    store.set(key, { count: 1, resetAt: now + options.windowMs })
+    return { success: true, remaining: options.maxRequests - 1, resetAt: now + options.windowMs }
+  }
+
+  if (entry.count >= options.maxRequests) {
+    return { success: false, remaining: 0, resetAt: entry.resetAt }
+  }
+
+  entry.count++
+  return { success: true, remaining: options.maxRequests - entry.count, resetAt: entry.resetAt }
+}
+
+export const LIMITS = {
+  login: { maxRequests: 5, windowMs: 15 * 60 * 1000 },
+  inquiry: { maxRequests: 3, windowMs: 10 * 60 * 1000 },
+  createDeal: { maxRequests: 5, windowMs: 60 * 60 * 1000 },
+  createPost: { maxRequests: 10, windowMs: 60 * 60 * 1000 },
+  createComment: { maxRequests: 30, windowMs: 60 * 60 * 1000 },
+  sendMessage: { maxRequests: 60, windowMs: 60 * 1000 },
+} as const

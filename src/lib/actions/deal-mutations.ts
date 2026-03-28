@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { requireAuth } from "@/lib/supabase/auth"
 import { sanitizeText, truncate } from "@/lib/sanitize"
+import { rateLimit, LIMITS } from "@/lib/rate-limit"
 
 function generateSlug(title: string): string {
   // Remove everything except alphanumeric and spaces
@@ -22,6 +23,10 @@ function generateSlug(title: string): string {
 export async function createDeal(formData: FormData) {
   try {
     const user = await requireAuth()
+    const rl = rateLimit(`deal:${user.id}`, LIMITS.createDeal)
+    if (!rl.success) {
+      return { success: false, error: "딜 등록이 너무 빈번합니다. 잠시 후 다시 시도해주세요." }
+    }
     const supabase = await createClient()
 
     const title = truncate(sanitizeText((formData.get("title") as string) ?? ""), 200)

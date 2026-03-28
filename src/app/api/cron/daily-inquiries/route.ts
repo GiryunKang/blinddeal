@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
+import { timingSafeEqual } from "crypto"
 
 const INQUIRY_TYPE_LABELS: Record<string, string> = {
   buy: "딜 탐색",
@@ -25,10 +26,20 @@ function getTypeBadgeColor(type: string): string {
   }
 }
 
+function verifyCronSecret(authHeader: string | null): boolean {
+  const expected = process.env.CRON_SECRET
+  if (!expected || !authHeader) return false
+  const received = authHeader.replace("Bearer ", "")
+  if (expected.length !== received.length) return false
+  try {
+    return timingSafeEqual(Buffer.from(expected), Buffer.from(received))
+  } catch {
+    return false
+  }
+}
+
 export async function GET(request: Request) {
-  // Verify CRON_SECRET
-  const authHeader = request.headers.get("authorization")
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(request.headers.get("authorization"))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
