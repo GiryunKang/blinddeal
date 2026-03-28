@@ -1,7 +1,15 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { createClient as createServiceClient } from "@supabase/supabase-js"
 import { requireAuth } from "@/lib/supabase/auth"
+
+function getServiceClient() {
+  return createServiceClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 async function requireAdmin() {
   const user = await requireAuth()
@@ -190,7 +198,8 @@ export async function approveVerification(recordId: string) {
     const finalLevel = Math.max(newLevel, currentLevel)
 
     if (newLevel > currentLevel) {
-      await supabase
+      const serviceClient = getServiceClient()
+      await serviceClient
         .from("profiles")
         .update({ verification_level: finalLevel })
         .eq("id", data.user_id)
