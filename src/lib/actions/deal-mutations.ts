@@ -133,7 +133,6 @@ export async function createDeal(formData: FormData) {
       return { success: false, error: "딜 등록에 실패했습니다. 잠시 후 다시 시도해주세요." }
     }
 
-    // Auto-notification for deal owner
     try {
       await supabase.from("notifications").insert({
         user_id: user.id,
@@ -142,7 +141,40 @@ export async function createDeal(formData: FormData) {
         body: `"${title}" 딜이 성공적으로 등록되었습니다. 대시보드에서 관리하세요.`,
         data: { dealId: newDeal?.id, slug }
       })
-    } catch { /* ignore */ }
+
+      if (visibility === "public" && newDeal?.id) {
+        const { data: matchedUsers } = await supabase
+          .from("profiles")
+          .select("id, interests, preferred_deal_size_min, preferred_deal_size_max")
+          .neq("id", user.id)
+          .contains("interests", [dealCategory])
+          .limit(20)
+
+        if (matchedUsers && matchedUsers.length > 0) {
+          const notifications = matchedUsers
+            .filter((u) => {
+              if (!askingPrice) return true
+              const min = u.preferred_deal_size_min
+              const max = u.preferred_deal_size_max
+              if (min && askingPrice < min) return false
+              if (max && askingPrice > max) return false
+              return true
+            })
+            .slice(0, 10)
+            .map((u) => ({
+              user_id: u.id,
+              type: "deal" as const,
+              title: "관심 분야 새 딜 등록",
+              body: `"${title}" — ${dealCategory === "real_estate" ? "부동산" : "M&A"} 새 딜이 등록되었습니다.`,
+              link: `/deals/${slug}`,
+            }))
+
+          if (notifications.length > 0) {
+            await supabase.from("notifications").insert(notifications)
+          }
+        }
+      }
+    } catch { /* ignore notification errors */ }
 
     return { success: true, slug }
   } catch (err) {
@@ -179,15 +211,29 @@ export async function toggleDealInterest(dealId: string) {
 
       return { success: true, interested: false }
     } else {
-      // Add interest
       const { error } = await supabase.from("deal_interests").insert({
         deal_id: dealId,
         user_id: user.id,
       })
 
       if (error) {
-        console.error("Error adding interest:", error)
         return { success: false, error: "관심 등록에 실패했습니다." }
+      }
+
+      const { data: deal } = await supabase
+        .from("deals")
+        .select("owner_id, title")
+        .eq("id", dealId)
+        .single()
+
+      if (deal && deal.owner_id !== user.id) {
+        await supabase.from("notifications").insert({
+          user_id: deal.owner_id,
+          type: "deal",
+          title: "새로운 관심 표시",
+          body: `"${deal.title}" 딜에 새로운 관심이 등록되었습니다.`,
+          link: `/deals/${dealId}`,
+        })
       }
 
       return { success: true, interested: true }

@@ -36,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data: articles } = await supabase
       .from("articles")
       .select("slug, updated_at")
-      .eq("is_published", true)
+      .eq("status", "published")
 
     const articleRoutes: MetadataRoute.Sitemap = (articles ?? []).map((article) => ({
       url: `${BASE_URL}/insights/${article.slug}`,

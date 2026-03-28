@@ -168,12 +168,75 @@ export async function approveVerification(recordId: string) {
     throw new Error("인증 승인에 실패했습니다.")
   }
 
-  // Update profile verification status
   if (data?.user_id) {
-    await supabase
+    const levelMap: Record<string, number> = {
+      phone: 1,
+      business_registration: 2,
+      corporate_registration: 2,
+      asset_proof: 3,
+      credit_rating: 3,
+      expert_letter: 4,
+      identity_pass: 4,
+    }
+    const newLevel = levelMap[data.verification_type] ?? 0
+
+    const { data: currentProfile } = await supabase
       .from("profiles")
-      .update({ is_verified: true })
+      .select("verification_level")
       .eq("id", data.user_id)
+      .single()
+
+    const currentLevel = currentProfile?.verification_level ?? 0
+    const finalLevel = Math.max(newLevel, currentLevel)
+
+    if (newLevel > currentLevel) {
+      await supabase
+        .from("profiles")
+        .update({ verification_level: finalLevel })
+        .eq("id", data.user_id)
+    }
+
+    await supabase.from("notifications").insert({
+      user_id: data.user_id,
+      type: "system",
+      title: "인증이 승인되었습니다",
+      body: `인증 등급이 Lv.${finalLevel}로 업데이트되었습니다. 더 많은 딜에 접근할 수 있습니다.`,
+      link: "/profile/verification",
+    })
+  }
+
+  return data
+}
+
+export async function rejectVerification(recordId: string, reason?: string) {
+  await requireAdmin()
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from("verification_records")
+    .update({
+      status: "rejected",
+      reviewed_at: new Date().toISOString(),
+      notes: reason || null,
+    })
+    .eq("id", recordId)
+    .select()
+    .single()
+
+  if (error) {
+    throw new Error("인증 거절에 실패했습니다.")
+  }
+
+  if (data?.user_id) {
+    await supabase.from("notifications").insert({
+      user_id: data.user_id,
+      type: "system",
+      title: "인증 요청이 반려되었습니다",
+      body: reason
+        ? `사유: ${reason}. 서류를 확인 후 다시 제출해주세요.`
+        : "서류를 확인 후 다시 제출해주세요.",
+      link: "/profile/verification",
+    })
   }
 
   return data

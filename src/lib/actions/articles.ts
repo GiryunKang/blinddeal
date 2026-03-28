@@ -1,8 +1,27 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
-import { getUser } from "@/lib/supabase/auth"
 import { requireAuth } from "@/lib/supabase/auth"
+
+const CATEGORY_MAP: Record<string, string> = {
+  "시장 트렌드": "market_trend",
+  "부동산 분석": "real_estate_analysis",
+  "M&A 인사이트": "ma_insight",
+  "산업 리포트": "industry_report",
+  "전문가 칼럼": "expert_column",
+  "딜 후기": "deal_review",
+  "가이드": "guide",
+}
+
+export const CATEGORY_LABELS: Record<string, string> = {
+  market_trend: "시장 트렌드",
+  real_estate_analysis: "부동산 분석",
+  ma_insight: "M&A 인사이트",
+  industry_report: "산업 리포트",
+  expert_column: "전문가 칼럼",
+  deal_review: "딜 후기",
+  guide: "가이드",
+}
 
 export interface ArticleFilters {
   category?: string
@@ -29,11 +48,12 @@ export async function getArticles(filters: ArticleFilters = {}) {
     `,
       { count: "exact" }
     )
-    .eq("is_published", true)
+    .eq("status", "published")
     .order("published_at", { ascending: false })
 
   if (category && category !== "전체") {
-    query = query.eq("category", category)
+    const dbCategory = CATEGORY_MAP[category] ?? category
+    query = query.eq("category", dbCategory)
   }
 
   const from = (page - 1) * limit
@@ -47,13 +67,17 @@ export async function getArticles(filters: ArticleFilters = {}) {
     return { articles: [], count: 0 }
   }
 
-  return { articles: data ?? [], count: count ?? 0 }
+  const articles = (data ?? []).map((a) => ({
+    ...a,
+    category: CATEGORY_LABELS[a.category] ?? a.category,
+  }))
+
+  return { articles, count: count ?? 0 }
 }
 
 export async function getArticleBySlug(slug: string) {
   const supabase = await createClient()
 
-  // Articles use id as slug fallback — try to match by a slug column or by id
   const { data: article, error } = await supabase
     .from("articles")
     .select(
@@ -68,20 +92,34 @@ export async function getArticleBySlug(slug: string) {
       )
     `
     )
-    .eq("id", slug)
+    .eq("slug", slug)
     .single()
 
   if (error || !article) {
-    return null
+    const { data: byId } = await supabase
+      .from("articles")
+      .select(
+        `*, author:profiles!author_id (id, display_name, avatar_url, company_name, bio)`
+      )
+      .eq("id", slug)
+      .single()
+
+    if (!byId) return null
+
+    await supabase
+      .from("articles")
+      .update({ view_count: (byId.view_count ?? 0) + 1 })
+      .eq("id", byId.id)
+
+    return { ...byId, category: CATEGORY_LABELS[byId.category] ?? byId.category }
   }
 
-  // Increment view count (fire and forget)
   await supabase
     .from("articles")
     .update({ view_count: (article.view_count ?? 0) + 1 })
     .eq("id", article.id)
 
-  return article
+  return { ...article, category: CATEGORY_LABELS[article.category] ?? article.category }
 }
 
 export async function createArticle(formData: FormData) {
@@ -102,17 +140,18 @@ export async function createArticle(formData: FormData) {
         .filter(Boolean)
     : []
 
+  const dbCategory = CATEGORY_MAP[category] ?? category
+
   const { data, error } = await supabase
     .from("articles")
     .insert({
       author_id: user.id,
       title,
       content,
-      summary: summary || null,
-      cover_image_url: coverImageUrl || null,
-      category,
+      excerpt: summary || null,
+      category: dbCategory,
       tags,
-      is_published: true,
+      status: "published",
       published_at: new Date().toISOString(),
     })
     .select("id")
