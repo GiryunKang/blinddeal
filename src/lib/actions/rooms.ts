@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { requireAuth } from "@/lib/supabase/auth"
+import { sanitizeText, truncate } from "@/lib/sanitize"
 
 /**
  * Get all deal rooms for the current user (as buyer or seller).
@@ -265,10 +266,12 @@ export async function sendMessage(
       return { success: false, error: "이 대화방에 접근할 수 없습니다." }
     }
 
+    const sanitizedContent = truncate(sanitizeText(content), 5000)
+
     const { error } = await supabase.from("messages").insert({
       room_id: roomId,
       sender_id: user.id,
-      content,
+      content: sanitizedContent,
       message_type: type,
     })
 

@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Eye, Heart, Clock } from "lucide-react"
@@ -11,6 +13,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { formatDate } from "@/lib/utils"
+import { BASE_URL } from "@/lib/constants"
 import { CommentSection } from "@/components/community/comment-section"
 import { PostLikeButton } from "@/components/community/post-like-button"
 
@@ -34,6 +37,35 @@ const boardColors: Record<string, string> = {
 
 interface PostDetailPageProps {
   params: Promise<{ board: string; id: string }>
+}
+
+export async function generateMetadata({
+  params,
+}: PostDetailPageProps): Promise<Metadata> {
+  const { board, id } = await params
+  const post = await getPost(id)
+
+  if (!post) {
+    return { title: "게시글을 찾을 수 없습니다" }
+  }
+
+  const boardLabel = boardLabels[post.board] ?? post.board
+  const description = post.content?.slice(0, 150) ?? `${boardLabel} 게시판 글`
+
+  return {
+    title: post.title,
+    description,
+    openGraph: {
+      title: `${post.title} | BlindDeal 커뮤니티`,
+      description,
+      url: `${BASE_URL}/community/${board}/${id}`,
+      type: "article",
+      locale: "ko_KR",
+    },
+    alternates: {
+      canonical: `${BASE_URL}/community/${board}/${id}`,
+    },
+  }
 }
 
 export default async function PostDetailPage({

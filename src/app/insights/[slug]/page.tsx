@@ -1,9 +1,10 @@
-export const revalidate = 300 // Revalidate every 5 minutes
+import type { Metadata } from "next"
 
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft, Eye, Heart, Clock, Tag } from "lucide-react"
+
 import { getArticleBySlug } from "@/lib/actions/articles"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -14,6 +15,9 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { formatDate } from "@/lib/utils"
+import { BASE_URL } from "@/lib/constants"
+
+export const revalidate = 300
 
 const categoryColors: Record<string, string> = {
   "시장 트렌드": "bg-blue-500/20 text-blue-400",
@@ -25,6 +29,35 @@ const categoryColors: Record<string, string> = {
 
 interface ArticleDetailPageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({
+  params,
+}: ArticleDetailPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const article = await getArticleBySlug(slug)
+
+  if (!article) {
+    return { title: "인사이트를 찾을 수 없습니다" }
+  }
+
+  const description = article.summary || article.content?.slice(0, 150) || ""
+
+  return {
+    title: article.title,
+    description,
+    openGraph: {
+      title: `${article.title} | BlindDeal 인사이트`,
+      description,
+      url: `${BASE_URL}/insights/${slug}`,
+      type: "article",
+      locale: "ko_KR",
+      ...(article.cover_image_url && { images: [{ url: article.cover_image_url, width: 1200, height: 630, alt: article.title }] }),
+    },
+    alternates: {
+      canonical: `${BASE_URL}/insights/${slug}`,
+    },
+  }
 }
 
 export default async function ArticleDetailPage({
@@ -43,8 +76,33 @@ export default async function ArticleDetailPage({
     article.author?.company_name || article.author?.display_name || "BlindDeal"
   const initials = authorName.slice(0, 2).toUpperCase()
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.summary || article.content?.slice(0, 200),
+    url: `${BASE_URL}/insights/${slug}`,
+    ...(article.cover_image_url && { image: article.cover_image_url }),
+    datePublished: article.published_at,
+    dateModified: article.updated_at,
+    author: {
+      "@type": "Person",
+      name: authorName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "BlindDeal",
+      url: BASE_URL,
+    },
+    mainEntityOfPage: `${BASE_URL}/insights/${slug}`,
+  }
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Back link */}
       <Link
         href="/insights"

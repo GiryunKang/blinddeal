@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { getUser, requireAuth } from "@/lib/supabase/auth"
+import { sanitizeText, sanitizeHtml, truncate } from "@/lib/sanitize"
 
 export async function getPosts(board?: string, page: number = 1) {
   const supabase = await createClient()
@@ -112,16 +113,21 @@ export async function createPost(formData: FormData) {
   const user = await requireAuth()
   const supabase = await createClient()
 
-  const title = formData.get("title") as string
-  const content = formData.get("content") as string
-  const category = formData.get("category") as string
+  const title = truncate(sanitizeText(formData.get("title") as string ?? ""), 200)
+  const content = truncate(sanitizeHtml(formData.get("content") as string ?? ""), 10000)
+  const category = sanitizeText(formData.get("category") as string ?? "")
   const tagsStr = formData.get("tags") as string
+
+  if (!title || !content) {
+    return { success: false, error: "제목과 내용을 입력해주세요." }
+  }
 
   const tags = tagsStr
     ? tagsStr
         .split(",")
-        .map((t) => t.trim())
+        .map((t) => sanitizeText(t))
         .filter(Boolean)
+        .slice(0, 10)
     : []
 
   const { data, error } = await supabase
@@ -152,10 +158,16 @@ export async function createComment(
   const user = await requireAuth()
   const supabase = await createClient()
 
+  const sanitizedContent = truncate(sanitizeText(content), 5000)
+
+  if (!sanitizedContent) {
+    throw new Error("댓글 내용을 입력해주세요.")
+  }
+
   const { error } = await supabase.from("comments").insert({
     post_id: postId,
     author_id: user.id,
-    content,
+    content: sanitizedContent,
     parent_id: parentId || null,
   })
 

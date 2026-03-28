@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { requireAuth } from "@/lib/supabase/auth"
+import { sanitizeText, truncate } from "@/lib/sanitize"
 
 function generateSlug(title: string): string {
   // Remove everything except alphanumeric and spaces
@@ -23,10 +24,10 @@ export async function createDeal(formData: FormData) {
     const user = await requireAuth()
     const supabase = await createClient()
 
-    const title = (formData.get("title") as string)?.trim()
-    const description = (formData.get("description") as string)?.trim()
-    const dealCategory = formData.get("deal_category") as string
-    const dealType = formData.get("deal_type") as string
+    const title = truncate(sanitizeText((formData.get("title") as string) ?? ""), 200)
+    const description = truncate(sanitizeText((formData.get("description") as string) ?? ""), 10000)
+    const dealCategory = sanitizeText((formData.get("deal_category") as string) ?? "")
+    const dealType = sanitizeText((formData.get("deal_type") as string) ?? "")
     const askingPriceStr = formData.get("asking_price") as string
     const visibility = (formData.get("visibility") as string) || "public"
     const requiredVerificationLevel = parseInt(

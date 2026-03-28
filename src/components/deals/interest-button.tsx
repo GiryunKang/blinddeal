@@ -2,6 +2,8 @@
 
 import { Heart } from "lucide-react"
 import { useState, useTransition } from "react"
+import { toast } from "sonner"
+
 import { toggleDealInterest } from "@/lib/actions/deal-mutations"
 import { cn } from "@/lib/utils"
 import { HeartBurst } from "@/components/effects/heart-burst"
@@ -30,14 +32,17 @@ export function InterestButton({
         setInterested(result.interested ?? false)
         setCount((prev) => (result.interested ? prev + 1 : prev - 1))
 
-        // Trigger pulse animation
         setAnimate(true)
         setTimeout(() => setAnimate(false), 300)
 
-        // Trigger burst on toggle ON
         if (result.interested) {
           setBurstKey((prev) => prev + 1)
+          toast.success("관심 딜에 추가되었습니다.")
+        } else {
+          toast("관심 딜에서 제거되었습니다.")
         }
+      } else {
+        toast.error(result.error || "처리에 실패했습니다.")
       }
     })
   }

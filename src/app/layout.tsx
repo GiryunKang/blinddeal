@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { PWARegister } from "@/components/pwa-register";
+import { BASE_URL } from "@/lib/constants";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -11,7 +13,21 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#3b82f6",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "BlindDeal",
+  },
+  metadataBase: new URL(BASE_URL),
   title: {
     default: 'BlindDeal — 부동산 · M&A 전문 거래 플랫폼',
     template: '%s | BlindDeal'
@@ -21,12 +37,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
-    url: 'https://blinddeal-ten.vercel.app',
+    url: BASE_URL,
     siteName: 'BlindDeal',
     title: 'BlindDeal — 부동산 · M&A 전문 거래 플랫폼',
     description: '부동산과 M&A 딜을 공개 또는 비공개로 안전하게 거래하세요.',
   },
   robots: { index: true, follow: true },
+  alternates: {
+    canonical: BASE_URL,
+  },
 };
 
 export default function RootLayout({
@@ -39,6 +58,7 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
         <Toaster position="top-right" richColors closeButton />
+        <PWARegister />
       </body>
     </html>
   );

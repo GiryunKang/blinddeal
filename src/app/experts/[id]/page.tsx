@@ -1,6 +1,9 @@
+import type { Metadata } from "next"
+
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getExpert } from "@/lib/actions/experts"
+import { BASE_URL } from "@/lib/constants"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -25,6 +28,36 @@ const typeColorMap: Record<string, string> = {
 
 interface ExpertDetailPageProps {
   params: Promise<{ id: string }>
+}
+
+export async function generateMetadata({
+  params,
+}: ExpertDetailPageProps): Promise<Metadata> {
+  const { id } = await params
+  const expert = await getExpert(id)
+
+  if (!expert) {
+    return { title: "전문가를 찾을 수 없습니다" }
+  }
+
+  const name = expert.profile?.display_name ?? "전문가"
+  const firm = expert.firm_name ?? ""
+  const description = `${name} — ${expert.expert_type} 전문가${firm ? ` (${firm})` : ""}. ${expert.bio?.slice(0, 120) ?? "BlindDeal 인증 전문가"}`
+
+  return {
+    title: `${name} — ${expert.expert_type} 전문가`,
+    description,
+    openGraph: {
+      title: `${name} | BlindDeal 전문가`,
+      description,
+      url: `${BASE_URL}/experts/${id}`,
+      type: "profile",
+      locale: "ko_KR",
+    },
+    alternates: {
+      canonical: `${BASE_URL}/experts/${id}`,
+    },
+  }
 }
 
 export default async function ExpertDetailPage({

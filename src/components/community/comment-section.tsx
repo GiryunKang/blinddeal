@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { toast } from "sonner"
 import { formatDate } from "@/lib/utils"
 import { createComment } from "@/lib/actions/community"
 import { MessageCircle } from "lucide-react"
@@ -61,19 +62,29 @@ export function CommentSection({
   function handleSubmitComment() {
     if (!newComment.trim()) return
     startTransition(async () => {
-      await createComment(postId, newComment.trim())
-      setNewComment("")
-      router.refresh()
+      try {
+        await createComment(postId, newComment.trim())
+        setNewComment("")
+        toast.success("댓글이 등록되었습니다.")
+        router.refresh()
+      } catch {
+        toast.error("댓글 등록에 실패했습니다. 다시 시도해주세요.")
+      }
     })
   }
 
   function handleSubmitReply(parentId: string) {
     if (!replyContent.trim()) return
     startTransition(async () => {
-      await createComment(postId, replyContent.trim(), parentId)
-      setReplyContent("")
-      setReplyTo(null)
-      router.refresh()
+      try {
+        await createComment(postId, replyContent.trim(), parentId)
+        setReplyContent("")
+        setReplyTo(null)
+        toast.success("답글이 등록되었습니다.")
+        router.refresh()
+      } catch {
+        toast.error("답글 등록에 실패했습니다. 다시 시도해주세요.")
+      }
     })
   }
 

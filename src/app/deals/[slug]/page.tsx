@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import {
@@ -30,9 +32,45 @@ import { InquiryButton } from "@/components/deals/inquiry-button"
 import { NDAOverlay } from "@/components/deals/nda-overlay"
 import { VisibilityControl } from "@/components/deals/visibility-control"
 import { PriceCardEffects } from "@/components/effects/price-card-effects"
+import { BASE_URL } from "@/lib/constants"
+
+export const revalidate = 60
 
 interface DealDetailPageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({
+  params,
+}: DealDetailPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const deal = await getDealBySlug(decodeURIComponent(slug))
+
+  if (!deal) {
+    return { title: "딜을 찾을 수 없습니다" }
+  }
+
+  const categoryLabel = deal.deal_category === "real_estate" ? "부동산" : "M&A"
+  const priceText = deal.asking_price
+    ? `${(deal.asking_price / 100_000_000).toFixed(0)}억원`
+    : "가격 협의"
+  const description = `[${categoryLabel}] ${deal.title} — ${priceText}. ${deal.description?.slice(0, 120) ?? ""}`
+
+  return {
+    title: deal.title,
+    description,
+    openGraph: {
+      title: `${deal.title} | BlindDeal`,
+      description,
+      url: `${BASE_URL}/deals/${deal.slug}`,
+      type: "website",
+      locale: "ko_KR",
+      ...(deal.thumbnail_url && { images: [{ url: deal.thumbnail_url, width: 1200, height: 630, alt: deal.title }] }),
+    },
+    alternates: {
+      canonical: `${BASE_URL}/deals/${deal.slug}`,
+    },
+  }
 }
 
 function StatCard({
@@ -163,8 +201,30 @@ export default async function DealDetailPage({
     cancelled: "취소",
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: deal.title,
+    description: deal.description?.slice(0, 300),
+    url: `${BASE_URL}/deals/${deal.slug}`,
+    ...(deal.thumbnail_url && { image: deal.thumbnail_url }),
+    category: categoryLabel,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: deal.price_currency || "KRW",
+      ...(deal.asking_price && { price: deal.asking_price }),
+      availability: deal.status === "active"
+        ? "https://schema.org/InStock"
+        : "https://schema.org/SoldOut",
+    },
+  }
+
   return (
     <div className="relative min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Background gradient decoration */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-blue-500/[0.04] via-indigo-500/[0.02] to-transparent" />
 

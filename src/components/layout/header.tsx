@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/sheet";
 import { Bell, LogOut, Settings, User as UserIcon, Menu, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 
 const publicNavLinks = [
   { href: "/deals", label: "마켓" },
@@ -87,10 +86,10 @@ export function Header() {
   const navLinks = mounted && user ? authNavLinks : publicNavLinks;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-background/70 backdrop-blur-2xl">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-background/70 backdrop-blur-2xl" role="banner">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 sm:gap-8 px-4 overflow-x-hidden">
         {/* Logo */}
-        <Link href="/" className="group flex min-h-[44px] items-center gap-2.5">
+        <Link href="/" className="group flex min-h-[44px] items-center gap-2.5" aria-label="BlindDeal 홈으로 이동">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 transition-shadow duration-300 group-hover:shadow-blue-500/40">
             <span className="text-sm font-bold text-white">B</span>
           </div>
@@ -100,7 +99,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="메인 네비게이션">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -136,33 +135,28 @@ export function Header() {
           ) : user ? (
             <>
               {/* Notifications */}
-              <Link href="/profile/notifications">
+              <Link href="/profile/notifications" aria-label="알림">
                 <Button
                   variant="ghost"
                   size="icon"
                   className="relative rounded-xl text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                  aria-label="알림 확인"
                 >
                   <Bell className="h-[18px] w-[18px]" />
                   {/* Notification pulse dot */}
-                  <motion.span
-                    className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background"
-                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }}
-                    transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
-                  />
+                  <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background animate-pulse" />
                 </Button>
               </Link>
 
               {/* New Deal button with gradient + motion */}
               <Link href="/deals/new" className="hidden sm:block">
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Button
-                    size="sm"
-                    className="gap-1.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-blue-500/30"
-                  >
-                    <Plus className="h-4 w-4" />
-                    딜 등록
-                  </Button>
-                </motion.div>
+                <Button
+                  size="sm"
+                  className="gap-1.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:shadow-blue-500/30 hover:scale-[1.03] active:scale-[0.97]"
+                >
+                  <Plus className="h-4 w-4" />
+                  딜 등록
+                </Button>
               </Link>
 
               {/* User Menu */}

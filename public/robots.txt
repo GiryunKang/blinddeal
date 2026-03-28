@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /api/
+Disallow: /rooms/
+Disallow: /profile/edit
+Disallow: /profile/verification
+Disallow: /dashboard
+
+Sitemap: https://blinddeal-ten.vercel.app/sitemap.xml
