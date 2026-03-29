@@ -96,9 +96,9 @@ const features = [
   },
   {
     icon: Wallet,
-    title: "에스크로(안심결제)",
+    title: "안전 거래 파트너 연결",
     description:
-      "거래 대금은 제3자가 안전하게 보관합니다. 소유권 이전이 완료된 후에만 매도자에게 자금이 전달되어 양측 모두 안전합니다.",
+      "거래 규모에 맞는 에스크로 파트너(은행, 법무법인, 신탁회사)를 연결합니다. 전문 금융기관을 통한 안전한 자금 관리를 지원합니다.",
     color: "indigo",
   },
   {
@@ -418,7 +418,7 @@ export default function ServicePage() {
               { step: "4", title: "관심 딜 발견 → NDA 서명 → 상세 열람", desc: "비공개 딜은 비밀유지계약(NDA)에 서명한 후 상세 정보를 열람할 수 있습니다." },
               { step: "5", title: "문의하기 → 협상방 개설", desc: "딜에 관심이 있다면 '문의하기'를 눌러 매도자와 직접 소통하세요." },
               { step: "6", title: "전문가 배정 → 실사 진행", desc: "법무, 회계, 세무 전문가를 배정받고 체계적인 실사를 진행합니다." },
-              { step: "7", title: "계약 체결 → 에스크로 결제", desc: "계약이 완료되면 에스크로(안심결제)로 안전하게 거래를 마무리합니다." },
+              { step: "7", title: "계약 체결 → 안전 거래", desc: "계약이 완료되면 에스크로 파트너를 통해 안전하게 거래를 마무리합니다." },
             ].map((item, i) => (
               <ScrollReveal key={i} delay={i * 80}>
                 <div className="group flex gap-5 py-5 border-b border-border/20 last:border-0">
@@ -515,7 +515,7 @@ export default function ServicePage() {
               { step: "4", title: "관심 딜 발견 → NDA 서명", desc: "비공개 딜의 상세 정보를 보려면 비밀유지계약(NDA)에 서명합니다.", link: null, linkText: null },
               { step: "5", title: "문의하기 → 협상방 개설", desc: "딜에 관심이 있으면 '문의하기'를 눌러 매도자와 직접 소통을 시작합니다.", link: null, linkText: null },
               { step: "6", title: "전문가 배정 → 실사 진행", desc: "법무, 회계, 세무 전문가를 배정하고 실사 체크리스트를 진행합니다.", link: null, linkText: null },
-              { step: "7", title: "계약 체결 → 에스크로 결제", desc: "계약이 완료되면 에스크로(안심결제)로 안전하게 거래를 마무리합니다.", link: null, linkText: null },
+              { step: "7", title: "계약 체결 → 안전 거래", desc: "계약이 완료되면 에스크로 파트너를 통해 안전하게 거래를 마무리합니다.", link: null, linkText: null },
             ].map((item, i) => (
               <ScrollReveal key={item.step} delay={i * 60}>
                 <div className="group flex items-start gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all hover:border-white/[0.12] hover:bg-white/[0.04]">

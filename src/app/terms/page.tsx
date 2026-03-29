@@ -30,7 +30,7 @@ export default function TermsPage() {
             <p className="pl-11">
               이 약관은 주식회사 블라인드딜(이하 &ldquo;회사&rdquo;)이
               운영하는 BlindDeal 플랫폼(이하 &ldquo;플랫폼&rdquo;)에서
-              제공하는 부동산 및 M&amp;A 거래 중개 서비스(이하
+              제공하는 부동산 및 M&amp;A 딜 정보 연결 서비스(이하
               &ldquo;서비스&rdquo;)의 이용과 관련하여, 회사와 이용자 간의
               권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로
               합니다.
@@ -57,8 +57,10 @@ export default function TermsPage() {
                 거래 건을 의미합니다.
               </li>
               <li>
-                &ldquo;에스크로&rdquo;란 거래 안전을 위해 회사가 제공하는
-                제3자 예치 결제 서비스를 의미합니다.
+                &ldquo;에스크로&rdquo;란 거래 안전을 위해 제휴
+                금융기관(은행, 법무법인 등)이 제공하는 제3자 예치
+                서비스를 의미하며, 회사는 해당 서비스를 직접 제공하지
+                않고 연결만 지원합니다.
               </li>
               <li>
                 &ldquo;NDA&rdquo;란 딜의 상세 정보 열람 시 체결하는
@@ -66,7 +68,8 @@ export default function TermsPage() {
               </li>
               <li>
                 &ldquo;전문가&rdquo;란 플랫폼에서 인증을 받고 자문 서비스를
-                제공하는 공인중개사, 변호사, 세무사, 회계사 등을 의미합니다.
+                제공하는 변호사, 세무사, 회계사 등 전문 자격을
+                보유한 자를 의미합니다.
               </li>
             </ol>
           </section>
@@ -229,21 +232,19 @@ export default function TermsPage() {
             </h2>
             <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
-                거래 당사자는 안전한 거래를 위해 플랫폼의 에스크로 결제
-                서비스를 이용할 수 있습니다.
+                거래 당사자는 안전한 거래를 위해 플랫폼이 연결하는 제휴
+                금융기관(은행, 법무법인 등)의 에스크로 서비스를 이용할
+                수 있습니다.
               </li>
               <li>
-                에스크로 서비스 이용 시 매수자가 결제한 금액은 회사가 지정한
-                에스크로 계좌에 예치되며, 거래 완료 조건 충족 시 매도자에게
-                지급됩니다.
+                에스크로 서비스는 제휴 금융기관이 직접 제공하며, 회사는
+                해당 서비스의 연결만 지원합니다. 자금 예치, 지급, 환불
+                등의 처리는 해당 금융기관의 약관에 따릅니다.
               </li>
               <li>
-                거래 취소 시 에스크로 금액은 회사의 환불 정책에 따라
-                처리됩니다.
-              </li>
-              <li>
-                에스크로 서비스에 대해 별도의 수수료가 부과될 수 있으며,
-                수수료율은 플랫폼에 사전 공지됩니다.
+                회사는 에스크로 서비스와 관련하여 자금을 직접 수취하거나
+                관리하지 않으며, 금융기관과 거래 당사자 간의 분쟁에 대해
+                책임을 지지 않습니다.
               </li>
             </ol>
           </section>
@@ -252,20 +253,26 @@ export default function TermsPage() {
           <section className="space-y-3">
             <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">10</span>
-              수수료
+              이용 요금
             </h2>
             <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
-                회사는 서비스 이용에 대해 수수료를 부과할 수 있으며,
-                수수료율 및 부과 기준은 플랫폼에 별도로 공지합니다.
+                회사는 멤버십 구독, 프리미엄 딜 리스팅, 전문가 연결 등
+                서비스 이용에 대해 이용 요금을 부과할 수 있으며,
+                요금 및 부과 기준은 플랫폼에 별도로 공지합니다.
               </li>
               <li>
-                수수료 변경 시 회사는 변경 적용일 30일 전에 회원에게
+                이용 요금 변경 시 회사는 변경 적용일 30일 전에 회원에게
                 공지합니다.
               </li>
               <li>
-                회원이 수수료 변경에 동의하지 않을 경우 서비스 이용을 중단할
-                수 있습니다.
+                회원이 이용 요금 변경에 동의하지 않을 경우 서비스 이용을
+                중단할 수 있습니다.
+              </li>
+              <li>
+                회사는 거래 당사자 간 거래 금액에 대해 수수료를 부과하지
+                않습니다. 거래와 관련된 비용은 당사자 간 또는 전문가와
+                별도로 협의합니다.
               </li>
             </ol>
           </section>
@@ -278,6 +285,12 @@ export default function TermsPage() {
             </h2>
             <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
+                회사는 딜 정보 연결 및 프로세스 관리 도구를 제공할 뿐,
+                거래 당사자 간의 거래를 중개하거나 알선하지 않습니다.
+                따라서 거래의 성립, 이행, 하자 등에 대해 책임을 지지
+                않습니다.
+              </li>
+              <li>
                 회사는 회원 간 또는 회원과 제3자 간에 서비스를 매개로 발생한
                 분쟁에 대해 개입할 의무가 없으며, 이로 인한 손해를 배상할
                 책임이 없습니다.
@@ -289,6 +302,11 @@ export default function TermsPage() {
               <li>
                 회사는 회원이 등록한 딜 정보의 정확성, 진실성에 대해 보증하지
                 않습니다.
+              </li>
+              <li>
+                플랫폼에서 연결된 전문가의 자문 내용 및 서비스 품질에 대해
+                회사는 책임을 지지 않으며, 전문가와 회원 간의 계약 관계는
+                당사자 간에 직접 성립합니다.
               </li>
             </ol>
           </section>

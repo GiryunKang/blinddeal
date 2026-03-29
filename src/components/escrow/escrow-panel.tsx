@@ -81,12 +81,12 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ShieldCheck className="size-5 text-blue-400" />
-          <h3 className="text-lg font-semibold text-foreground">에스크로(안심결제)</h3>
+          <h3 className="text-lg font-semibold text-foreground">안전 거래 현황</h3>
         </div>
         <Badge className={config.color}>{config.label}</Badge>
       </div>
       <p className="text-xs text-muted-foreground">
-        거래 대금을 플랫폼이 안전하게 보관 후, 거래 완료 시 매도자에게 전달합니다.
+        에스크로 파트너를 통해 안전하게 거래가 진행됩니다.
       </p>
 
       <div className="rounded-lg bg-muted/30 p-4 text-center">

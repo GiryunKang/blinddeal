@@ -214,7 +214,7 @@ export default async function DealDetailPage({
     under_negotiation: "협상 중",
     due_diligence: "실사(정밀조사) 진행",
     contract: "계약 진행",
-    escrow: "에스크로(안심결제)",
+    escrow: "안전 거래 진행",
     closed: "완료",
     cancelled: "취소",
   }

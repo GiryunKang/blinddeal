@@ -73,7 +73,7 @@ const steps = [
   { step: "01", icon: Plus, title: "딜 등록", description: "부동산 또는 M&A 딜을 등록하세요. 공개/비공개를 직접 선택합니다.", color: "blue" as const },
   { step: "02", icon: Shield, title: "검증 & 매칭", description: "비공개 딜은 자격이 검증된 상대방에게만 노출됩니다. 조건에 맞는 딜을 자동 매칭합니다.", color: "indigo" as const },
   { step: "03", icon: MessageSquare, title: "협상 & 실사(정밀조사)", description: "플랫폼 내에서 안전하게 소통하고, 비밀유지계약(NDA) 서명 후 상세 자료를 공유합니다.", color: "purple" as const },
-  { step: "04", icon: TrendingUp, title: "계약 & 에스크로(안심결제)", description: "전문가 검토, 계약 체결, 에스크로(안심결제)까지 한 곳에서 완료합니다.", color: "cyan" as const },
+  { step: "04", icon: TrendingUp, title: "계약 & 안전 거래", description: "전문가 검토, 계약 체결, 신뢰할 수 있는 에스크로 파트너 연결까지 한 곳에서 지원합니다.", color: "cyan" as const },
 ];
 
 const colorMap = {
@@ -208,9 +208,9 @@ export function PremiumHowItWorks() {
    ═══════════════════════════════════════════════════════════ */
 
 const trustItems = [
-  { icon: Shield, title: "에스크로(안심결제)", description: "거래 대금은 제3자(플랫폼)가 안전하게 보관하다가, 소유권 이전이 확인된 후에만 매도자에게 전달됩니다.", color: "blue" as const },
+  { icon: Shield, title: "에스크로 파트너 연결", description: "거래 규모에 맞는 신뢰할 수 있는 에스크로 파트너(은행, 법무법인)를 연결하여 안전한 자금 관리를 지원합니다.", color: "blue" as const },
   { icon: FileCheck, title: "법적 구속력 있는 비밀유지계약(NDA)", description: "비공개 딜 열람 시 전자 서명하는 비밀유지계약(NDA)은 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.", color: "indigo" as const },
-  { icon: Scale, title: "분쟁 해결 프로세스", description: "거래 과정에서 분쟁 발생 시 플랫폼의 중재 프로세스와 전문가 자문을 통해 공정하게 해결합니다.", color: "purple" as const },
+  { icon: Scale, title: "분쟁 해결 지원", description: "거래 과정에서 분쟁 발생 시 전문가(변호사, 중재인) 연결과 거래 이력 제공을 통해 해결을 지원합니다.", color: "purple" as const },
 ];
 
 export function PremiumTrustSecurity() {

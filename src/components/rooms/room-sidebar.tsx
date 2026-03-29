@@ -349,7 +349,7 @@ export function RoomSidebar({ room, currentUserId, lois, ddData, escrowData }: R
       {escrowData && (
         <Card className="border-border/50">
           <CardHeader>
-            <CardTitle className="text-sm">에스크로(안심결제)</CardTitle>
+            <CardTitle className="text-sm">안전 거래 현황</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="text-lg font-bold">{formatKRW(escrowData.total_amount)}</div>

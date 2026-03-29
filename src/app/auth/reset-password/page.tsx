@@ -111,8 +111,8 @@ export default function ResetPasswordPage() {
             />
             <FeatureBullet
               icon={<Wallet className="h-5 w-5" />}
-              title="에스크로 안심결제"
-              description="안전한 결제 시스템으로 거래 보호"
+              title="안전 거래 파트너 연결"
+              description="신뢰할 수 있는 에스크로 파트너 연결"
             />
             <FeatureBullet
               icon={<Users className="h-5 w-5" />}

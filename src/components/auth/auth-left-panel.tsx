@@ -160,8 +160,8 @@ export function AuthLeftPanel() {
               <Wallet className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-white">에스크로 안심결제</p>
-              <p className="mt-0.5 text-xs text-white/40">안전한 결제 시스템으로 거래 보호</p>
+              <p className="text-sm font-medium text-white">안전 거래 파트너 연결</p>
+              <p className="mt-0.5 text-xs text-white/40">신뢰할 수 있는 에스크로 파트너 연결</p>
             </div>
           </motion.div>
           <motion.div className="group flex items-start gap-4" variants={featureCardVariants}>

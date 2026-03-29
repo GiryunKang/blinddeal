@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { MainLayout } from "@/components/layout/main-layout";
 
-export const metadata: Metadata = { title: "에스크로(안심결제) 안내" }
+export const metadata: Metadata = { title: "안전 거래 안내 — 에스크로 파트너 연결" }
 import {
   Shield,
   FileCheck,
@@ -11,6 +11,9 @@ import {
   HelpCircle,
   Lock,
   Users,
+  Building2,
+  Scale,
+  Landmark,
 } from "lucide-react";
 
 const steps = [
@@ -19,70 +22,88 @@ const steps = [
     step: "01",
     title: "거래 합의",
     description:
-      "매수자와 매도자가 딜 조건에 합의하고, 에스크로 결제를 선택합니다.",
+      "매수자와 매도자가 딜 조건에 합의하고, 안전한 거래 진행을 위해 에스크로 파트너 연결을 요청합니다.",
+  },
+  {
+    icon: Building2,
+    step: "02",
+    title: "에스크로 파트너 연결",
+    description:
+      "BlindDeal이 거래 규모와 유형에 맞는 신뢰할 수 있는 에스크로 파트너(은행, 법무법인 등)를 연결합니다.",
   },
   {
     icon: Wallet,
-    step: "02",
-    title: "대금 예치",
-    description:
-      "매수자가 거래 대금을 BlindDeal 에스크로 계좌에 예치합니다. 예치 즉시 매도자에게 입금 확인이 통보됩니다.",
-  },
-  {
-    icon: Shield,
     step: "03",
-    title: "안전 보관",
+    title: "대금 예치 및 관리",
     description:
-      "거래 대금은 BlindDeal이 안전하게 보관합니다. 양 당사자의 합의 없이는 자금이 이동하지 않습니다.",
+      "매수자가 에스크로 파트너의 신탁/예치 계좌에 거래 대금을 입금합니다. 자금 관리는 에스크로 파트너가 직접 수행합니다.",
   },
   {
     icon: CheckCircle2,
     step: "04",
     title: "거래 완료 및 정산",
     description:
-      "거래 조건이 모두 충족되면 매수자가 인수 확인을 하고, 에스크로 대금이 매도자에게 정산됩니다.",
+      "거래 조건이 모두 충족되면 에스크로 파트너를 통해 매도자에게 대금이 정산됩니다. BlindDeal은 거래 진행 상태를 추적합니다.",
   },
 ];
 
-const buyerBenefits = [
-  "대금을 안전하게 예치하고 거래 조건 충족 후 지급",
-  "매도자의 의무 이행 전까지 자금 보호",
-  "거래 불발 시 환불 절차 보장",
-  "모든 거래 내역의 투명한 기록",
+const partners = [
+  {
+    icon: Landmark,
+    title: "은행 에스크로",
+    description:
+      "시중은행의 에스크로 계좌를 통한 대금 예치. 금융감독원의 감독 하에 운영되어 안전성이 보장됩니다.",
+    suitable: "모든 규모의 부동산 거래",
+  },
+  {
+    icon: Scale,
+    title: "법무법인 신탁계좌",
+    description:
+      "대형 법무법인의 신탁계좌를 통한 자금 관리. 법률 전문가의 감독 하에 거래 조건 충족 여부를 검증합니다.",
+    suitable: "M&A, 대규모 부동산 개발 딜",
+  },
+  {
+    icon: Building2,
+    title: "신탁회사",
+    description:
+      "부동산 신탁회사를 통한 자산 관리 및 대금 정산. 부동산 개발 프로젝트에 특화된 에스크로 서비스를 제공합니다.",
+    suitable: "부동산 개발, PF 거래",
+  },
 ];
 
-const sellerBenefits = [
-  "매수자의 자금력을 사전에 확인",
-  "거래 완료 즉시 신속한 대금 정산",
-  "대금 미지급 리스크 제거",
-  "분쟁 발생 시 중립적 중재 지원",
+const platformRole = [
+  "거래 규모와 유형에 맞는 에스크로 파트너 추천",
+  "에스크로 파트너와의 연결 및 초기 상담 지원",
+  "딜 프로세스 전반의 상태 추적 및 알림",
+  "거래 관련 문서(NDA, LOI 등) 관리 도구 제공",
+  "전문가(법무, 회계, 세무) 네트워크 연결",
 ];
 
 const faqs = [
   {
-    question: "에스크로 수수료는 얼마인가요?",
+    question: "BlindDeal이 직접 에스크로를 운영하나요?",
     answer:
-      "에스크로 수수료는 거래 금액의 0.1~0.5%이며, 거래 유형과 금액에 따라 차등 적용됩니다. 정확한 수수료는 거래 진행 시 사전에 안내됩니다.",
+      "아닙니다. BlindDeal은 에스크로 서비스를 직접 제공하지 않습니다. 거래 규모와 유형에 적합한 신뢰할 수 있는 에스크로 파트너(은행, 법무법인, 신탁회사 등)를 연결해드립니다. 자금 관리와 정산은 에스크로 파트너가 직접 수행합니다.",
   },
   {
-    question: "에스크로 예치 기간은 얼마나 되나요?",
+    question: "에스크로 파트너 연결 비용이 있나요?",
     answer:
-      "기본 에스크로 예치 기간은 거래 합의 시 설정되며, 일반적으로 7일~90일 사이에서 거래 당사자 간 합의로 정합니다. 기간 연장도 양측 합의 시 가능합니다.",
+      "BlindDeal의 파트너 연결 서비스 자체는 멤버십에 포함되어 있습니다. 에스크로 파트너의 서비스 이용료는 해당 파트너의 요금 체계에 따르며, 연결 전 예상 비용을 안내해드립니다.",
   },
   {
-    question: "거래가 취소되면 환불은 어떻게 되나요?",
+    question: "거래 금액에 제한이 있나요?",
     answer:
-      "거래 취소 사유에 따라 환불 절차가 진행됩니다. 양측 합의에 의한 취소 시 즉시 환불되며, 일방 귀책 사유에 의한 취소 시 회사의 분쟁 조정 절차를 따릅니다.",
-  },
-  {
-    question: "에스크로 대금은 어디에 보관되나요?",
-    answer:
-      "에스크로 대금은 회사의 운영 자금과 완전히 분리된 별도의 에스크로 전용 계좌에 보관됩니다. 금융기관과의 협약을 통해 예치금의 안전성을 보장합니다.",
+      "BlindDeal 플랫폼 자체에는 거래 금액 제한이 없습니다. 에스크로 파트너에 따라 최소/최대 거래 금액이 다를 수 있으며, 거래 규모에 맞는 적절한 파트너를 추천합니다.",
   },
   {
     question: "분쟁이 발생하면 어떻게 처리되나요?",
     answer:
-      "거래 분쟁 발생 시 BlindDeal은 중립적 입장에서 양측의 주장을 검토하고 조정을 진행합니다. 조정이 이루어지지 않을 경우 관련 법령에 따른 분쟁 해결 절차를 안내합니다.",
+      "거래 분쟁은 에스크로 파트너의 약관 및 관련 법령에 따라 처리됩니다. BlindDeal은 분쟁 해결을 위한 전문가(변호사, 중재인) 연결을 지원할 수 있으며, 거래 이력 및 관련 문서를 제공합니다.",
+  },
+  {
+    question: "어떤 에스크로 파트너를 이용할 수 있나요?",
+    answer:
+      "시중은행, 대형 법무법인, 부동산 신탁회사 등 검증된 금융기관과 제휴하고 있습니다. 거래 상담 시 구체적인 파트너 목록과 각 파트너의 특징을 안내해드립니다.",
   },
 ];
 
@@ -96,25 +117,25 @@ export default function EscrowGuidePage() {
             <Lock className="h-8 w-8 text-primary" />
           </div>
           <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
-            에스크로(안심결제) 안내
+            안전 거래 안내
           </h1>
           <p className="mt-2 text-base text-muted-foreground/80">
-            에스크로란 거래 대금을 제3자(플랫폼)가 안전하게 보관하다가, 거래가 완료되면 매도자에게 전달하는 결제 방식입니다.
+            대형 부동산·M&A 거래에는 전문 금융기관의 에스크로 서비스가 필수입니다.
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
-            BlindDeal의 에스크로 서비스는 거래 대금을 안전하게 보관하여
-            매수자와 매도자 모두를 보호합니다. 신뢰할 수 있는 제3자 예치
-            시스템으로 안심하고 거래하세요.
+            BlindDeal은 거래 규모와 유형에 맞는 신뢰할 수 있는 에스크로
+            파트너(은행, 법무법인, 신탁회사)를 연결하여 안전한 거래를
+            지원합니다.
           </p>
         </section>
 
         {/* How It Works */}
         <section className="mx-auto mt-20 max-w-3xl">
           <h2 className="text-center text-2xl font-bold tracking-tight">
-            에스크로 결제 프로세스
+            안전 거래 프로세스
           </h2>
           <p className="mt-2 text-center text-muted-foreground">
-            4단계로 진행되는 안전한 거래 흐름
+            4단계로 진행되는 파트너 기반 안전 거래 흐름
           </p>
 
           <div className="mt-10 space-y-0">
@@ -146,54 +167,67 @@ export default function EscrowGuidePage() {
           </div>
         </section>
 
-        {/* Protection */}
+        {/* Escrow Partners */}
         <section className="mx-auto mt-20 max-w-4xl">
           <h2 className="text-center text-2xl font-bold tracking-tight">
-            거래 당사자 보호
+            에스크로 파트너 유형
           </h2>
           <p className="mt-2 text-center text-muted-foreground">
-            매수자와 매도자 모두를 위한 안전장치
+            거래 규모와 유형에 맞는 최적의 파트너를 연결합니다
           </p>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            {/* Buyer Protection */}
-            <div className="rounded-xl border border-border/50 bg-card/50 p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-                  <Users className="h-5 w-5 text-blue-400" />
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {partners.map((partner) => (
+              <div
+                key={partner.title}
+                className="rounded-xl border border-border/50 bg-card/50 p-6"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <partner.icon className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold">매수자 보호</h3>
+                <h3 className="mt-4 text-lg font-semibold">{partner.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {partner.description}
+                </p>
+                <p className="mt-3 text-xs font-medium text-primary">
+                  적합한 거래: {partner.suitable}
+                </p>
               </div>
-              <ul className="mt-4 space-y-3">
-                {buyerBenefits.map((benefit) => (
-                  <li key={benefit} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" />
-                    <span className="text-sm text-muted-foreground">
-                      {benefit}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            ))}
+          </div>
+        </section>
 
-            {/* Seller Protection */}
-            <div className="rounded-xl border border-border/50 bg-card/50 p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500/10">
-                  <Shield className="h-5 w-5 text-indigo-400" />
-                </div>
-                <h3 className="text-lg font-semibold">매도자 보호</h3>
+        {/* Platform Role */}
+        <section className="mx-auto mt-20 max-w-3xl">
+          <h2 className="text-center text-2xl font-bold tracking-tight">
+            BlindDeal의 역할
+          </h2>
+          <p className="mt-2 text-center text-muted-foreground">
+            플랫폼은 거래를 중개하지 않으며, 딜 정보 연결과 프로세스 관리를
+            지원합니다
+          </p>
+
+          <div className="mt-10 rounded-xl border border-border/50 bg-card/50 p-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+                <Users className="h-5 w-5 text-blue-400" />
               </div>
-              <ul className="mt-4 space-y-3">
-                {sellerBenefits.map((benefit) => (
-                  <li key={benefit} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-indigo-400" />
-                    <span className="text-sm text-muted-foreground">
-                      {benefit}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <h3 className="text-lg font-semibold">플랫폼 지원 범위</h3>
+            </div>
+            <ul className="mt-4 space-y-3">
+              {platformRole.map((role) => (
+                <li key={role} className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" />
+                  <span className="text-sm text-muted-foreground">{role}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4">
+              <p className="text-sm text-amber-200/80">
+                <strong>유의사항:</strong> BlindDeal은 거래 자금을 직접
+                수취하거나 관리하지 않습니다. 모든 자금 관련 업무는 연결된
+                에스크로 파트너가 직접 수행하며, 파트너의 약관이 적용됩니다.
+              </p>
             </div>
           </div>
         </section>
@@ -204,7 +238,7 @@ export default function EscrowGuidePage() {
             자주 묻는 질문
           </h2>
           <p className="mt-2 text-center text-muted-foreground">
-            에스크로 서비스에 대해 궁금한 점을 확인하세요
+            안전 거래 서비스에 대해 궁금한 점을 확인하세요
           </p>
 
           <div className="mt-10 space-y-4">
