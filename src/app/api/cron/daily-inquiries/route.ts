@@ -67,7 +67,7 @@ export async function GET(request: Request) {
   }
 
   if (!inquiries || inquiries.length === 0) {
-    console.log("[Daily Inquiries] No inquiries in the last 24 hours.")
+    console.info("[Daily Inquiries] No inquiries in the last 24 hours.")
     return NextResponse.json({ message: "No inquiries", count: 0 })
   }
 
@@ -190,14 +190,14 @@ export async function GET(request: Request) {
     }
   }
 
-  // Fallback: log to console
-  console.log("=== DAILY INQUIRY REPORT ===")
-  console.log(`Subject: ${subject}`)
-  console.log(`To: ${recipientEmail}`)
-  console.log(`Total inquiries: ${inquiries.length}`)
-  console.log("Breakdown:", typeBreakdown)
-  console.log("HTML email content generated (Resend not configured)")
-  console.log("============================")
+  // Fallback: log to console (Resend not configured)
+  console.info("=== DAILY INQUIRY REPORT ===")
+  console.info(`Subject: ${subject}`)
+  console.info(`To: ${recipientEmail}`)
+  console.info(`Total inquiries: ${inquiries.length}`)
+  console.info("Breakdown:", typeBreakdown)
+  console.info("HTML email content generated (Resend not configured)")
+  console.info("============================")
 
   return NextResponse.json({
     message: "Email logged to console (RESEND_API_KEY not configured)",

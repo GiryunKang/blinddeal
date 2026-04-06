@@ -1,13 +1,17 @@
 export const revalidate = 300 // Revalidate every 5 minutes
 
 import type { Metadata } from "next"
+import Link from "next/link"
+
+import { BookOpen } from "lucide-react"
+
 import { getArticles } from "@/lib/actions/articles"
+
+import { ArticleCard } from "@/components/insights/article-card"
+
 import type { ArticleFilters } from "@/lib/articles-types"
 
 export const metadata: Metadata = { title: "인사이트" }
-import { ArticleCard } from "@/components/insights/article-card"
-import { BookOpen } from "lucide-react"
-import Link from "next/link"
 
 const categories = [
   "전체",
