@@ -109,7 +109,7 @@ export default function TermsPage() {
             <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>부동산 및 M&amp;A 딜 정보 등록 및 검색 서비스</li>
               <li>비공개 딜 매칭 및 NDA 체결 서비스</li>
-              <li>에스크로 결제 서비스</li>
+              <li>에스크로 파트너 연결 서비스</li>
               <li>전문가 자문 연결 서비스</li>
               <li>시장 인사이트 및 데이터 분석 서비스</li>
               <li>커뮤니티 및 네트워킹 서비스</li>
@@ -228,7 +228,7 @@ export default function TermsPage() {
           <section className="space-y-3">
             <h2 className="flex items-center gap-3 text-lg font-semibold text-foreground">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/10 text-xs font-bold text-blue-400 ring-1 ring-blue-500/20">9</span>
-              에스크로 결제
+              에스크로 파트너 연결
             </h2>
             <ol className="list-inside list-decimal space-y-2 pl-11">
               <li>
