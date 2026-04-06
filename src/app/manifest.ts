@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "BlindDeal — 부동산 · M&A 전문 거래 플랫폼",
+    name: "BlindDeal — 부동산 · M&A 딜 정보 플랫폼",
     short_name: "BlindDeal",
-    description: "부동산과 M&A 딜을 공개 또는 비공개로 안전하게 거래하세요.",
+    description: "부동산과 M&A 딜 정보를 공개 또는 비공개로 연결하세요.",
     start_url: "/deals",
     display: "standalone",
     background_color: "#0a0e1a",

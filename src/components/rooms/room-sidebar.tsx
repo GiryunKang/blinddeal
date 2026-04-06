@@ -368,7 +368,7 @@ export function RoomSidebar({ room, currentUserId, lois, ddData, escrowData }: R
                escrowData.status}
             </Badge>
             <p className="text-xs text-muted-foreground">
-              거래 대금이 안전하게 보관됩니다.
+              에스크로 파트너를 통해 안전하게 거래가 진행됩니다.
             </p>
           </CardContent>
         </Card>

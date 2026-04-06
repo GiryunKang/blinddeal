@@ -164,8 +164,8 @@ const processSteps = [
   {
     number: 7,
     icon: Wallet,
-    title: "에스크로",
-    description: "거래 대금을 안전하게 보관하고 조건 충족을 확인합니다.",
+    title: "안전 거래",
+    description: "에스크로 파트너를 통해 안전하게 거래를 진행합니다.",
   },
   {
     number: 8,
@@ -449,7 +449,7 @@ export default function ServicePage() {
                 거래 프로세스
               </h2>
               <p className="mt-4 text-muted-foreground">
-                딜 등록부터 거래 완료까지, 하나의 플랫폼에서 완결합니다
+                딜 등록부터 거래 완료까지, 프로세스 전체를 관리합니다
               </p>
             </div>
           </ScrollReveal>

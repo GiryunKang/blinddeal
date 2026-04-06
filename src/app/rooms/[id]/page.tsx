@@ -54,8 +54,8 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
     negotiating: "조건을 협의한 후, LOI(의향서)를 작성해 보세요.",
     loi_exchanged: "LOI가 수락되면 실사(DD) 단계로 넘어갑니다.",
     due_diligence: "법률, 재무, 운영 실사를 진행하세요. 체크리스트를 확인하세요.",
-    contract_review: "계약서를 검토하고 에스크로 결제를 준비하세요.",
-    escrow: "에스크로 입금 후, 거래 조건 이행을 확인하면 출금됩니다.",
+    contract_review: "계약서를 검토하고 에스크로 파트너 연결을 준비하세요.",
+    escrow: "에스크로 파트너를 통해 안전하게 거래가 진행됩니다.",
     completed: "거래가 완료되었습니다.",
     cancelled: "이 거래는 취소되었습니다.",
   }

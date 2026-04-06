@@ -87,13 +87,13 @@ export default function PrivacyPage() {
                 <span className="font-medium text-foreground">
                   서비스 제공:
                 </span>{" "}
-                딜 등록 및 검색, NDA 체결, 에스크로 결제, 전문가 매칭
+                딜 등록 및 검색, NDA 체결, 에스크로 파트너 연결, 전문가 매칭
               </li>
               <li>
                 <span className="font-medium text-foreground">
                   거래 안전:
                 </span>{" "}
-                에스크로 결제 처리, 거래 당사자 신원 확인, 분쟁 해결
+                에스크로 파트너 연결, 거래 당사자 신원 확인, 분쟁 해결 지원
               </li>
               <li>
                 <span className="font-medium text-foreground">
@@ -189,8 +189,8 @@ export default function PrivacyPage() {
                 연락처) 제공 (거래 진행 목적)
               </li>
               <li>
-                에스크로 결제 서비스 이용 시 결제 대행사에 결제 처리에 필요한
-                정보 제공
+                에스크로 파트너 연결 시 해당 금융기관에 거래 처리에 필요한
+                최소한의 정보 제공
               </li>
               <li>
                 법령의 규정에 의하거나, 수사기관의 요청에 의한 경우 (법적

@@ -68,7 +68,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              부동산 &middot; M&amp;A 전문 거래 플랫폼
+              부동산 &middot; M&amp;A 딜 정보 플랫폼
             </p>
           </div>
 

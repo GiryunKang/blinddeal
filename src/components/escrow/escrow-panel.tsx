@@ -152,7 +152,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
               disabled={isPending}
             >
               <Banknote className="mr-1.5 size-4" />
-              입금 확인
+              입금 확인됨
             </Button>
           )}
           {escrow.status === "funded" && (
@@ -163,7 +163,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
                 disabled={isPending}
               >
                 <ShieldCheck className="mr-1.5 size-4" />
-                출금 실행
+                정산 확인
               </Button>
               <Button
                 variant="destructive"
@@ -182,7 +182,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
               onClick={() => setConfirmAction("refunded")}
               disabled={isPending}
             >
-              환불 처리
+              환불 확인
             </Button>
           )}
         </div>
