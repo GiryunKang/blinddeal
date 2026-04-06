@@ -16,10 +16,10 @@ const statusConfig: Record<
   { label: string; color: string }
 > = {
   pending: { label: "대기중", color: "bg-gray-500/20 text-gray-400" },
-  funded: { label: "입금 완료", color: "bg-blue-500/20 text-blue-400" },
-  released: { label: "출금 완료", color: "bg-green-500/20 text-green-400" },
-  disputed: { label: "분쟁중", color: "bg-red-500/20 text-red-400" },
-  refunded: { label: "환불 완료", color: "bg-amber-500/20 text-amber-400" },
+  funded: { label: "파트너 입금 확인", color: "bg-blue-500/20 text-blue-400" },
+  released: { label: "파트너 정산 완료", color: "bg-green-500/20 text-green-400" },
+  disputed: { label: "분쟁 접수", color: "bg-red-500/20 text-red-400" },
+  refunded: { label: "파트너 환불 완료", color: "bg-amber-500/20 text-amber-400" },
 }
 
 interface EscrowPanelProps {
@@ -44,10 +44,10 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
       try {
         await updateEscrowStatus(escrow.id, confirmAction)
         const labels: Record<string, string> = {
-          funded: "입금이 확인되었습니다.",
-          released: "출금이 실행되었습니다.",
-          disputed: "분쟁이 접수되었습니다.",
-          refunded: "환불이 처리되었습니다.",
+          funded: "에스크로 파트너 입금이 확인되었습니다.",
+          released: "에스크로 파트너 정산이 확인되었습니다.",
+          disputed: "에스크로 파트너에 분쟁이 접수되었습니다.",
+          refunded: "에스크로 파트너 환불이 확인되었습니다.",
         }
         toast.success(labels[confirmAction] ?? "처리 완료")
       } catch {
@@ -100,13 +100,13 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
         <div className="flex items-center gap-2">
           <span className={`size-2 rounded-full ${escrow.funded_at ? "bg-green-400" : "bg-gray-500"}`} />
           <span className="text-muted-foreground">
-            입금 {escrow.funded_at ? new Date(escrow.funded_at).toLocaleDateString("ko-KR") : "대기중"}
+            파트너 입금 {escrow.funded_at ? new Date(escrow.funded_at).toLocaleDateString("ko-KR") : "대기중"}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className={`size-2 rounded-full ${escrow.released_at ? "bg-green-400" : "bg-gray-500"}`} />
           <span className="text-muted-foreground">
-            출금 {escrow.released_at ? new Date(escrow.released_at).toLocaleDateString("ko-KR") : "대기중"}
+            파트너 정산 {escrow.released_at ? new Date(escrow.released_at).toLocaleDateString("ko-KR") : "대기중"}
           </span>
         </div>
       </div>

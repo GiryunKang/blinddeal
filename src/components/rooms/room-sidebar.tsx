@@ -360,11 +360,11 @@ export function RoomSidebar({ room, currentUserId, lois, ddData, escrowData }: R
               "bg-muted text-muted-foreground"
             }>
               {escrowData.status === "created" ? "생성됨" :
-               escrowData.status === "funded" ? "입금 완료" :
-               escrowData.status === "releasing" ? "방출 중" :
-               escrowData.status === "released" ? "방출 완료" :
-               escrowData.status === "refunded" ? "환불됨" :
-               escrowData.status === "disputed" ? "분쟁 중" :
+               escrowData.status === "funded" ? "파트너 입금 확인" :
+               escrowData.status === "releasing" ? "파트너 정산 진행중" :
+               escrowData.status === "released" ? "파트너 정산 완료" :
+               escrowData.status === "refunded" ? "파트너 환불 완료" :
+               escrowData.status === "disputed" ? "분쟁 접수" :
                escrowData.status}
             </Badge>
             <p className="text-xs text-muted-foreground">
