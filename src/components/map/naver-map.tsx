@@ -27,6 +27,7 @@ declare global {
   }
 }
 
+/* eslint-disable @typescript-eslint/no-namespace */
 declare namespace naver {
   namespace maps {
     class Map {
@@ -86,6 +87,7 @@ declare namespace naver {
     }
   }
 }
+/* eslint-enable @typescript-eslint/no-namespace */
 
 export function NaverMap({
   center = { lat: 37.5665, lng: 126.978 },

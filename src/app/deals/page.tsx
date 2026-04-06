@@ -1,16 +1,15 @@
-export const revalidate = 60 // Revalidate every 60 seconds
-
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import Link from "next/link"
 import { MapPin, Sparkles, ChevronLeft, ChevronRight } from "lucide-react"
 import { getDeals, type DealFilters } from "@/lib/actions/deals"
-
-export const metadata: Metadata = { title: "딜 마켓플레이스" }
 import { DealCard } from "@/components/deals/deal-card"
 import { DealFilters as DealFiltersComponent } from "@/components/deals/deal-filters"
 import { Button } from "@/components/ui/button"
 import { StaggerStyles } from "@/components/effects/stagger-styles"
+
+export const revalidate = 60 // Revalidate every 60 seconds
+export const metadata: Metadata = { title: "딜 마켓플레이스" }
 
 interface DealsPageProps {
   searchParams: Promise<{

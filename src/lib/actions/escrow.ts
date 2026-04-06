@@ -26,7 +26,7 @@ export async function createEscrow(
 
   if (error) {
     console.error("Error creating escrow:", error)
-    throw new Error("에스크로 계좌 생성에 실패했습니다.")
+    throw new Error("에스크로 파트너 연결 등록에 실패했습니다.")
   }
 
   return data

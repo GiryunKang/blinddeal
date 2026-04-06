@@ -9,16 +9,7 @@ import {
   ArrowRight,
   Building2,
   Briefcase,
-  Shield,
-  Users,
-  TrendingUp,
-  MessageSquare,
   Plus,
-  FileCheck,
-  Scale,
-  MessageSquareHeart,
-  Calculator,
-  FileSearch,
   Mouse,
 } from "lucide-react";
 import { formatKRW } from "@/lib/utils";

@@ -76,7 +76,7 @@ const levels: Level[] = [
     title: "검증",
     subtitle: "자산 증빙 + 신용등급 자료 제출",
     description: "자산 증빙 서류와 신용등급 자료를 제출하여 거래 능력을 검증합니다.",
-    benefits: "프리미엄 딜 접근, 에스크로 이용",
+    benefits: "프리미엄 딜 접근, 에스크로 파트너 연결",
     icon: FileCheck,
     uploadType: "financial",
     uploadLabel: "자산 증빙 / 신용등급 자료",

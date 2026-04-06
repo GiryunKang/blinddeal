@@ -7,7 +7,6 @@ import { ArrowLeft, Eye, Heart, Clock, Tag } from "lucide-react"
 
 import { getArticleBySlug } from "@/lib/actions/articles"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
   Avatar,

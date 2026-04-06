@@ -6,7 +6,6 @@ import { Lock, ArrowRight, Building2, Briefcase, Eye, EyeOff } from "lucide-reac
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatKRW } from "@/lib/utils"
-import { ClassifiedStamp } from "@/components/effects/classified-stamp"
 import { TiltCard } from "@/components/effects/tilt-card"
 
 /* ─── Animation Variants ─── */

@@ -1,14 +1,13 @@
-export const revalidate = 60 // Revalidate every 60 seconds
-
 import type { Metadata } from "next"
 import Link from "next/link"
-
-export const metadata: Metadata = { title: "커뮤니티" }
 import { Plus, MessageCircle } from "lucide-react"
 import { getPosts } from "@/lib/actions/community"
 import { getUser } from "@/lib/supabase/auth"
 import { PostCard } from "@/components/community/post-card"
 import { Button } from "@/components/ui/button"
+
+export const revalidate = 60 // Revalidate every 60 seconds
+export const metadata: Metadata = { title: "커뮤니티" }
 
 const boards = [
   { value: "all", label: "전체" },

@@ -30,7 +30,6 @@ interface NotificationItem {
 
 interface NotificationListProps {
   notifications: NotificationItem[]
-  totalCount: number
 }
 
 const typeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -51,7 +50,6 @@ const typeColors: Record<string, string> = {
 
 export function NotificationList({
   notifications,
-  totalCount,
 }: NotificationListProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()

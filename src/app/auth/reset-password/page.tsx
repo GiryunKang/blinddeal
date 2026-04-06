@@ -99,7 +99,7 @@ export default function ResetPasswordPage() {
               이루어집니다
             </h1>
             <p className="max-w-sm text-sm leading-relaxed text-white/50">
-              부동산과 M&A 거래를 위한 프리미엄 비공개 플랫폼
+              부동산과 M&A 딜 정보를 연결하는 프리미엄 비공개 플랫폼
             </p>
           </div>
 

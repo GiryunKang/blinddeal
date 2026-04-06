@@ -1,4 +1,4 @@
-import { getPendingDeals, approveDeal, rejectDeal } from "@/lib/actions/admin"
+import { getPendingDeals } from "@/lib/actions/admin"
 import { Badge } from "@/components/ui/badge"
 import { formatKRW, formatDate } from "@/lib/utils"
 import {

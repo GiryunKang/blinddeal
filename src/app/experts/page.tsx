@@ -1,13 +1,12 @@
-export const revalidate = 300 // Revalidate every 5 minutes
-
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import { getExperts, type ExpertFilters, type ExpertType } from "@/lib/actions/experts"
-
-export const metadata: Metadata = { title: "전문가 네트워크" }
 import { ExpertCard } from "@/components/experts/expert-card"
 import { Users, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
+
+export const revalidate = 300 // Revalidate every 5 minutes
+export const metadata: Metadata = { title: "전문가 네트워크" }
 
 const EXPERT_TYPES: { value: ExpertType | "all"; label: string }[] = [
   { value: "all", label: "전체" },

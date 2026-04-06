@@ -1,9 +1,6 @@
 import type { Metadata } from "next"
-import { MainLayout } from "@/components/layout/main-layout";
-
-export const metadata: Metadata = { title: "안전 거래 안내 — 에스크로 파트너 연결" }
+import { MainLayout } from "@/components/layout/main-layout"
 import {
-  Shield,
   FileCheck,
   Wallet,
   CheckCircle2,
@@ -14,7 +11,9 @@ import {
   Building2,
   Scale,
   Landmark,
-} from "lucide-react";
+} from "lucide-react"
+
+export const metadata: Metadata = { title: "안전 거래 안내 — 에스크로 파트너 연결" }
 
 const steps = [
   {
@@ -52,7 +51,7 @@ const partners = [
     icon: Landmark,
     title: "은행 에스크로",
     description:
-      "시중은행의 에스크로 계좌를 통한 대금 예치. 금융감독원의 감독 하에 운영되어 안전성이 보장됩니다.",
+      "시중은행 에스크로 파트너의 신탁 계좌를 통한 대금 예치. 금융감독원의 감독 하에 파트너가 직접 운영합니다.",
     suitable: "모든 규모의 부동산 거래",
   },
   {

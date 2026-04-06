@@ -1,13 +1,11 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import {
-  User,
   Mail,
   Phone,
   Building,
   Shield,
   Calendar,
-  Settings,
   Bell,
   Target,
   Pencil,
@@ -15,7 +13,7 @@ import {
   CheckCircle,
 } from "lucide-react"
 import { getProfile, requireAuth } from "@/lib/supabase/auth"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"

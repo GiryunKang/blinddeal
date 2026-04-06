@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Eye, Heart, Clock } from "lucide-react"
+import { ArrowLeft, Eye, Clock } from "lucide-react"
 import { getPost } from "@/lib/actions/community"
 import { getUser } from "@/lib/supabase/auth"
 import { Badge } from "@/components/ui/badge"

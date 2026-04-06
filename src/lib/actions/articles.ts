@@ -107,7 +107,6 @@ export async function createArticle(formData: FormData) {
   const content = formData.get("content") as string
   const summary = formData.get("summary") as string
   const category = formData.get("category") as string
-  const coverImageUrl = formData.get("cover_image_url") as string
   const tagsStr = formData.get("tags") as string
 
   const tags = tagsStr

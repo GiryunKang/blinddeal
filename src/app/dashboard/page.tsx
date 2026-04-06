@@ -12,7 +12,7 @@ import {
   ArrowRight,
   Plus,
 } from "lucide-react"
-import { getMyDeals, getMyInterests, getMyRooms, getMyDealStats } from "@/lib/actions/my-deals"
+import { getMyDeals, getMyInterests, getMyRooms } from "@/lib/actions/my-deals"
 import { formatKRW } from "@/lib/utils"
 import { AnimatedStatsGrid } from "@/components/dashboard/animated-stats"
 import {
@@ -21,7 +21,6 @@ import {
   MotionSection,
   MotionPipelineColumn,
   MotionKanbanCard,
-  MotionActivityItem,
 } from "@/components/dashboard/dashboard-motion"
 
 export const metadata: Metadata = { title: "대시보드" }
@@ -38,11 +37,10 @@ const PIPELINE_STAGES = [
 ] as const
 
 export default async function DashboardPage() {
-  const [myDeals, myInterests, myRooms, stats] = await Promise.all([
+  const [myDeals, myInterests, myRooms] = await Promise.all([
     getMyDeals(),
     getMyInterests(),
     getMyRooms(),
-    getMyDealStats(),
   ])
 
   const activeNegotiations = myDeals.filter(

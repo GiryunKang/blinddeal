@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
-import { MainLayout } from "@/components/layout/main-layout";
+import { MainLayout } from "@/components/layout/main-layout"
+import { Shield, Lightbulb, Award, Mail, MapPin, Phone } from "lucide-react"
 
 export const metadata: Metadata = { title: "회사 소개" }
-import { Shield, Lightbulb, Award, Mail, MapPin, Phone } from "lucide-react";
 
 const values = [
   {

@@ -50,7 +50,7 @@ export function DealForm() {
 
   const DRAFT_KEY = "blinddeal_deal_draft"
 
-  function saveDraft() {
+  const saveDraft = useCallback(() => {
     const form = document.querySelector<HTMLFormElement>("form")
     if (!form) return
     const data: Record<string, string> = {}
@@ -62,7 +62,7 @@ export function DealForm() {
     localStorage.setItem(DRAFT_KEY, JSON.stringify(data))
     setDraftSaved(true)
     setTimeout(() => setDraftSaved(false), 2000)
-  }
+  }, [category])
 
   function loadDraft() {
     try {
@@ -123,7 +123,7 @@ export function DealForm() {
 
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
     saveTimerRef.current = setTimeout(saveDraft, 5000)
-  }, [category])
+  }, [saveDraft])
 
   function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])

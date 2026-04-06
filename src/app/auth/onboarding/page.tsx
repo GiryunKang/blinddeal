@@ -69,7 +69,7 @@ const verificationLevels = [
   {
     level: 3,
     title: "검증완료",
-    description: "프리미엄 딜 접근, 에스크로 이용",
+    description: "프리미엄 딜 접근, 에스크로 파트너 연결",
     icon: Award,
     color: "text-purple-400",
   },

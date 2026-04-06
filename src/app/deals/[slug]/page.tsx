@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import {
@@ -264,12 +265,12 @@ export default async function DealDetailPage({
               >
                 인증 등급 올리기
               </a>
-              <a
+              <Link
                 href="/deals"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 다른 딜 둘러보기
-              </a>
+              </Link>
             </div>
           </div>
         </div>

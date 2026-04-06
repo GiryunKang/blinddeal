@@ -32,7 +32,7 @@ export default async function NotificationsPage({
         프로필
       </Link>
 
-      <NotificationList notifications={notifications} totalCount={count} />
+      <NotificationList notifications={notifications} />
 
       {/* Pagination */}
       {totalPages > 1 && (

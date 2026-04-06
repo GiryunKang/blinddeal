@@ -1,11 +1,11 @@
-export const revalidate = 60 // Revalidate every 60 seconds
-
 import Link from "next/link"
 import { Plus, ArrowLeft } from "lucide-react"
 import { getPosts } from "@/lib/actions/community"
 import { getUser } from "@/lib/supabase/auth"
 import { PostCard } from "@/components/community/post-card"
 import { Button } from "@/components/ui/button"
+
+export const revalidate = 60 // Revalidate every 60 seconds
 
 const boardLabels: Record<string, string> = {
   general: "일반",
