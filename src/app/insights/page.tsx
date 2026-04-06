@@ -1,7 +1,8 @@
 export const revalidate = 300 // Revalidate every 5 minutes
 
 import type { Metadata } from "next"
-import { getArticles, type ArticleFilters } from "@/lib/actions/articles"
+import { getArticles } from "@/lib/actions/articles"
+import type { ArticleFilters } from "@/lib/articles-types"
 
 export const metadata: Metadata = { title: "인사이트" }
 import { ArticleCard } from "@/components/insights/article-card"

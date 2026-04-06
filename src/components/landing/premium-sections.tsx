@@ -208,7 +208,7 @@ export function PremiumHowItWorks() {
    ═══════════════════════════════════════════════════════════ */
 
 const trustItems = [
-  { icon: Shield, title: "에스크로 파트너 연결", description: "거래 규모에 맞는 신뢰할 수 있는 에스크로 파트너(은행, 법무법인)를 연결하여 안전한 자금 관리를 지원합니다.", color: "blue" as const },
+  { icon: Shield, title: "에스크로 파트너 연결", description: "거래 규모에 맞는 신뢰할 수 있는 에스크로 파트너(은행, 법무법인)를 연결합니다. 자금 관리는 파트너가 직접 수행합니다.", color: "blue" as const },
   { icon: FileCheck, title: "법적 구속력 있는 비밀유지계약(NDA)", description: "비공개 딜 열람 시 전자 서명하는 비밀유지계약(NDA)은 법적 구속력을 가집니다. IP 주소, 타임스탬프가 자동 기록됩니다.", color: "indigo" as const },
   { icon: Scale, title: "분쟁 해결 지원", description: "거래 과정에서 분쟁 발생 시 전문가(변호사, 중재인) 연결과 거래 이력 제공을 통해 해결을 지원합니다.", color: "purple" as const },
 ];

@@ -54,7 +54,7 @@ const painPoints = [
     title: "파편화된 프로세스",
     accent: "purple",
     description:
-      "매칭, 협상, 실사, 계약, 결제가 모두 다른 채널에서 이루어집니다. BlindDeal은 하나의 플랫폼에서 전체 거래 프로세스를 완결합니다.",
+      "매칭, 협상, 실사, 계약이 모두 다른 채널에서 이루어집니다. BlindDeal은 하나의 플랫폼에서 에스크로 파트너 연결까지 딜 프로세스 전체를 지원합니다.",
   },
 ];
 
@@ -98,7 +98,7 @@ const features = [
     icon: Wallet,
     title: "안전 거래 파트너 연결",
     description:
-      "거래 규모에 맞는 에스크로 파트너(은행, 법무법인, 신탁회사)를 연결합니다. 전문 금융기관을 통한 안전한 자금 관리를 지원합니다.",
+      "거래 규모에 맞는 에스크로 파트너(은행, 법무법인, 신탁회사)를 연결합니다. 자금 관리는 파트너가 직접 수행합니다.",
     color: "indigo",
   },
   {
@@ -171,7 +171,7 @@ const processSteps = [
     number: 8,
     icon: CheckCircle2,
     title: "거래 완료",
-    description: "소유권 이전 후 대금이 전달되어 거래가 완결됩니다.",
+    description: "소유권 이전 후 에스크로 파트너를 통해 대금이 전달됩니다.",
   },
 ];
 
@@ -187,7 +187,7 @@ const commitments = [
   {
     icon: Shield,
     title: "안전한 정보 보호",
-    description: "NDA, 인증 체계, 에스크로로 정보와 자금을 보호합니다.",
+    description: "NDA, 인증 체계, 에스크로 파트너 연결로 정보와 자금 안전을 지원합니다.",
     gradient: "from-indigo-500/20 to-indigo-600/10",
     ring: "ring-indigo-500/20",
     text: "text-indigo-400",

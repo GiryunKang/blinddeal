@@ -150,7 +150,7 @@ export default function PrivacyPage() {
                   </tr>
                   <tr>
                     <td className="px-4 py-3">
-                      대금결제 및 재화 공급 기록
+                      이용 요금 결제 및 서비스 이용 기록
                     </td>
                     <td className="px-4 py-3">5년</td>
                     <td className="px-4 py-3">전자상거래법</td>

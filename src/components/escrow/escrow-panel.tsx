@@ -60,18 +60,18 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
 
   const confirmMessages: Record<string, { title: string; desc: string; danger: boolean }> = {
     released: {
-      title: `${formatKRW(escrow.amount)}을 매도자에게 출금합니다`,
-      desc: "출금 후에는 취소할 수 없습니다. 거래 조건을 최종 확인했는지 다시 한번 점검해주세요.",
+      title: "에스크로 파트너의 정산 완료를 확인합니다",
+      desc: "에스크로 파트너가 매도자에게 대금을 정산한 것을 확인합니다. 확인 후에는 취소할 수 없습니다.",
       danger: false,
     },
     disputed: {
-      title: "분쟁을 접수합니다",
-      desc: "분쟁 접수 시 에스크로 자금이 동결되며, 양측 합의 또는 중재 절차가 진행됩니다.",
+      title: "에스크로 파트너에 분쟁을 접수합니다",
+      desc: "분쟁 접수 시 에스크로 파트너가 자금 동결 절차를 진행하며, 양측 합의 또는 중재 절차가 시작됩니다.",
       danger: true,
     },
     refunded: {
-      title: `${formatKRW(escrow.amount)}을 매수자에게 환불합니다`,
-      desc: "환불 후에는 취소할 수 없습니다.",
+      title: "에스크로 파트너의 환불 완료를 확인합니다",
+      desc: "에스크로 파트너가 매수자에게 환불한 것을 확인합니다. 확인 후에는 취소할 수 없습니다.",
       danger: true,
     },
   }
@@ -81,7 +81,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ShieldCheck className="size-5 text-blue-400" />
-          <h3 className="text-lg font-semibold text-foreground">안전 거래 현황</h3>
+          <h3 className="text-lg font-semibold text-foreground">에스크로 파트너 진행 현황</h3>
         </div>
         <Badge className={config.color}>{config.label}</Badge>
       </div>
@@ -152,7 +152,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
               disabled={isPending}
             >
               <Banknote className="mr-1.5 size-4" />
-              입금 확인됨
+              파트너 입금 확인
             </Button>
           )}
           {escrow.status === "funded" && (
@@ -163,7 +163,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
                 disabled={isPending}
               >
                 <ShieldCheck className="mr-1.5 size-4" />
-                정산 확인
+                파트너 정산 확인
               </Button>
               <Button
                 variant="destructive"
@@ -182,7 +182,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
               onClick={() => setConfirmAction("refunded")}
               disabled={isPending}
             >
-              환불 확인
+              파트너 환불 확인
             </Button>
           )}
         </div>

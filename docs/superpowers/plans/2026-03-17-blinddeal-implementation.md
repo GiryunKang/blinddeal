@@ -231,8 +231,8 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "BlindDeal — 부동산 · M&A 전문 거래 플랫폼",
-  description: "검증된 부동산 및 M&A 딜을 공개/비공개로 거래하는 전문 플랫폼",
+  title: "BlindDeal — 부동산 · M&A 딜 정보 플랫폼",
+  description: "검증된 부동산 및 M&A 딜 정보를 공개/비공개로 연결하는 전문 플랫폼",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -1103,7 +1103,7 @@ export default function LoginPage() {
         <div className="text-center">
           <div className="mx-auto mb-4 h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500" />
           <h1 className="text-2xl font-bold">BlindDeal</h1>
-          <p className="mt-1 text-sm text-muted-foreground">부동산 · M&A 전문 거래 플랫폼</p>
+          <p className="mt-1 text-sm text-muted-foreground">부동산 · M&A 딜 정보 플랫폼</p>
         </div>
         <LoginForm />
       </div>
