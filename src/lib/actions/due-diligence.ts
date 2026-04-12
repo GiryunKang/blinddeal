@@ -25,8 +25,18 @@ const DEFAULT_CHECKLIST = [
 ]
 
 export async function createDD(roomId: string, dealId: string) {
-  await requireAuth()
+  const user = await requireAuth()
   const supabase = await createClient()
+
+  const { data: room } = await supabase
+    .from("deal_rooms")
+    .select("buyer_id, seller_id")
+    .eq("id", roomId)
+    .single()
+
+  if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
+    throw new Error("권한이 없습니다.")
+  }
 
   // Create DD process
   const { data: dd, error: ddError } = await supabase
@@ -110,8 +120,39 @@ export async function updateChecklistItem(
   status: "pending" | "in_progress" | "completed" | "issue_found",
   notes?: string
 ) {
-  await requireAuth()
+  const user = await requireAuth()
   const supabase = await createClient()
+
+  // Verify participant: checklist item → DD → room
+  const { data: item } = await supabase
+    .from("dd_checklist_items")
+    .select("dd_id")
+    .eq("id", itemId)
+    .single()
+
+  if (!item) {
+    throw new Error("권한이 없습니다.")
+  }
+
+  const { data: dd } = await supabase
+    .from("due_diligence")
+    .select("room_id")
+    .eq("id", item.dd_id)
+    .single()
+
+  if (!dd) {
+    throw new Error("권한이 없습니다.")
+  }
+
+  const { data: room } = await supabase
+    .from("deal_rooms")
+    .select("buyer_id, seller_id")
+    .eq("id", dd.room_id)
+    .single()
+
+  if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
+    throw new Error("권한이 없습니다.")
+  }
 
   const updateData: Record<string, unknown> = { status }
 
@@ -143,8 +184,28 @@ export async function completeDDReview(
   result: "pass" | "fail" | "conditional_pass",
   summary: string
 ) {
-  await requireAuth()
+  const user = await requireAuth()
   const supabase = await createClient()
+
+  const { data: dd } = await supabase
+    .from("due_diligence")
+    .select("room_id")
+    .eq("id", ddId)
+    .single()
+
+  if (!dd) {
+    throw new Error("권한이 없습니다.")
+  }
+
+  const { data: room } = await supabase
+    .from("deal_rooms")
+    .select("buyer_id, seller_id")
+    .eq("id", dd.room_id)
+    .single()
+
+  if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
+    throw new Error("권한이 없습니다.")
+  }
 
   const { data, error } = await supabase
     .from("due_diligence")

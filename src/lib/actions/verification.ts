@@ -33,6 +33,19 @@ export async function getVerificationStatus() {
 
 export async function submitVerification(type: string, formData: FormData) {
   try {
+    const VALID_TYPES = [
+      "phone",
+      "business_registration",
+      "corporate_registration",
+      "asset_proof",
+      "credit_rating",
+      "expert_letter",
+      "identity_pass",
+    ] as const
+    if (!VALID_TYPES.includes(type as (typeof VALID_TYPES)[number])) {
+      return { success: false, error: "잘못된 인증 유형입니다." }
+    }
+
     const user = await requireAuth()
     const supabase = await createClient()
 
@@ -40,12 +53,27 @@ export async function submitVerification(type: string, formData: FormData) {
     let documentUrl: string | null = null
 
     if (file && file.size > 0) {
-      const fileExt = file.name.split(".").pop()
-      const fileName = `${user.id}/${type}/${Date.now()}.${fileExt}`
+      const ALLOWED_TYPES = ["image/jpeg", "image/png", "application/pdf"]
+      const MAX_SIZE = 10 * 1024 * 1024 // 10MB
+
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        return { success: false, error: "허용되지 않는 파일 형식입니다. (JPG, PNG, PDF만 가능)" }
+      }
+      if (file.size > MAX_SIZE) {
+        return { success: false, error: "파일 크기는 10MB 이하여야 합니다." }
+      }
+
+      const fileExt = file.name.split(".").pop()?.toLowerCase()
+      const ALLOWED_EXTS = ["jpg", "jpeg", "png", "pdf"]
+      if (!fileExt || !ALLOWED_EXTS.includes(fileExt)) {
+        return { success: false, error: "허용되지 않는 파일 확장자입니다." }
+      }
+
+      const safeFileName = `${user.id}/${type}/${Date.now()}.${fileExt}`
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("verifications")
-        .upload(fileName, file)
+        .upload(safeFileName, file)
 
       if (uploadError) {
         console.error("Verification file upload error:", uploadError)

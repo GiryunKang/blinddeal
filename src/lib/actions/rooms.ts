@@ -230,14 +230,15 @@ export async function getMessages(roomId: string) {
       `
       )
       .eq("room_id", roomId)
-      .order("created_at", { ascending: true })
+      .order("created_at", { ascending: false })
+      .limit(100)
 
     if (error) {
       console.error("Error fetching messages:", error)
       return []
     }
 
-    return data ?? []
+    return (data ?? []).reverse()
   } catch (err) {
     console.error("Unexpected error fetching messages:", err)
     return []
@@ -320,6 +321,17 @@ export async function sendMessage(
   }
 }
 
+const ROOM_VALID_TRANSITIONS: Record<string, string[]> = {
+  inquiry: ["negotiating", "cancelled"],
+  negotiating: ["loi_exchanged", "cancelled"],
+  loi_exchanged: ["due_diligence", "cancelled"],
+  due_diligence: ["contract_review", "cancelled"],
+  contract_review: ["partner_escrow", "cancelled"],
+  partner_escrow: ["completed", "cancelled"],
+  completed: [],
+  cancelled: [],
+}
+
 /**
  * Update room status.
  */
@@ -331,15 +343,21 @@ export async function updateRoomStatus(
     const user = await requireAuth()
     const supabase = await createClient()
 
-    // Verify user is a participant
+    // Verify user is a participant and fetch current status
     const { data: room } = await supabase
       .from("deal_rooms")
-      .select("buyer_id, seller_id")
+      .select("buyer_id, seller_id, status")
       .eq("id", roomId)
       .single()
 
     if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
       return { success: false, error: "이 대화방에 접근할 수 없습니다." }
+    }
+
+    // Validate state transition
+    const allowedNext = ROOM_VALID_TRANSITIONS[room.status] ?? []
+    if (!allowedNext.includes(status)) {
+      return { success: false, error: "현재 상태에서 해당 단계로 변경할 수 없습니다." }
     }
 
     const { error } = await supabase

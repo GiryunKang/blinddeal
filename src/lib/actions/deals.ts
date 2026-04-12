@@ -91,8 +91,9 @@ export async function getDeals(filters: DealFilters = {}) {
     }
 
     if (search) {
+      const safeSearch = search.replace(/[%_\\]/g, "\\$&").slice(0, 100)
       query = query.or(
-        `title.ilike.%${search}%,description.ilike.%${search}%,city.ilike.%${search}%,industry.ilike.%${search}%`
+        `title.ilike.%${safeSearch}%,description.ilike.%${safeSearch}%,city.ilike.%${safeSearch}%,industry.ilike.%${safeSearch}%`
       )
     }
 
@@ -152,6 +153,7 @@ export async function getDealBySlug(slug: string) {
       `
       )
       .eq("slug", slug)
+      .in("status", ["active", "under_negotiation", "due_diligence", "contract", "partner_escrow", "closed"])
       .single()
 
     if (error || !deal) {

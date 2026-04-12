@@ -40,12 +40,21 @@ export async function createDeal(formData: FormData) {
       10
     )
 
+    const VALID_VISIBILITY = ["public", "private"] as const
+    const VALID_CATEGORY = ["real_estate", "ma"] as const
+
     // Server-side validation
     if (!title) {
       return { success: false, error: "딜 제목을 입력해주세요." }
     }
     if (!description) {
       return { success: false, error: "상세 설명을 입력해주세요." }
+    }
+    if (!VALID_VISIBILITY.includes(visibility as typeof VALID_VISIBILITY[number])) {
+      return { success: false, error: "잘못된 공개 설정입니다." }
+    }
+    if (!VALID_CATEGORY.includes(dealCategory as typeof VALID_CATEGORY[number])) {
+      return { success: false, error: "딜 카테고리를 선택해주세요." }
     }
     if (!dealType) {
       return { success: false, error: "딜 유형을 선택해주세요." }

@@ -8,7 +8,12 @@ export async function createEscrow(
   dealId: string,
   amount: number
 ) {
-  await requireAuth()
+  const user = await requireAuth()
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    throw new Error("금액은 0보다 큰 유효한 숫자여야 합니다.")
+  }
+
   const supabase = await createClient()
 
   const { data: room } = await supabase
@@ -17,8 +22,8 @@ export async function createEscrow(
     .eq("id", roomId)
     .single()
 
-  if (!room) {
-    throw new Error("에스크로 파트너 연결 등록에 실패했습니다.")
+  if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
+    throw new Error("권한이 없습니다.")
   }
 
   const { data: existing } = await supabase

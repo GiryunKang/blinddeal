@@ -14,6 +14,21 @@ export interface LOIData {
  * Create a Letter of Intent for a room.
  */
 export async function createLOI(roomId: string, data: LOIData) {
+  // Fix 1: Validate proposed_price
+  if (!Number.isFinite(data.proposed_price) || data.proposed_price <= 0) {
+    throw new Error("제안 금액은 0보다 큰 유효한 숫자여야 합니다.")
+  }
+
+  // Fix 2: Validate valid_until is future date
+  const validUntilDate = new Date(data.valid_until)
+  if (isNaN(validUntilDate.getTime()) || validUntilDate <= new Date()) {
+    throw new Error("유효 기간은 미래 날짜여야 합니다.")
+  }
+
+  // Fix 5: Sanitize text inputs
+  const sanitizedTerms = data.proposed_terms.slice(0, 5000)
+  const sanitizedConditions = (data.conditions || []).map(c => c.slice(0, 500)).slice(0, 20)
+
   const user = await requireAuth()
   const supabase = await createClient()
 
@@ -28,14 +43,26 @@ export async function createLOI(roomId: string, data: LOIData) {
     throw new Error("이 대화방에 접근할 수 없습니다.")
   }
 
+  // Fix 3: Prevent duplicate active LOI
+  const { data: existingLOI } = await supabase
+    .from("loi_documents")
+    .select("id")
+    .eq("room_id", roomId)
+    .eq("status", "sent")
+    .maybeSingle()
+
+  if (existingLOI) {
+    throw new Error("이미 대기 중인 의향서가 있습니다. 기존 의향서가 처리된 후 다시 제출해주세요.")
+  }
+
   const { data: loi, error } = await supabase
     .from("loi_documents")
     .insert({
       room_id: roomId,
       sender_id: user.id,
       proposed_price: data.proposed_price,
-      proposed_terms: data.proposed_terms,
-      conditions: Array.isArray(data.conditions) ? data.conditions : [data.conditions],
+      proposed_terms: sanitizedTerms,
+      conditions: Array.isArray(sanitizedConditions) ? sanitizedConditions : [sanitizedConditions],
       valid_until: data.valid_until,
       status: "sent",
     })
@@ -72,7 +99,7 @@ export async function respondToLOI(
   // Get the LOI
   const { data: loi } = await supabase
     .from("loi_documents")
-    .select("*, room:deal_rooms!room_id(buyer_id, seller_id)")
+    .select("*, room:deal_rooms!room_id(buyer_id, seller_id, deal_id)")
     .eq("id", loiId)
     .single()
 
@@ -80,7 +107,7 @@ export async function respondToLOI(
     throw new Error("LOI를 찾을 수 없습니다.")
   }
 
-  const room = loi.room as { buyer_id: string; seller_id: string } | null
+  const room = loi.room as { buyer_id: string; seller_id: string; deal_id: string } | null
   if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
     throw new Error("이 LOI에 접근할 수 없습니다.")
   }
@@ -122,12 +149,19 @@ export async function respondToLOI(
     message_type: "system",
   })
 
-  // If accepted, update room status to loi_exchanged
+  // Fix 4: If accepted, update room status and sync deal status
   if (status === "accepted") {
     await supabase
       .from("deal_rooms")
       .update({ status: "loi_exchanged", updated_at: new Date().toISOString() })
       .eq("id", loi.room_id)
+
+    if (room?.deal_id) {
+      await supabase
+        .from("deals")
+        .update({ status: "under_negotiation" })
+        .eq("id", room.deal_id)
+    }
   }
 }
 
