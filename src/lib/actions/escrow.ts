@@ -8,7 +8,7 @@ export async function createEscrow(
   dealId: string,
   amount: number
 ) {
-  const user = await requireAuth()
+  await requireAuth()
   const supabase = await createClient()
 
   const { data: room } = await supabase
