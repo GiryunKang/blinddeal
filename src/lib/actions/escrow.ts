@@ -7,11 +7,11 @@ export async function createEscrow(
   roomId: string,
   dealId: string,
   amount: number
-) {
+): Promise<{ success: true; data: NonNullable<unknown> } | { success: false; error: string }> {
   const user = await requireAuth()
 
   if (!Number.isFinite(amount) || amount <= 0) {
-    throw new Error("금액은 0보다 큰 유효한 숫자여야 합니다.")
+    return { success: false, error: "금액은 0보다 큰 유효한 숫자여야 합니다." }
   }
 
   const supabase = await createClient()
@@ -23,7 +23,7 @@ export async function createEscrow(
     .single()
 
   if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   const { data: existing } = await supabase
@@ -33,7 +33,7 @@ export async function createEscrow(
     .maybeSingle()
 
   if (existing) {
-    throw new Error("이미 에스크로 파트너 연결이 존재합니다.")
+    return { success: false, error: "이미 에스크로 파트너 연결이 존재합니다." }
   }
 
   const { data, error } = await supabase
@@ -52,10 +52,10 @@ export async function createEscrow(
 
   if (error) {
     console.error("Error creating escrow:", error)
-    throw new Error("에스크로 파트너 연결 등록에 실패했습니다.")
+    return { success: false, error: "에스크로 파트너 연결 등록에 실패했습니다." }
   }
 
-  return data
+  return { success: true, data }
 }
 
 export async function getEscrow(roomId: string) {
@@ -100,7 +100,7 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
 export async function updateEscrowStatus(
   escrowId: string,
   status: "created" | "funded" | "in_review" | "releasing" | "released" | "refunded" | "disputed"
-) {
+): Promise<{ success: true; data: NonNullable<unknown> } | { success: false; error: string }> {
   const user = await requireAuth()
   const supabase = await createClient()
 
@@ -112,14 +112,14 @@ export async function updateEscrowStatus(
     .single()
 
   if (!escrowRecord || (escrowRecord.buyer_id !== user.id && escrowRecord.seller_id !== user.id)) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   // Validate state transition
   const currentStatus = escrowRecord.status
   const allowed = VALID_TRANSITIONS[currentStatus] ?? []
   if (!allowed.includes(status)) {
-    throw new Error(`현재 상태(${currentStatus})에서 ${status}로 변경할 수 없습니다.`)
+    return { success: false, error: `현재 상태(${currentStatus})에서 ${status}로 변경할 수 없습니다.` }
   }
 
   const updateData: Record<string, unknown> = {
@@ -141,8 +141,8 @@ export async function updateEscrowStatus(
 
   if (error) {
     console.error("Error updating escrow status:", error)
-    throw new Error("에스크로 상태 업데이트에 실패했습니다.")
+    return { success: false, error: "에스크로 상태 업데이트에 실패했습니다." }
   }
 
-  return data
+  return { success: true, data }
 }

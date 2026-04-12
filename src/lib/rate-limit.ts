@@ -1,3 +1,9 @@
+// NOTE: In-memory rate limiting is per-instance on serverless. Each cold start
+// resets this Map, so limits only catch rapid-fire abuse within a single instance
+// lifetime. For production-grade rate limiting, migrate to Upstash Redis
+// (@upstash/ratelimit + @upstash/redis). This implementation still catches
+// burst abuse within the same warm instance.
+
 interface RateLimitEntry {
   count: number
   resetAt: number
@@ -6,7 +12,7 @@ interface RateLimitEntry {
 const store = new Map<string, RateLimitEntry>()
 const MAX_STORE_SIZE = 10_000
 
-const CLEANUP_INTERVAL = 60_000
+const CLEANUP_INTERVAL = 30_000
 let lastCleanup = Date.now()
 
 function cleanup() {
@@ -58,10 +64,10 @@ export function rateLimit(
 }
 
 export const LIMITS = {
-  login: { maxRequests: 5, windowMs: 15 * 60 * 1000 },
-  inquiry: { maxRequests: 3, windowMs: 10 * 60 * 1000 },
-  createDeal: { maxRequests: 5, windowMs: 60 * 60 * 1000 },
-  createPost: { maxRequests: 10, windowMs: 60 * 60 * 1000 },
-  createComment: { maxRequests: 30, windowMs: 60 * 60 * 1000 },
-  sendMessage: { maxRequests: 60, windowMs: 60 * 1000 },
+  login: { maxRequests: 5, windowMs: 10 * 60 * 1000 },
+  inquiry: { maxRequests: 3, windowMs: 5 * 60 * 1000 },
+  createDeal: { maxRequests: 5, windowMs: 30 * 60 * 1000 },
+  createPost: { maxRequests: 10, windowMs: 30 * 60 * 1000 },
+  createComment: { maxRequests: 10, windowMs: 30 * 1000 },
+  sendMessage: { maxRequests: 20, windowMs: 30 * 1000 },
 } as const

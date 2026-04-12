@@ -24,7 +24,7 @@ const DEFAULT_CHECKLIST = [
   { category: "시장", item_name: "규제 환경 검토" },
 ]
 
-export async function createDD(roomId: string, dealId: string) {
+export async function createDD(roomId: string, dealId: string): Promise<{ success: true; data: NonNullable<unknown> } | { success: false; error: string }> {
   const user = await requireAuth()
   const supabase = await createClient()
 
@@ -35,7 +35,7 @@ export async function createDD(roomId: string, dealId: string) {
     .single()
 
   if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   // Create DD process
@@ -51,7 +51,7 @@ export async function createDD(roomId: string, dealId: string) {
 
   if (ddError) {
     console.error("Error creating DD:", ddError)
-    throw new Error("실사 프로세스 생성에 실패했습니다.")
+    return { success: false, error: "실사 프로세스 생성에 실패했습니다." }
   }
 
   // Create checklist items
@@ -70,7 +70,7 @@ export async function createDD(roomId: string, dealId: string) {
     console.error("Error creating checklist:", checklistError)
   }
 
-  return dd
+  return { success: true, data: dd }
 }
 
 export async function getDDByRoom(roomId: string) {
@@ -119,7 +119,7 @@ export async function updateChecklistItem(
   itemId: string,
   status: "pending" | "in_progress" | "completed" | "issue_found",
   notes?: string
-) {
+): Promise<{ success: true; data: NonNullable<unknown> } | { success: false; error: string }> {
   const user = await requireAuth()
   const supabase = await createClient()
 
@@ -131,7 +131,7 @@ export async function updateChecklistItem(
     .single()
 
   if (!item) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   const { data: dd } = await supabase
@@ -141,7 +141,7 @@ export async function updateChecklistItem(
     .single()
 
   if (!dd) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   const { data: room } = await supabase
@@ -151,7 +151,7 @@ export async function updateChecklistItem(
     .single()
 
   if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   const updateData: Record<string, unknown> = { status }
@@ -173,17 +173,17 @@ export async function updateChecklistItem(
 
   if (error) {
     console.error("Error updating checklist item:", error)
-    throw new Error("체크리스트 항목 업데이트에 실패했습니다.")
+    return { success: false, error: "체크리스트 항목 업데이트에 실패했습니다." }
   }
 
-  return data
+  return { success: true, data }
 }
 
 export async function completeDDReview(
   ddId: string,
   result: "pass" | "fail" | "conditional_pass",
   summary: string
-) {
+): Promise<{ success: true; data: NonNullable<unknown> } | { success: false; error: string }> {
   const user = await requireAuth()
   const supabase = await createClient()
 
@@ -194,7 +194,7 @@ export async function completeDDReview(
     .single()
 
   if (!dd) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   const { data: room } = await supabase
@@ -204,7 +204,7 @@ export async function completeDDReview(
     .single()
 
   if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
-    throw new Error("권한이 없습니다.")
+    return { success: false, error: "권한이 없습니다." }
   }
 
   const { data, error } = await supabase
@@ -221,8 +221,8 @@ export async function completeDDReview(
 
   if (error) {
     console.error("Error completing DD review:", error)
-    throw new Error("실사 리뷰 완료 처리에 실패했습니다.")
+    return { success: false, error: "실사 리뷰 완료 처리에 실패했습니다." }
   }
 
-  return data
+  return { success: true, data }
 }

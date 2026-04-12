@@ -38,11 +38,16 @@ export async function updateProfile(formData: FormData) {
     const phone = formData.get("phone") as string | null
     const bio = formData.get("bio") as string | null
 
+    const safeName = displayName?.slice(0, 50) || ""
+    const safeBio = bio?.slice(0, 500) || ""
+    const safeCompany = companyName?.slice(0, 100) || ""
+    const safePhone = phone?.slice(0, 20) || ""
+
     const updates: Record<string, unknown> = {
-      display_name: displayName,
-      phone: phone || null,
-      bio: bio || null,
-      company_name: companyName || null,
+      display_name: safeName,
+      phone: safePhone || null,
+      bio: safeBio || null,
+      company_name: safeCompany || null,
       updated_at: new Date().toISOString(),
     }
 

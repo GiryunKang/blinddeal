@@ -25,8 +25,8 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError("비밀번호는 6자 이상이어야 합니다.");
+    if (password.length < 8) {
+      setError("비밀번호는 8자 이상이어야 합니다.");
       return;
     }
 
@@ -181,6 +181,7 @@ export default function ResetPasswordPage() {
                     className="rounded-xl border-white/[0.08] bg-white/[0.03] pl-10 transition-all duration-300 placeholder:text-muted-foreground/30 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
                   />
                 </div>
+                <p className="text-xs text-muted-foreground">8자 이상</p>
               </div>
 
               {/* Confirm password field */}

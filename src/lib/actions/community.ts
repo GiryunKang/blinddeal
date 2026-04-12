@@ -163,14 +163,14 @@ export async function createComment(
   const user = await requireAuth()
   const rl = rateLimit(`comment:${user.id}`, LIMITS.createComment)
   if (!rl.success) {
-    throw new Error("댓글 작성이 너무 빈번합니다. 잠시 후 다시 시도해주세요.")
+    return { success: false, error: "댓글 작성이 너무 빈번합니다. 잠시 후 다시 시도해주세요." }
   }
   const supabase = await createClient()
 
   const sanitizedContent = truncate(sanitizeText(content), 5000)
 
   if (!sanitizedContent) {
-    throw new Error("댓글 내용을 입력해주세요.")
+    return { success: false, error: "댓글 내용을 입력해주세요." }
   }
 
   const { error } = await supabase.from("comments").insert({
@@ -182,7 +182,7 @@ export async function createComment(
 
   if (error) {
     console.error("Error creating comment:", error)
-    throw new Error("댓글 작성에 실패했습니다.")
+    return { success: false, error: "댓글 작성에 실패했습니다." }
   }
 
   // Increment comment count on the post
@@ -246,7 +246,7 @@ export async function togglePostLike(postId: string) {
 
     if (error) {
       console.error("Error toggling like:", error)
-      throw new Error("좋아요 처리에 실패했습니다.")
+      return { liked: false, error: "좋아요 처리에 실패했습니다." }
     }
 
     // Increment like count

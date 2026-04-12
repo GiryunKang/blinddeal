@@ -38,33 +38,34 @@ export async function getRooms() {
           display_name,
           avatar_url,
           company_name
+        ),
+        messages (
+          content,
+          created_at,
+          sender_id,
+          read_at
         )
       `
       )
       .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
       .order("updated_at", { ascending: false })
+      .order("created_at", { referencedTable: "messages", ascending: false })
+      .limit(1, { referencedTable: "messages" })
 
     if (error) {
       console.error("Error fetching rooms:", error)
       return { success: false, error: "대화방 목록을 불러올 수 없습니다.", data: [] }
     }
 
-    // Fetch last message for each room
-    const roomsWithLastMessage = await Promise.all(
-      (data ?? []).map(async (room) => {
-        const { data: messages } = await supabase
-          .from("messages")
-          .select("content, created_at, sender_id, read_at")
-          .eq("room_id", room.id)
-          .order("created_at", { ascending: false })
-          .limit(1)
-
-        return {
-          ...room,
-          last_message: messages?.[0] ?? null,
-        }
-      })
-    )
+    // Flatten the nested messages array to a single last_message object
+    const roomsWithLastMessage = (data ?? []).map((room) => {
+      const msgs = (room as unknown as { messages?: Array<{ content: string; created_at: string; sender_id: string; read_at: string | null }> }).messages
+      return {
+        ...room,
+        messages: undefined,
+        last_message: msgs?.[0] ?? null,
+      }
+    })
 
     return { success: true, data: roomsWithLastMessage }
   } catch (err) {

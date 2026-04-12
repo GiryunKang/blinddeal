@@ -20,7 +20,7 @@ export async function updateDealVisibility(
     .single()
 
   if (!deal) {
-    throw new Error("딜을 찾을 수 없거나 권한이 없습니다.")
+    return { success: false, error: "딜을 찾을 수 없거나 권한이 없습니다." }
   }
 
   const updateData: Record<string, unknown> = {
@@ -41,7 +41,7 @@ export async function updateDealVisibility(
 
   if (error) {
     console.error("Error updating deal visibility:", error)
-    throw new Error("공개 범위 설정에 실패했습니다.")
+    return { success: false, error: "공개 범위 설정에 실패했습니다." }
   }
 
   return { success: true }
@@ -60,7 +60,7 @@ export async function getMatchedBuyersForDeal(dealId: string) {
     .single()
 
   if (!deal) {
-    throw new Error("딜을 찾을 수 없거나 권한이 없습니다.")
+    return { count: 0 }
   }
 
   // Count matched buyers (users with match preferences that align)

@@ -13,19 +13,19 @@ export interface LOIData {
 /**
  * Create a Letter of Intent for a room.
  */
-export async function createLOI(roomId: string, data: LOIData) {
-  // Fix 1: Validate proposed_price
+export async function createLOI(roomId: string, data: LOIData): Promise<{ success: true; data: NonNullable<unknown> } | { success: false; error: string }> {
+  // Validate proposed_price
   if (!Number.isFinite(data.proposed_price) || data.proposed_price <= 0) {
-    throw new Error("제안 금액은 0보다 큰 유효한 숫자여야 합니다.")
+    return { success: false, error: "제안 금액은 0보다 큰 유효한 숫자여야 합니다." }
   }
 
-  // Fix 2: Validate valid_until is future date
+  // Validate valid_until is future date
   const validUntilDate = new Date(data.valid_until)
   if (isNaN(validUntilDate.getTime()) || validUntilDate <= new Date()) {
-    throw new Error("유효 기간은 미래 날짜여야 합니다.")
+    return { success: false, error: "유효 기간은 미래 날짜여야 합니다." }
   }
 
-  // Fix 5: Sanitize text inputs
+  // Sanitize text inputs
   const sanitizedTerms = data.proposed_terms.slice(0, 5000)
   const sanitizedConditions = (data.conditions || []).map(c => c.slice(0, 500)).slice(0, 20)
 
@@ -40,10 +40,10 @@ export async function createLOI(roomId: string, data: LOIData) {
     .single()
 
   if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
-    throw new Error("이 대화방에 접근할 수 없습니다.")
+    return { success: false, error: "이 대화방에 접근할 수 없습니다." }
   }
 
-  // Fix 3: Prevent duplicate active LOI
+  // Prevent duplicate active LOI
   const { data: existingLOI } = await supabase
     .from("loi_documents")
     .select("id")
@@ -52,7 +52,7 @@ export async function createLOI(roomId: string, data: LOIData) {
     .maybeSingle()
 
   if (existingLOI) {
-    throw new Error("이미 대기 중인 의향서가 있습니다. 기존 의향서가 처리된 후 다시 제출해주세요.")
+    return { success: false, error: "이미 대기 중인 의향서가 있습니다. 기존 의향서가 처리된 후 다시 제출해주세요." }
   }
 
   const { data: loi, error } = await supabase
@@ -71,7 +71,7 @@ export async function createLOI(roomId: string, data: LOIData) {
 
   if (error) {
     console.error("Error creating LOI:", error)
-    throw new Error("LOI 제출에 실패했습니다.")
+    return { success: false, error: "LOI 제출에 실패했습니다." }
   }
 
   // Insert a system message
@@ -82,7 +82,7 @@ export async function createLOI(roomId: string, data: LOIData) {
     message_type: "system",
   })
 
-  return loi
+  return { success: true, data: loi }
 }
 
 /**
@@ -92,7 +92,7 @@ export async function respondToLOI(
   loiId: string,
   status: "accepted" | "rejected" | "countered",
   notes?: string
-) {
+): Promise<{ success: true } | { success: false; error: string }> {
   const user = await requireAuth()
   const supabase = await createClient()
 
@@ -104,17 +104,17 @@ export async function respondToLOI(
     .single()
 
   if (!loi) {
-    throw new Error("LOI를 찾을 수 없습니다.")
+    return { success: false, error: "LOI를 찾을 수 없습니다." }
   }
 
   const room = loi.room as { buyer_id: string; seller_id: string; deal_id: string } | null
   if (!room || (room.buyer_id !== user.id && room.seller_id !== user.id)) {
-    throw new Error("이 LOI에 접근할 수 없습니다.")
+    return { success: false, error: "이 LOI에 접근할 수 없습니다." }
   }
 
   // Cannot respond to own LOI
   if (loi.sender_id === user.id) {
-    throw new Error("본인의 LOI에는 응답할 수 없습니다.")
+    return { success: false, error: "본인의 LOI에는 응답할 수 없습니다." }
   }
 
   const updateData: Record<string, unknown> = {
@@ -132,7 +132,7 @@ export async function respondToLOI(
 
   if (error) {
     console.error("Error responding to LOI:", error)
-    throw new Error("LOI 응답에 실패했습니다.")
+    return { success: false, error: "LOI 응답에 실패했습니다." }
   }
 
   // Insert system message
@@ -149,7 +149,7 @@ export async function respondToLOI(
     message_type: "system",
   })
 
-  // Fix 4: If accepted, update room status and sync deal status
+  // If accepted, update room status and sync deal status
   if (status === "accepted") {
     await supabase
       .from("deal_rooms")
@@ -163,6 +163,8 @@ export async function respondToLOI(
         .eq("id", room.deal_id)
     }
   }
+
+  return { success: true }
 }
 
 /**

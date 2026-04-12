@@ -22,7 +22,7 @@ export async function completeOnboarding(
     .eq("id", user.id)
 
   if (error) {
-    throw new Error("온보딩 정보 저장에 실패했습니다: " + error.message)
+    return { success: false, error: "온보딩 정보 저장에 실패했습니다." }
   }
 
   return { success: true }

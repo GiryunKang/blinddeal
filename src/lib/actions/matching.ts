@@ -54,7 +54,7 @@ export async function saveMatchPreferences(data: MatchPreferencesData) {
 
     if (error) {
       console.error("Error updating match preferences:", error)
-      throw new Error("매칭 설정 저장에 실패했습니다.")
+      return { success: false, error: "매칭 설정 저장에 실패했습니다." }
     }
   } else {
     // Insert
@@ -65,7 +65,7 @@ export async function saveMatchPreferences(data: MatchPreferencesData) {
 
     if (error) {
       console.error("Error creating match preferences:", error)
-      throw new Error("매칭 설정 저장에 실패했습니다.")
+      return { success: false, error: "매칭 설정 저장에 실패했습니다." }
     }
   }
 
@@ -107,7 +107,7 @@ export async function markNotificationRead(id: string) {
 
   if (error) {
     console.error("Error marking notification as read:", error)
-    throw new Error("알림 처리에 실패했습니다.")
+    return { success: false, error: "알림 처리에 실패했습니다." }
   }
 
   return { success: true }
@@ -125,7 +125,7 @@ export async function markAllNotificationsRead() {
 
   if (error) {
     console.error("Error marking all notifications as read:", error)
-    throw new Error("알림 처리에 실패했습니다.")
+    return { success: false, error: "알림 처리에 실패했습니다." }
   }
 
   return { success: true }
