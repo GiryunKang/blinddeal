@@ -27,8 +27,7 @@ const statusConfig: Record<
 interface EscrowPanelProps {
   escrow: {
     id: string
-    amount: number
-    currency: string
+    total_amount: number
     status: EscrowStatus
     funded_at?: string | null
     released_at?: string | null
@@ -94,7 +93,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
       <div className="rounded-lg bg-muted/30 p-4 text-center">
         <p className="text-xs text-muted-foreground">거래 금액</p>
         <p className="mt-1 text-2xl font-bold text-foreground">
-          {formatKRW(escrow.amount)}
+          {formatKRW(escrow.total_amount)}
         </p>
       </div>
 

@@ -62,16 +62,16 @@ interface RoomSidebarProps {
     id: string
     room_id: string
     deal_id: string
-    proposer_id: string
+    sender_id: string
     proposed_price: number
-    terms: string
-    conditions: string
+    proposed_terms: string
+    conditions: string[] | null
     valid_until: string
     status: string
     response_notes?: string | null
     responded_at?: string | null
     created_at: string
-    proposer: {
+    sender: {
       id: string
       display_name: string
       avatar_url: string | null

@@ -10,16 +10,16 @@ import { respondToLOI } from "@/lib/actions/loi"
 interface LOICardProps {
   loi: {
     id: string
-    proposer_id: string
+    sender_id: string
     proposed_price: number
-    terms: string
-    conditions: string
+    proposed_terms: string
+    conditions: string[] | null
     valid_until: string
     status: string
     response_notes?: string | null
     responded_at?: string | null
     created_at: string
-    proposer: {
+    sender: {
       id: string
       display_name: string
       avatar_url: string | null
@@ -29,18 +29,19 @@ interface LOICardProps {
 }
 
 const loiStatusConfig: Record<string, { label: string; className: string }> = {
-  pending: { label: "검토 중", className: "bg-amber-500/20 text-amber-400" },
+  sent: { label: "검토 중", className: "bg-amber-500/20 text-amber-400" },
   accepted: { label: "수락", className: "bg-emerald-500/20 text-emerald-400" },
   rejected: { label: "거절", className: "bg-red-500/20 text-red-400" },
   countered: { label: "역제안", className: "bg-blue-500/20 text-blue-400" },
+  expired: { label: "만료", className: "bg-gray-500/20 text-gray-400" },
 }
 
 export function LOICard({ loi, currentUserId }: LOICardProps) {
   const [isPending, startTransition] = useTransition()
 
-  const status = loiStatusConfig[loi.status] ?? loiStatusConfig.pending
-  const isProposer = loi.proposer_id === currentUserId
-  const canRespond = !isProposer && loi.status === "pending"
+  const status = loiStatusConfig[loi.status] ?? loiStatusConfig.sent
+  const isSender = loi.sender_id === currentUserId
+  const canRespond = !isSender && loi.status === "sent"
   const isExpired = new Date(loi.valid_until) < new Date()
 
   function handleRespond(responseStatus: "accepted" | "rejected" | "countered") {
@@ -57,7 +58,7 @@ export function LOICard({ loi, currentUserId }: LOICardProps) {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-xs text-muted-foreground">
-          {loi.proposer?.display_name ?? "알 수 없음"} 제출
+          {loi.sender?.display_name ?? "알 수 없음"} 제출
         </span>
         <Badge className={status.className}>{status.label}</Badge>
       </div>
@@ -72,19 +73,23 @@ export function LOICard({ loi, currentUserId }: LOICardProps) {
 
         <div>
           <p className="text-xs text-muted-foreground">거래 조건</p>
-          <p className="text-xs text-foreground">{loi.terms}</p>
+          <p className="text-xs text-foreground">{loi.proposed_terms}</p>
         </div>
 
-        {loi.conditions && (
+        {loi.conditions && loi.conditions.length > 0 && (
           <div>
             <p className="text-xs text-muted-foreground">특약 사항</p>
-            <p className="text-xs text-foreground">{loi.conditions}</p>
+            <ul className="space-y-0.5">
+              {loi.conditions.map((cond, i) => (
+                <li key={i} className="text-xs text-foreground">• {cond}</li>
+              ))}
+            </ul>
           </div>
         )}
 
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>유효 기한: {formatDate(loi.valid_until, "yyyy.MM.dd")}</span>
-          {isExpired && loi.status === "pending" && (
+          {isExpired && loi.status === "sent" && (
             <Badge className="bg-red-500/20 text-red-400">만료</Badge>
           )}
         </div>
