@@ -243,7 +243,7 @@ export default async function DealDetailPage({
     <div className="relative min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
       {/* Background gradient decoration */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-blue-500/[0.04] via-indigo-500/[0.02] to-transparent" />

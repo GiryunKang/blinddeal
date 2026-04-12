@@ -100,7 +100,7 @@ export default async function ArticleDetailPage({
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
       {/* Back link */}
       <Link

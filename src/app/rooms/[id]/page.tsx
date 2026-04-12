@@ -33,8 +33,8 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
     getEscrow(id).catch(() => null),
   ])
 
-  const ddData = ddResult && "success" in ddResult && ddResult.success ? ddResult.data : null
-  const escrowData = escrowResult && "success" in escrowResult && escrowResult.success ? escrowResult.data : null
+  const ddData = ddResult ?? null
+  const escrowData = escrowResult ?? null
 
   const currentUserId = user.id
 

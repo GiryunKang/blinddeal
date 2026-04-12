@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/server"
-import { getUser } from "@/lib/supabase/auth"
+import { requireAuth } from "@/lib/supabase/auth"
 import {
   LayoutDashboard,
   FileText,
@@ -29,20 +28,14 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  const user = await getUser()
+  const user = await requireAuth()
 
-  if (!user) {
-    redirect("/auth/login")
-  }
+  const adminIds = (process.env.ADMIN_USER_IDS ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean)
 
-  const supabase = await createClient()
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("is_admin")
-    .eq("id", user.id)
-    .single()
-
-  if (!profile?.is_admin) {
+  if (!adminIds.includes(user.id)) {
     redirect("/")
   }
 
