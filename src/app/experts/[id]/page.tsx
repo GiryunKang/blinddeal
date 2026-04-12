@@ -113,7 +113,7 @@ export default async function ExpertDetailPage({
 
           {/* Specialty badges */}
           <div className="flex flex-wrap gap-1.5">
-            {expert.specialty.map((spec: string) => (
+            {(expert.specialty ?? []).map((spec: string) => (
               <Badge
                 key={spec}
                 className={

@@ -107,18 +107,22 @@ export function DDPanel({ dd }: DDPanelProps) {
       )}
 
       {/* Checklist grouped by category */}
-      {Object.entries(grouped).map(([category, items]) => (
-        <div key={category} className="space-y-2">
-          <h4 className="text-sm font-medium text-muted-foreground">
-            {category}
-          </h4>
-          <div className="space-y-1.5">
-            {items.map((item) => (
-              <ChecklistItem key={item.id} item={item} />
-            ))}
+      {Object.entries(grouped).length === 0 ? (
+        <p className="text-sm text-muted-foreground text-center py-4">체크리스트 항목이 없습니다</p>
+      ) : (
+        Object.entries(grouped).map(([category, items]) => (
+          <div key={category} className="space-y-2">
+            <h4 className="text-sm font-medium text-muted-foreground">
+              {category}
+            </h4>
+            <div className="space-y-1.5">
+              {items.map((item) => (
+                <ChecklistItem key={item.id} item={item} />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   )
 }

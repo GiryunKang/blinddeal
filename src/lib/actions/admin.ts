@@ -142,7 +142,7 @@ export async function rejectDeal(dealId: string, reason: string) {
 
 export async function getPendingVerifications() {
   await requireAdmin()
-  const supabase = await createClient()
+  const supabase = getServiceClient()
 
   const { data, error } = await supabase
     .from("verification_records")
@@ -171,7 +171,7 @@ export async function getPendingVerifications() {
 
 export async function approveVerification(recordId: string) {
   await requireAdmin()
-  const supabase = await createClient()
+  const supabase = getServiceClient()
 
   const { data, error } = await supabase
     .from("verification_records")
@@ -233,7 +233,7 @@ export async function approveVerification(recordId: string) {
 
 export async function rejectVerification(recordId: string, reason?: string) {
   await requireAdmin()
-  const supabase = await createClient()
+  const supabase = getServiceClient()
 
   const { data, error } = await supabase
     .from("verification_records")

@@ -38,7 +38,7 @@ interface MatchPreferences {
   keywords: string[]
 }
 
-export async function calculateMatchScore(
+async function calculateMatchScore(
   deal: DealForMatching,
   prefs: MatchPreferences
 ): Promise<MatchResult> {

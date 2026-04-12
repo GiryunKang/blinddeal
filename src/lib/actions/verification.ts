@@ -109,25 +109,3 @@ export async function submitVerification(type: string, formData: FormData) {
   }
 }
 
-export async function getMyVerificationRecords() {
-  try {
-    const user = await requireAuth()
-    const supabase = await createClient()
-
-    const { data, error } = await supabase
-      .from("verification_records")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-
-    if (error) {
-      console.error("Error fetching verification records:", error)
-      return []
-    }
-
-    return data ?? []
-  } catch (err) {
-    console.error("Unexpected error fetching verification records:", err)
-    return []
-  }
-}

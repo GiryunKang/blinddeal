@@ -118,7 +118,7 @@ export default async function RoomsPage() {
                         <span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="size-3" />
                           {formatDate(
-                            room.last_message?.created_at ?? room.updated_at,
+                            room.last_message?.created_at ?? room.updated_at ?? room.created_at,
                             "MM.dd HH:mm"
                           )}
                         </span>

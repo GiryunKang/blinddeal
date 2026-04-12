@@ -2,13 +2,14 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import type { Locale } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function formatKRW(amount: number | null | undefined): string {
-  if (amount == null) return "협의 후 공개";
+  if (amount == null || isNaN(amount)) return "협의 후 공개";
   if (amount >= 1_000_000_000_000) {
     const jo = amount / 1_000_000_000_000;
     return `${jo % 1 === 0 ? jo.toFixed(0) : jo.toFixed(1)}조원`;
@@ -25,9 +26,12 @@ export function formatKRW(amount: number | null | undefined): string {
 }
 
 export function formatDate(
-  date: Date | string,
-  pattern: string = "yyyy.MM.dd"
+  date: Date | string | null | undefined,
+  pattern: string = "yyyy.MM.dd",
+  locale_opt?: Locale
 ): string {
+  if (!date) return "—";
   const d = typeof date === "string" ? new Date(date) : date;
-  return format(d, pattern, { locale: ko });
+  if (isNaN(d.getTime())) return "—";
+  return format(d, pattern, { locale: locale_opt ?? ko });
 }

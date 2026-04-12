@@ -61,7 +61,7 @@ export function ExpertCard({ expert }: ExpertCardProps) {
 
           {/* Type badges */}
           <div className="flex flex-wrap gap-1.5">
-            {expert.specialty.map((spec) => (
+            {(expert.specialty ?? []).map((spec) => (
               <Badge
                 key={spec}
                 className={typeColorMap[spec] ?? "bg-gray-500/20 text-gray-400"}
