@@ -5,6 +5,7 @@ import { Check, X, RotateCcw } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { formatKRW, formatDate } from "@/lib/utils"
+import { toast } from "sonner"
 import { respondToLOI } from "@/lib/actions/loi"
 
 interface LOICardProps {
@@ -46,10 +47,9 @@ export function LOICard({ loi, currentUserId }: LOICardProps) {
 
   function handleRespond(responseStatus: "accepted" | "rejected" | "countered") {
     startTransition(async () => {
-      try {
-        await respondToLOI(loi.id, responseStatus)
-      } catch {
-        // Error handled by server action
+      const result = await respondToLOI(loi.id, responseStatus)
+      if (!result.success) {
+        toast.error(result.error ?? "처리에 실패했습니다.")
       }
     })
   }

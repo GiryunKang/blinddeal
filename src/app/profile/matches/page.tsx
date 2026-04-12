@@ -115,7 +115,8 @@ export default function MatchPreferencesPage() {
       .filter(Boolean)
 
     startTransition(async () => {
-      await saveMatchPreferences({ ...form, keywords })
+      const result = await saveMatchPreferences({ ...form, keywords })
+      if (!result.success) return
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
     })

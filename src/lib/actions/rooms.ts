@@ -344,10 +344,10 @@ export async function updateRoomStatus(
     const user = await requireAuth()
     const supabase = await createClient()
 
-    // Verify user is a participant and fetch current status
+    // Verify user is a participant and fetch current status + deal info
     const { data: room } = await supabase
       .from("deal_rooms")
-      .select("buyer_id, seller_id, status")
+      .select("buyer_id, seller_id, status, deal_id, deal:deals!deal_id(title)")
       .eq("id", roomId)
       .single()
 
@@ -389,6 +389,39 @@ export async function updateRoomStatus(
       content: `대화방 상태가 '${statusLabels[status]}'(으)로 변경되었습니다.`,
       message_type: "system",
     })
+
+    // Sync deal status when room reaches terminal states
+    if (status === "completed") {
+      await supabase
+        .from("deals")
+        .update({ status: "closed" })
+        .eq("id", room.deal_id)
+    }
+    // Note: cancelled rooms do not change deal status — other rooms may still be active
+
+    // Notify the other party of the status change
+    const notifyUserId = room.buyer_id === user.id ? room.seller_id : room.buyer_id
+    const dealTitle = (room.deal as { title?: string } | null)?.title ?? "딜"
+
+    const notificationStatusLabels: Record<string, string> = {
+      negotiating: "협상 단계로 진행",
+      loi_exchanged: "LOI가 교환",
+      due_diligence: "실사가 시작",
+      contract_review: "계약 검토 단계로 진행",
+      partner_escrow: "에스크로 파트너 연결이 시작",
+      completed: "딜이 종결",
+      cancelled: "딜이 취소",
+    }
+
+    try {
+      await supabase.from("notifications").insert({
+        user_id: notifyUserId,
+        type: "deal_status_change",
+        title: "딜 상태 변경",
+        body: `"${dealTitle}" ${notificationStatusLabels[status] ?? status}되었습니다.`,
+        data: { link: `/rooms/${roomId}` },
+      })
+    } catch { /* ignore notification errors */ }
 
     return { success: true }
   } catch (err) {

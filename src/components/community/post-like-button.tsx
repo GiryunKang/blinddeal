@@ -28,7 +28,8 @@ export function PostLikeButton({
       return
     }
     startTransition(async () => {
-      await togglePostLike(postId)
+      const result = await togglePostLike(postId)
+      if (result.error) return
       router.refresh()
     })
   }

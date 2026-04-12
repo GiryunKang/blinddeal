@@ -42,20 +42,20 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
   function handleConfirmedAction() {
     if (!confirmAction) return
     startTransition(async () => {
-      try {
-        await updateEscrowStatus(escrow.id, confirmAction)
-        const labels: Record<string, string> = {
-          funded: "에스크로 파트너 입금이 확인되었습니다.",
-          released: "에스크로 파트너 정산이 확인되었습니다.",
-          disputed: "에스크로 파트너에 분쟁이 접수되었습니다.",
-          refunded: "에스크로 파트너 환불이 확인되었습니다.",
-        }
-        toast.success(labels[confirmAction] ?? "처리 완료")
-      } catch {
-        toast.error("처리에 실패했습니다. 다시 시도해주세요.")
-      } finally {
+      const result = await updateEscrowStatus(escrow.id, confirmAction)
+      if (!result.success) {
+        toast.error(result.error ?? "처리에 실패했습니다. 다시 시도해주세요.")
         setConfirmAction(null)
+        return
       }
+      const labels: Record<string, string> = {
+        funded: "에스크로 파트너 입금이 확인되었습니다.",
+        released: "에스크로 파트너 정산이 확인되었습니다.",
+        disputed: "에스크로 파트너에 분쟁이 접수되었습니다.",
+        refunded: "에스크로 파트너 환불이 확인되었습니다.",
+      }
+      toast.success(labels[confirmAction] ?? "처리 완료")
+      setConfirmAction(null)
     })
   }
 

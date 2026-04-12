@@ -558,18 +558,25 @@ export default async function DealDetailPage({
 
                 {/* CTA Buttons */}
                 <div className="space-y-3">
-                  {!isOwner && (
+                  {!isOwner && deal.status !== "closed" && deal.status !== "cancelled" && (
                     <InquiryButton
                       dealId={deal.id}
                       dealTitle={deal.title}
                       dealCategory={deal.deal_category}
                     />
                   )}
-                  <InterestButton
-                    dealId={deal.id}
-                    initialInterested={userInterested}
-                    initialCount={deal.interest_count ?? 0}
-                  />
+                  {deal.status !== "closed" && deal.status !== "cancelled" && (
+                    <InterestButton
+                      dealId={deal.id}
+                      initialInterested={userInterested}
+                      initialCount={deal.interest_count ?? 0}
+                    />
+                  )}
+                  {(deal.status === "closed" || deal.status === "cancelled") && (
+                    <p className="text-center text-sm text-muted-foreground py-2">
+                      {deal.status === "closed" ? "종결된 딜입니다." : "취소된 딜입니다."}
+                    </p>
+                  )}
                 </div>
               </div>
 

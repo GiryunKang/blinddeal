@@ -4,6 +4,7 @@ import { useState, useTransition } from "react"
 import { Eye, Lock, ShieldCheck, Users } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 import { updateDealVisibility } from "@/lib/actions/deal-visibility"
 
 interface VisibilityControlProps {
@@ -28,22 +29,22 @@ export function VisibilityControl({
 
   function handleSave() {
     startTransition(async () => {
-      try {
-        const vis = visibility === "private" && requiredLevel > 0
+      const vis = visibility === "private" && requiredLevel > 0
+        ? "private"
+        : visibility === "private"
           ? "private"
-          : visibility === "private"
-            ? "private"
-            : "public"
-        await updateDealVisibility(
-          dealId,
-          vis as "public" | "private",
-          visibility === "private" && requiredLevel > 0 ? requiredLevel : undefined
-        )
-        setSaved(true)
-        setTimeout(() => setSaved(false), 2000)
-      } catch {
-        // Error handled by server action
+          : "public"
+      const result = await updateDealVisibility(
+        dealId,
+        vis as "public" | "private",
+        visibility === "private" && requiredLevel > 0 ? requiredLevel : undefined
+      )
+      if (!result.success) {
+        toast.error(result.error ?? "저장에 실패했습니다.")
+        return
       }
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
     })
   }
 

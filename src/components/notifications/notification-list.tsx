@@ -58,14 +58,16 @@ export function NotificationList({
 
   function handleMarkRead(id: string) {
     startTransition(async () => {
-      await markNotificationRead(id)
+      const result = await markNotificationRead(id)
+      if (!result.success) return
       router.refresh()
     })
   }
 
   function handleMarkAllRead() {
     startTransition(async () => {
-      await markAllNotificationsRead()
+      const result = await markAllNotificationsRead()
+      if (!result.success) return
       router.refresh()
     })
   }

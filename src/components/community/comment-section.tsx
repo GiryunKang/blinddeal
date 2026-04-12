@@ -62,29 +62,29 @@ export function CommentSection({
   function handleSubmitComment() {
     if (!newComment.trim()) return
     startTransition(async () => {
-      try {
-        await createComment(postId, newComment.trim())
-        setNewComment("")
-        toast.success("댓글이 등록되었습니다.")
-        router.refresh()
-      } catch {
-        toast.error("댓글 등록에 실패했습니다. 다시 시도해주세요.")
+      const result = await createComment(postId, newComment.trim())
+      if (!result.success) {
+        toast.error(result.error ?? "댓글 등록에 실패했습니다. 다시 시도해주세요.")
+        return
       }
+      setNewComment("")
+      toast.success("댓글이 등록되었습니다.")
+      router.refresh()
     })
   }
 
   function handleSubmitReply(parentId: string) {
     if (!replyContent.trim()) return
     startTransition(async () => {
-      try {
-        await createComment(postId, replyContent.trim(), parentId)
-        setReplyContent("")
-        setReplyTo(null)
-        toast.success("답글이 등록되었습니다.")
-        router.refresh()
-      } catch {
-        toast.error("답글 등록에 실패했습니다. 다시 시도해주세요.")
+      const result = await createComment(postId, replyContent.trim(), parentId)
+      if (!result.success) {
+        toast.error(result.error ?? "답글 등록에 실패했습니다. 다시 시도해주세요.")
+        return
       }
+      setReplyContent("")
+      setReplyTo(null)
+      toast.success("답글이 등록되었습니다.")
+      router.refresh()
     })
   }
 

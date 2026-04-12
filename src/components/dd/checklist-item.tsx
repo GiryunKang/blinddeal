@@ -34,9 +34,8 @@ export function ChecklistItem({ item }: ChecklistItemProps) {
     const nextStatus = config.next
     setStatus(nextStatus)
     startTransition(async () => {
-      try {
-        await updateChecklistItem(item.id, nextStatus)
-      } catch {
+      const result = await updateChecklistItem(item.id, nextStatus)
+      if (!result.success) {
         setStatus(status)
       }
     })
@@ -45,9 +44,8 @@ export function ChecklistItem({ item }: ChecklistItemProps) {
   function handleSetIssue() {
     setStatus("issue_found")
     startTransition(async () => {
-      try {
-        await updateChecklistItem(item.id, "issue_found")
-      } catch {
+      const result = await updateChecklistItem(item.id, "issue_found")
+      if (!result.success) {
         setStatus(status)
       }
     })

@@ -30,18 +30,18 @@ export function LOIForm({ roomId, askingPrice, onSuccess }: LOIFormProps) {
     if (!proposedPrice || !terms || !validUntil) return
 
     startTransition(async () => {
-      try {
-        await createLOI(roomId, {
-          proposed_price: parseInt(proposedPrice, 10),
-          proposed_terms: terms,
-          conditions: conditions ? conditions.split("\n").map((c) => c.trim()).filter(Boolean) : [],
-          valid_until: validUntil,
-        })
-        toast.success("LOI(의향서)가 상대방에게 전달되었습니다. 응답을 기다려주세요.")
-        onSuccess?.()
-      } catch {
-        toast.error("LOI 제출에 실패했습니다. 다시 시도해주세요.")
+      const result = await createLOI(roomId, {
+        proposed_price: parseInt(proposedPrice, 10),
+        proposed_terms: terms,
+        conditions: conditions ? conditions.split("\n").map((c) => c.trim()).filter(Boolean) : [],
+        valid_until: validUntil,
+      })
+      if (!result.success) {
+        toast.error(result.error ?? "LOI 제출에 실패했습니다. 다시 시도해주세요.")
+        return
       }
+      toast.success("LOI(의향서)가 상대방에게 전달되었습니다. 응답을 기다려주세요.")
+      onSuccess?.()
     })
   }
 

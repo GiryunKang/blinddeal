@@ -230,6 +230,17 @@ export async function toggleDealInterest(dealId: string) {
     const user = await requireAuth()
     const supabase = await createClient()
 
+    // Block self-interest: owners cannot register interest in their own deal
+    const { data: dealCheck } = await supabase
+      .from("deals")
+      .select("owner_id")
+      .eq("id", dealId)
+      .single()
+
+    if (dealCheck?.owner_id === user.id) {
+      return { success: false, error: "본인의 딜에는 관심 등록을 할 수 없습니다." }
+    }
+
     // Check if interest already exists
     const { data: existing } = await supabase
       .from("deal_interests")
