@@ -136,7 +136,7 @@ export async function getMyDealStats() {
     "under_negotiation",
     "due_diligence",
     "contract",
-    "escrow",
+    "partner_escrow",
     "closing",
     "closed",
     "cancelled",

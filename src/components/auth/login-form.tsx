@@ -104,7 +104,7 @@ export function LoginForm() {
       <motion.div className="space-y-2" variants={containerVariants} initial="hidden" animate="visible">
         <motion.h2 className="text-2xl font-bold tracking-tight" variants={itemVariants}>로그인</motion.h2>
         <motion.p className="text-sm text-muted-foreground" variants={itemVariants}>
-          계정에 로그인하고 거래를 이어가세요
+          계정에 로그인하고 딜 활동을 이어가세요
         </motion.p>
       </motion.div>
 

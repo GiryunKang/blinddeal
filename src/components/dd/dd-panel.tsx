@@ -2,15 +2,14 @@
 
 import { ChecklistItem } from "./checklist-item"
 
-type ItemStatus = "pending" | "in_progress" | "completed" | "issue"
+type ItemStatus = "pending" | "in_progress" | "completed" | "issue_found"
 
 interface DDChecklistItem {
   id: string
   category: string
-  title: string
+  item_name: string
   status: ItemStatus
   notes: string | null
-  order_index: number
 }
 
 interface DDPanelProps {
@@ -41,7 +40,7 @@ export function DDPanel({ dd }: DDPanelProps) {
   const completed = dd.checklist_items.filter(
     (i) => i.status === "completed"
   ).length
-  const issues = dd.checklist_items.filter((i) => i.status === "issue").length
+  const issues = dd.checklist_items.filter((i) => i.status === "issue_found").length
   const progressPercent = total > 0 ? Math.round((completed / total) * 100) : 0
 
   return (

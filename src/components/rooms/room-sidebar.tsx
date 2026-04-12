@@ -140,7 +140,7 @@ export function RoomSidebar({ room, currentUserId, lois, ddData, escrowData }: R
     )
   }
 
-  function handleStatusChange(newStatus: "inquiry" | "negotiating" | "loi_exchanged" | "due_diligence" | "contract_review" | "escrow" | "completed" | "cancelled") {
+  function handleStatusChange(newStatus: "inquiry" | "negotiating" | "loi_exchanged" | "due_diligence" | "contract_review" | "partner_escrow" | "completed" | "cancelled") {
     startTransition(async () => {
       const result = await updateRoomStatus(room.id, newStatus)
       if (!result.success) {
@@ -244,7 +244,7 @@ export function RoomSidebar({ room, currentUserId, lois, ddData, escrowData }: R
                   onClick={() => handleStatusChange("completed")}
                   disabled={isPending}
                 >
-                  거래 완료
+                  딜 종결
                 </Button>
               </>
             )}

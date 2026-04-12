@@ -9,14 +9,16 @@ import { formatKRW } from "@/lib/utils"
 import { updateEscrowStatus } from "@/lib/actions/escrow"
 import { ShieldCheck, Banknote, AlertTriangle } from "lucide-react"
 
-type EscrowStatus = "pending" | "funded" | "released" | "disputed" | "refunded"
+type EscrowStatus = "created" | "funded" | "in_review" | "releasing" | "released" | "refunded" | "disputed"
 
 const statusConfig: Record<
   EscrowStatus,
   { label: string; color: string }
 > = {
-  pending: { label: "대기중", color: "bg-gray-500/20 text-gray-400" },
+  created: { label: "생성됨", color: "bg-gray-500/20 text-gray-400" },
   funded: { label: "파트너 입금 확인", color: "bg-blue-500/20 text-blue-400" },
+  in_review: { label: "검토 중", color: "bg-indigo-500/20 text-indigo-400" },
+  releasing: { label: "정산 진행 중", color: "bg-cyan-500/20 text-cyan-400" },
   released: { label: "파트너 정산 완료", color: "bg-green-500/20 text-green-400" },
   disputed: { label: "분쟁 접수", color: "bg-red-500/20 text-red-400" },
   refunded: { label: "파트너 환불 완료", color: "bg-amber-500/20 text-amber-400" },
@@ -60,13 +62,13 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
 
   const confirmMessages: Record<string, { title: string; desc: string; danger: boolean }> = {
     released: {
-      title: "에스크로 파트너의 정산 완료를 확인합니다",
+      title: "파트너로부터 정산 완료 통보를 받았음을 기록합니다",
       desc: "에스크로 파트너가 매도자에게 대금을 정산한 것을 확인합니다. 확인 후에는 취소할 수 없습니다.",
       danger: false,
     },
     disputed: {
       title: "에스크로 파트너에 분쟁을 접수합니다",
-      desc: "분쟁 접수 시 에스크로 파트너가 자금 동결 절차를 진행하며, 양측 합의 또는 중재 절차가 시작됩니다.",
+      desc: "분쟁 접수 사실이 에스크로 파트너에게 통보됩니다. 이후 절차는 파트너의 약관에 따릅니다.",
       danger: true,
     },
     refunded: {
@@ -128,7 +130,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
               disabled={isPending}
               className="flex-1"
             >
-              {isPending ? "처리 중..." : "확인, 실행합니다"}
+              {isPending ? "처리 중..." : "확인합니다"}
             </Button>
             <Button
               size="sm"
@@ -145,7 +147,7 @@ export function EscrowPanel({ escrow }: EscrowPanelProps) {
       {/* Action buttons */}
       {!confirmAction && (
         <div className="flex gap-2 pt-2">
-          {escrow.status === "pending" && (
+          {escrow.status === "created" && (
             <Button
               className="flex-1"
               onClick={() => setConfirmAction("funded")}

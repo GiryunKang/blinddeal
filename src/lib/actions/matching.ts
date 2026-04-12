@@ -101,7 +101,7 @@ export async function markNotificationRead(id: string) {
 
   const { error } = await supabase
     .from("notifications")
-    .update({ is_read: true })
+    .update({ read: true })
     .eq("id", id)
     .eq("user_id", user.id)
 
@@ -119,9 +119,9 @@ export async function markAllNotificationsRead() {
 
   const { error } = await supabase
     .from("notifications")
-    .update({ is_read: true })
+    .update({ read: true })
     .eq("user_id", user.id)
-    .eq("is_read", false)
+    .eq("read", false)
 
   if (error) {
     console.error("Error marking all notifications as read:", error)

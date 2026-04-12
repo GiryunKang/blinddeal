@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react"
 import { updateChecklistItem } from "@/lib/actions/due-diligence"
 
-type ItemStatus = "pending" | "in_progress" | "completed" | "issue"
+type ItemStatus = "pending" | "in_progress" | "completed" | "issue_found"
 
 const statusConfig: Record<
   ItemStatus,
@@ -12,13 +12,13 @@ const statusConfig: Record<
   pending: { dot: "bg-gray-400", label: "대기", next: "in_progress" },
   in_progress: { dot: "bg-blue-400", label: "진행중", next: "completed" },
   completed: { dot: "bg-green-400", label: "완료", next: "pending" },
-  issue: { dot: "bg-red-400", label: "이슈", next: "pending" },
+  issue_found: { dot: "bg-red-400", label: "이슈", next: "pending" },
 }
 
 interface ChecklistItemProps {
   item: {
     id: string
-    title: string
+    item_name: string
     status: ItemStatus
     notes: string | null
     category: string
@@ -43,10 +43,10 @@ export function ChecklistItem({ item }: ChecklistItemProps) {
   }
 
   function handleSetIssue() {
-    setStatus("issue")
+    setStatus("issue_found")
     startTransition(async () => {
       try {
-        await updateChecklistItem(item.id, "issue")
+        await updateChecklistItem(item.id, "issue_found")
       } catch {
         setStatus(status)
       }
@@ -79,20 +79,20 @@ export function ChecklistItem({ item }: ChecklistItemProps) {
             : "text-foreground"
         }`}
       >
-        {item.title}
+        {item.item_name}
       </span>
 
       {/* Status label */}
       <span
         className={`text-xs font-medium ${
-          status === "issue" ? "text-red-400" : "text-muted-foreground"
+          status === "issue_found" ? "text-red-400" : "text-muted-foreground"
         }`}
       >
         {config.label}
       </span>
 
       {/* Issue button */}
-      {status !== "issue" && (
+      {status !== "issue_found" && (
         <button
           onClick={handleSetIssue}
           disabled={isPending}

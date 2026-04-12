@@ -29,7 +29,7 @@ import { TextReveal } from "@/components/effects/text-reveal";
 export const metadata: Metadata = {
   title: "서비스 소개",
   description:
-    "BlindDeal의 철학, 핵심 기능, 거래 프로세스를 소개합니다. 부동산과 M&A 거래의 새로운 기준.",
+    "BlindDeal의 철학, 핵심 기능, 딜 프로세스를 소개합니다. 부동산과 M&A 딜의 새로운 기준.",
 };
 
 /* ─── Data ─── */

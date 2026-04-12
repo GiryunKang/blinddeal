@@ -54,7 +54,7 @@ export async function getRooms() {
       (data ?? []).map(async (room) => {
         const { data: messages } = await supabase
           .from("messages")
-          .select("content, created_at, sender_id, is_read")
+          .select("content, created_at, sender_id, read_at")
           .eq("room_id", room.id)
           .order("created_at", { ascending: false })
           .limit(1)
@@ -325,7 +325,7 @@ export async function sendMessage(
  */
 export async function updateRoomStatus(
   roomId: string,
-  status: "inquiry" | "negotiating" | "loi_exchanged" | "due_diligence" | "contract_review" | "escrow" | "completed" | "cancelled"
+  status: "inquiry" | "negotiating" | "loi_exchanged" | "due_diligence" | "contract_review" | "partner_escrow" | "completed" | "cancelled"
 ) {
   try {
     const user = await requireAuth()

@@ -23,8 +23,8 @@ interface NotificationItem {
   type: "deal" | "message" | "comment" | "system" | "like"
   title: string
   body: string
-  link: string | null
-  is_read: boolean
+  data: { link?: string } | null
+  read: boolean
   created_at: string
 }
 
@@ -54,7 +54,7 @@ export function NotificationList({
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
-  const unreadCount = notifications.filter((n) => !n.is_read).length
+  const unreadCount = notifications.filter((n) => !n.read).length
 
   function handleMarkRead(id: string) {
     startTransition(async () => {
@@ -105,7 +105,7 @@ export function NotificationList({
             const content = (
               <div
                 className={`flex gap-3 rounded-lg border p-4 transition-colors ${
-                  notification.is_read
+                  notification.read
                     ? "border-border/30 bg-card/50"
                     : "border-border/50 bg-card"
                 }`}
@@ -120,20 +120,20 @@ export function NotificationList({
                   <div className="flex items-start justify-between gap-2">
                     <h4
                       className={`text-sm font-medium ${
-                        notification.is_read
+                        notification.read
                           ? "text-muted-foreground"
                           : "text-foreground"
                       }`}
                     >
                       {notification.title}
                     </h4>
-                    {!notification.is_read && (
+                    {!notification.read && (
                       <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />
                     )}
                   </div>
                   <p
                     className={`mt-0.5 text-sm ${
-                      notification.is_read
+                      notification.read
                         ? "text-muted-foreground/70"
                         : "text-muted-foreground"
                     }`}
@@ -148,7 +148,7 @@ export function NotificationList({
                   </p>
                 </div>
 
-                {!notification.is_read && (
+                {!notification.read && (
                   <button
                     onClick={(e) => {
                       e.preventDefault()
@@ -163,14 +163,14 @@ export function NotificationList({
               </div>
             )
 
-            if (notification.link) {
+            if (notification.data?.link) {
               return (
                 <Link
                   key={notification.id}
-                  href={notification.link}
+                  href={notification.data.link}
                   className="block"
                   onClick={() => {
-                    if (!notification.is_read) {
+                    if (!notification.read) {
                       handleMarkRead(notification.id)
                     }
                   }}

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { StaggerStyles } from "@/components/effects/stagger-styles"
 
 export const revalidate = 60 // Revalidate every 60 seconds
-export const metadata: Metadata = { title: "딜 마켓플레이스" }
+export const metadata: Metadata = { title: "딜 게시판" }
 
 interface DealsPageProps {
   searchParams: Promise<{

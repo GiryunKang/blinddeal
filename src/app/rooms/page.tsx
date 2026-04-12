@@ -43,8 +43,8 @@ const statusConfig: Record<string, { label: string; className: string }> = {
     label: "계약 검토",
     className: "bg-violet-500/20 text-violet-400",
   },
-  escrow: {
-    label: "에스크로",
+  partner_escrow: {
+    label: "파트너 에스크로",
     className: "bg-yellow-500/20 text-yellow-400",
   },
   completed: {
@@ -87,7 +87,7 @@ export default async function RoomsPage() {
             const hasUnread =
               room.last_message &&
               room.last_message.sender_id !== user.id &&
-              !room.last_message.is_read
+              !room.last_message.read_at
 
             return (
               <MotionRoomCard key={room.id} index={index}>
@@ -154,7 +154,7 @@ export default async function RoomsPage() {
             <MessageSquare className="size-8 text-muted-foreground" />
           </div>
           <h3 className="mt-4 text-lg font-medium text-foreground">
-            아직 진행 중인 거래가 없습니다
+            아직 진행 중인 대화가 없습니다
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
             딜 마켓플레이스에서 관심 있는 딜에 문의해보세요

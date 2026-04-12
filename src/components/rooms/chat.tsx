@@ -18,7 +18,7 @@ interface MessageWithSender {
   content: string
   message_type: "text" | "file" | "system"
   file_url: string | null
-  is_read: boolean
+  read_at: string | null
   created_at: string
   sender: {
     id: string

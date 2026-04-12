@@ -121,7 +121,7 @@ export function RegisterForm() {
       <motion.div className="space-y-2" variants={regContainerVariants} initial="hidden" animate="visible">
         <motion.h2 className="text-2xl font-bold tracking-tight" variants={regItemVariants}>회원가입</motion.h2>
         <motion.p className="text-sm text-muted-foreground" variants={regItemVariants}>
-          BlindDeal에 가입하고 거래를 시작하세요
+          BlindDeal에 가입하고 딜 탐색을 시작하세요
         </motion.p>
       </motion.div>
 

@@ -117,7 +117,7 @@ export async function requestExpertAssignment(
 
   if (error) {
     console.error("Error requesting expert assignment:", error)
-    throw new Error("전문가 배정 요청에 실패했습니다.")
+    throw new Error("전문가 연결 요청에 실패했습니다.")
   }
 
   return data

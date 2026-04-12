@@ -79,7 +79,7 @@ export interface Message {
   content: string;
   message_type: "text" | "file" | "system";
   file_url: string | null;
-  is_read: boolean;
+  read_at: string | null;
   created_at: string;
 }
 
@@ -132,8 +132,8 @@ export interface Notification {
   type: "deal" | "message" | "comment" | "system" | "like";
   title: string;
   body: string;
-  link: string | null;
-  is_read: boolean;
+  data: Record<string, unknown> | null;
+  read: boolean;
   created_at: string;
 }
 

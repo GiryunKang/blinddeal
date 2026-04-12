@@ -5,8 +5,8 @@ import { requireAuth } from "@/lib/supabase/auth"
 
 export interface LOIData {
   proposed_price: number
-  terms: string
-  conditions: string
+  proposed_terms: string
+  conditions: string[]
   valid_until: string
 }
 
@@ -20,7 +20,7 @@ export async function createLOI(roomId: string, data: LOIData) {
   // Verify user is a participant
   const { data: room } = await supabase
     .from("deal_rooms")
-    .select("buyer_id, seller_id, deal_id")
+    .select("buyer_id, seller_id")
     .eq("id", roomId)
     .single()
 
@@ -29,16 +29,15 @@ export async function createLOI(roomId: string, data: LOIData) {
   }
 
   const { data: loi, error } = await supabase
-    .from("lois")
+    .from("loi_documents")
     .insert({
       room_id: roomId,
-      deal_id: room.deal_id,
-      proposer_id: user.id,
+      sender_id: user.id,
       proposed_price: data.proposed_price,
-      terms: data.terms,
-      conditions: data.conditions,
+      proposed_terms: data.proposed_terms,
+      conditions: Array.isArray(data.conditions) ? data.conditions : [data.conditions],
       valid_until: data.valid_until,
-      status: "pending",
+      status: "sent",
     })
     .select()
     .single()
@@ -72,7 +71,7 @@ export async function respondToLOI(
 
   // Get the LOI
   const { data: loi } = await supabase
-    .from("lois")
+    .from("loi_documents")
     .select("*, room:deal_rooms!room_id(buyer_id, seller_id)")
     .eq("id", loiId)
     .single()
@@ -87,7 +86,7 @@ export async function respondToLOI(
   }
 
   // Cannot respond to own LOI
-  if (loi.proposer_id === user.id) {
+  if (loi.sender_id === user.id) {
     throw new Error("본인의 LOI에는 응답할 수 없습니다.")
   }
 
@@ -100,7 +99,7 @@ export async function respondToLOI(
   }
 
   const { error } = await supabase
-    .from("lois")
+    .from("loi_documents")
     .update(updateData)
     .eq("id", loiId)
 
@@ -123,11 +122,11 @@ export async function respondToLOI(
     message_type: "system",
   })
 
-  // If accepted, update room status
+  // If accepted, update room status to loi_exchanged
   if (status === "accepted") {
     await supabase
       .from("deal_rooms")
-      .update({ status: "active", updated_at: new Date().toISOString() })
+      .update({ status: "loi_exchanged", updated_at: new Date().toISOString() })
       .eq("id", loi.room_id)
   }
 }
@@ -151,11 +150,11 @@ export async function getLOIs(roomId: string) {
   }
 
   const { data, error } = await supabase
-    .from("lois")
+    .from("loi_documents")
     .select(
       `
       *,
-      proposer:profiles!proposer_id (
+      sender:profiles!sender_id (
         id,
         display_name,
         avatar_url

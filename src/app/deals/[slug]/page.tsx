@@ -215,26 +215,27 @@ export default async function DealDetailPage({
     under_negotiation: "협상 중",
     due_diligence: "실사(정밀조사) 진행",
     contract: "계약 진행",
-    escrow: "안전 거래 진행",
+    partner_escrow: "안전 거래 진행",
     closed: "완료",
     cancelled: "취소",
   }
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Product",
+    "@type": "WebPage",
     name: deal.title,
     description: deal.description?.slice(0, 300),
     url: `${BASE_URL}/deals/${deal.slug}`,
     ...(deal.thumbnail_url && { image: deal.thumbnail_url }),
-    category: categoryLabel,
-    offers: {
-      "@type": "Offer",
-      priceCurrency: deal.price_currency || "KRW",
-      ...(deal.asking_price && { price: deal.asking_price }),
-      availability: deal.status === "active"
-        ? "https://schema.org/InStock"
-        : "https://schema.org/SoldOut",
+    about: {
+      "@type": "Thing",
+      name: deal.title,
+      description: `${categoryLabel} 딜 정보`,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "BlindDeal",
+      url: BASE_URL,
     },
   }
 

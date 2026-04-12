@@ -1,7 +1,6 @@
 import { getAdminStats } from "@/lib/actions/admin"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, FileText, MessageSquare, TrendingUp } from "lucide-react"
-import { formatKRW } from "@/lib/utils"
 
 export default async function AdminDashboardPage() {
   const stats = await getAdminStats()
@@ -29,8 +28,8 @@ export default async function AdminDashboardPage() {
       bg: "bg-amber-500/10",
     },
     {
-      label: "월 거래량",
-      value: formatKRW(stats.totalRevenue),
+      label: "파트너 에스크로 건수",
+      value: stats.partnerEscrowCount.toLocaleString(),
       icon: TrendingUp,
       color: "text-purple-400",
       bg: "bg-purple-500/10",

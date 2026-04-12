@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     default: 'BlindDeal — 부동산 · M&A 딜 정보 플랫폼',
     template: '%s | BlindDeal'
   },
-  description: '부동산과 M&A 딜 정보를 공개 또는 비공개로 연결하세요. 검증된 상대방과 NDA, 전문가 네트워크, 에스크로 파트너 연결을 통한 딜 프로세스 관리 플랫폼.',
+  description: '부동산과 M&A 딜 정보를 공개 또는 비공개로 확인하세요. 검증된 상대방과 NDA, 전문가 네트워크, 에스크로 파트너 연결을 통한 딜 프로세스 관리 플랫폼.',
   keywords: ['부동산', 'M&A', '딜', '거래', '투자', '에스크로', 'BlindDeal', '블라인드딜'],
   openGraph: {
     type: 'website',

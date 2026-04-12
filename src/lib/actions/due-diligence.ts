@@ -5,27 +5,27 @@ import { requireAuth } from "@/lib/supabase/auth"
 
 const DEFAULT_CHECKLIST = [
   // 법률
-  { category: "법률", title: "법인 등기부등본 확인", order_index: 1 },
-  { category: "법률", title: "소송 및 분쟁 이력 조사", order_index: 2 },
-  { category: "법률", title: "계약서 검토 (임대차, 용역 등)", order_index: 3 },
-  { category: "법률", title: "지적재산권 확인", order_index: 4 },
+  { category: "법률", item_name: "법인 등기부등본 확인" },
+  { category: "법률", item_name: "소송 및 분쟁 이력 조사" },
+  { category: "법률", item_name: "계약서 검토 (임대차, 용역 등)" },
+  { category: "법률", item_name: "지적재산권 확인" },
   // 재무
-  { category: "재무", title: "최근 3년 재무제표 분석", order_index: 5 },
-  { category: "재무", title: "세금 납부 이력 확인", order_index: 6 },
-  { category: "재무", title: "부채 및 담보 현황 파악", order_index: 7 },
-  { category: "재무", title: "매출 구성 및 수익성 분석", order_index: 8 },
+  { category: "재무", item_name: "최근 3년 재무제표 분석" },
+  { category: "재무", item_name: "세금 납부 이력 확인" },
+  { category: "재무", item_name: "부채 및 담보 현황 파악" },
+  { category: "재무", item_name: "매출 구성 및 수익성 분석" },
   // 운영
-  { category: "운영", title: "인력 구조 및 핵심 인재 파악", order_index: 9 },
-  { category: "운영", title: "주요 거래처 현황 분석", order_index: 10 },
-  { category: "운영", title: "시설 및 장비 상태 점검", order_index: 11 },
+  { category: "운영", item_name: "인력 구조 및 핵심 인재 파악" },
+  { category: "운영", item_name: "주요 거래처 현황 분석" },
+  { category: "운영", item_name: "시설 및 장비 상태 점검" },
   // 시장
-  { category: "시장", title: "시장 규모 및 성장성 분석", order_index: 12 },
-  { category: "시장", title: "경쟁사 분석", order_index: 13 },
-  { category: "시장", title: "규제 환경 검토", order_index: 14 },
+  { category: "시장", item_name: "시장 규모 및 성장성 분석" },
+  { category: "시장", item_name: "경쟁사 분석" },
+  { category: "시장", item_name: "규제 환경 검토" },
 ]
 
 export async function createDD(roomId: string, dealId: string) {
-  const user = await requireAuth()
+  await requireAuth()
   const supabase = await createClient()
 
   // Create DD process
@@ -34,8 +34,7 @@ export async function createDD(roomId: string, dealId: string) {
     .insert({
       room_id: roomId,
       deal_id: dealId,
-      created_by: user.id,
-      status: "in_progress",
+      status: "initiated",
     })
     .select()
     .single()
@@ -49,9 +48,8 @@ export async function createDD(roomId: string, dealId: string) {
   const checklistItems = DEFAULT_CHECKLIST.map((item) => ({
     dd_id: dd.id,
     category: item.category,
-    title: item.title,
+    item_name: item.item_name,
     status: "pending" as const,
-    order_index: item.order_index,
   }))
 
   const { error: checklistError } = await supabase
@@ -87,16 +85,15 @@ export async function getDDByRoom(roomId: string) {
       checklist_items:dd_checklist_items (
         id,
         category,
-        title,
+        item_name,
         status,
         notes,
-        order_index,
-        updated_at
+        completed_at
       )
     `
     )
     .eq("room_id", roomId)
-    .order("created_at", { ascending: false })
+    .order("started_at", { ascending: false })
     .limit(1)
     .single()
 
@@ -105,28 +102,21 @@ export async function getDDByRoom(roomId: string) {
     return null
   }
 
-  // Sort checklist items by order_index
-  if (data?.checklist_items) {
-    data.checklist_items.sort(
-      (a: { order_index: number }, b: { order_index: number }) =>
-        a.order_index - b.order_index
-    )
-  }
-
   return data
 }
 
 export async function updateChecklistItem(
   itemId: string,
-  status: "pending" | "in_progress" | "completed" | "issue",
+  status: "pending" | "in_progress" | "completed" | "issue_found",
   notes?: string
 ) {
   await requireAuth()
   const supabase = await createClient()
 
-  const updateData: Record<string, unknown> = {
-    status,
-    updated_at: new Date().toISOString(),
+  const updateData: Record<string, unknown> = { status }
+
+  if (status === "completed") {
+    updateData.completed_at = new Date().toISOString()
   }
 
   if (notes !== undefined) {
@@ -150,7 +140,7 @@ export async function updateChecklistItem(
 
 export async function completeDDReview(
   ddId: string,
-  result: "pass" | "fail" | "conditional",
+  result: "pass" | "fail" | "conditional_pass",
   summary: string
 ) {
   await requireAuth()

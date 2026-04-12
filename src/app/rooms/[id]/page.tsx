@@ -44,7 +44,7 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
     loi_exchanged: "LOI 교환",
     due_diligence: "실사(DD)",
     contract_review: "계약 검토",
-    escrow: "에스크로",
+    partner_escrow: "파트너 에스크로",
     completed: "완료",
     cancelled: "취소",
   }
@@ -55,7 +55,7 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
     loi_exchanged: "LOI가 수락되면 실사(DD) 단계로 넘어갑니다.",
     due_diligence: "법률, 재무, 운영 실사를 진행하세요. 체크리스트를 확인하세요.",
     contract_review: "계약서를 검토하고 에스크로 파트너 연결을 준비하세요.",
-    escrow: "에스크로 파트너를 통해 안전하게 거래가 진행됩니다.",
+    partner_escrow: "에스크로 파트너를 통해 안전하게 거래가 진행됩니다.",
     completed: "거래가 완료되었습니다.",
     cancelled: "이 거래는 취소되었습니다.",
   }

@@ -11,17 +11,17 @@ function getServiceClient() {
   )
 }
 
+// profiles table has no is_admin column — admin access is controlled via
+// ADMIN_USER_IDS env var (comma-separated UUIDs set in Vercel/local .env)
 async function requireAdmin() {
   const user = await requireAuth()
-  const supabase = await createClient()
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("is_admin")
-    .eq("id", user.id)
-    .single()
+  const adminIds = (process.env.ADMIN_USER_IDS ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean)
 
-  if (!profile?.is_admin) {
+  if (!adminIds.includes(user.id)) {
     throw new Error("관리자 권한이 필요합니다.")
   }
 
@@ -32,7 +32,7 @@ export async function getAdminStats() {
   await requireAdmin()
   const supabase = await createClient()
 
-  const [usersRes, dealsRes, roomsRes, escrowsRes] = await Promise.all([
+  const [usersRes, dealsRes, roomsRes, partnerEscrowsRes] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }),
     supabase.from("deals").select("id", { count: "exact", head: true }),
     supabase
@@ -40,21 +40,18 @@ export async function getAdminStats() {
       .select("id", { count: "exact", head: true })
       .eq("status", "active"),
     supabase
-      .from("escrows")
-      .select("amount")
+      .from("escrow_accounts")
+      .select("id", { count: "exact", head: true })
       .eq("status", "released"),
   ])
 
-  const totalRevenue = (escrowsRes.data ?? []).reduce(
-    (sum: number, e: { amount: number }) => sum + (e.amount || 0),
-    0
-  )
+  const partnerEscrowCount = partnerEscrowsRes.count ?? 0
 
   return {
     totalUsers: usersRes.count ?? 0,
     totalDeals: dealsRes.count ?? 0,
     activeRooms: roomsRes.count ?? 0,
-    totalRevenue,
+    partnerEscrowCount,
   }
 }
 
@@ -88,11 +85,12 @@ export async function getPendingDeals() {
 
 export async function approveDeal(dealId: string) {
   await requireAdmin()
-  const supabase = await createClient()
+  // Use service client — deal status trigger only allows owner or service_role to change status
+  const serviceClient = getServiceClient()
 
-  const { data, error } = await supabase
+  const { data, error } = await serviceClient
     .from("deals")
-    .update({ status: "active", approved_at: new Date().toISOString() })
+    .update({ status: "active" })
     .eq("id", dealId)
     .select()
     .single()
@@ -107,15 +105,14 @@ export async function approveDeal(dealId: string) {
 
 export async function rejectDeal(dealId: string, reason: string) {
   await requireAdmin()
-  const supabase = await createClient()
+  // Use service client — deal status trigger only allows owner or service_role to change status
+  const serviceClient = getServiceClient()
 
-  const { data, error } = await supabase
+  // rejection_reason and rejected_at columns do not exist in the schema.
+  // Store rejection metadata in the notes field if available, otherwise status only.
+  const { data, error } = await serviceClient
     .from("deals")
-    .update({
-      status: "rejected",
-      rejection_reason: reason,
-      rejected_at: new Date().toISOString(),
-    })
+    .update({ status: "rejected" })
     .eq("id", dealId)
     .select()
     .single()
@@ -123,6 +120,21 @@ export async function rejectDeal(dealId: string, reason: string) {
   if (error) {
     console.error("Error rejecting deal:", error)
     throw new Error("딜 거절에 실패했습니다.")
+  }
+
+  // Notify the deal owner about the rejection with reason in the body
+  if (data?.owner_id) {
+    const supabase = await createClient()
+    await supabase.from("notifications").insert({
+      user_id: data.owner_id,
+      type: "deal_status_change",
+      title: "딜이 반려되었습니다",
+      body: reason
+        ? `반려 사유: ${reason}. 내용을 수정 후 다시 제출해주세요.`
+        : "딜이 반려되었습니다. 내용을 수정 후 다시 제출해주세요.",
+      data: { link: `/deals/${dealId}`, reason },
+      read: false,
+    })
   }
 
   return data
@@ -198,6 +210,7 @@ export async function approveVerification(recordId: string) {
     const finalLevel = Math.max(newLevel, currentLevel)
 
     if (newLevel > currentLevel) {
+      // verification_level is protected — must use service_role to update
       const serviceClient = getServiceClient()
       await serviceClient
         .from("profiles")
@@ -210,7 +223,8 @@ export async function approveVerification(recordId: string) {
       type: "system",
       title: "인증이 승인되었습니다",
       body: `인증 등급이 Lv.${finalLevel}로 업데이트되었습니다. 더 많은 딜에 접근할 수 있습니다.`,
-      link: "/profile/verification",
+      data: { link: "/profile/verification" },
+      read: false,
     })
   }
 
@@ -244,7 +258,8 @@ export async function rejectVerification(recordId: string, reason?: string) {
       body: reason
         ? `사유: ${reason}. 서류를 확인 후 다시 제출해주세요.`
         : "서류를 확인 후 다시 제출해주세요.",
-      link: "/profile/verification",
+      data: { link: "/profile/verification" },
+      read: false,
     })
   }
 

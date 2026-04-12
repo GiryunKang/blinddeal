@@ -51,7 +51,7 @@ export async function generateMetadata({
       title: `${name} | BlindDeal 전문가`,
       description,
       url: `${BASE_URL}/experts/${id}`,
-      type: "profile",
+      type: "website",
       locale: "ko_KR",
     },
     alternates: {

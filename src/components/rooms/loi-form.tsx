@@ -33,8 +33,8 @@ export function LOIForm({ roomId, askingPrice, onSuccess }: LOIFormProps) {
       try {
         await createLOI(roomId, {
           proposed_price: parseInt(proposedPrice, 10),
-          terms,
-          conditions,
+          proposed_terms: terms,
+          conditions: conditions ? conditions.split("\n").map((c) => c.trim()).filter(Boolean) : [],
           valid_until: validUntil,
         })
         toast.success("LOI(의향서)가 상대방에게 전달되었습니다. 응답을 기다려주세요.")
@@ -83,7 +83,7 @@ export function LOIForm({ roomId, askingPrice, onSuccess }: LOIFormProps) {
           id="terms"
           value={terms}
           onChange={(e) => setTerms(e.target.value)}
-          placeholder="거래 조건을 입력하세요 (예: 결제 방법, 인수 일정 등)"
+          placeholder="협의 조건을 입력하세요 (예: 인수 일정, 조건부 사항 등)"
           required
         />
       </div>

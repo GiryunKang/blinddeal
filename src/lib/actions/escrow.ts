@@ -11,15 +11,26 @@ export async function createEscrow(
   const user = await requireAuth()
   const supabase = await createClient()
 
+  const { data: room } = await supabase
+    .from("deal_rooms")
+    .select("buyer_id, seller_id")
+    .eq("id", roomId)
+    .single()
+
+  if (!room) {
+    throw new Error("에스크로 파트너 연결 등록에 실패했습니다.")
+  }
+
   const { data, error } = await supabase
-    .from("escrows")
+    .from("escrow_accounts")
     .insert({
       room_id: roomId,
       deal_id: dealId,
-      amount,
+      buyer_id: room.buyer_id,
+      seller_id: room.seller_id,
+      total_amount: amount,
       currency: "KRW",
-      status: "pending",
-      created_by: user.id,
+      status: "created",
     })
     .select()
     .single()
@@ -47,7 +58,7 @@ export async function getEscrow(roomId: string) {
   }
 
   const { data, error } = await supabase
-    .from("escrows")
+    .from("escrow_accounts")
     .select("*")
     .eq("room_id", roomId)
     .order("created_at", { ascending: false })
@@ -63,14 +74,13 @@ export async function getEscrow(roomId: string) {
 
 export async function updateEscrowStatus(
   escrowId: string,
-  status: "pending" | "funded" | "released" | "disputed" | "refunded"
+  status: "created" | "funded" | "in_review" | "releasing" | "released" | "refunded" | "disputed"
 ) {
   await requireAuth()
   const supabase = await createClient()
 
   const updateData: Record<string, unknown> = {
     status,
-    updated_at: new Date().toISOString(),
   }
 
   if (status === "funded") {
@@ -80,7 +90,7 @@ export async function updateEscrowStatus(
   }
 
   const { data, error } = await supabase
-    .from("escrows")
+    .from("escrow_accounts")
     .update(updateData)
     .eq("id", escrowId)
     .select()
